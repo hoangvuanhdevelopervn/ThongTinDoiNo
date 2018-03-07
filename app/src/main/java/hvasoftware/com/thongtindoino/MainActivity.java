@@ -1,32 +1,89 @@
 package hvasoftware.com.thongtindoino;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class MainActivity extends AppCompatActivity {
+    private static final String TAG = "MainActivity";
+    private FirebaseFirestore firebaseFirestore;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        FirebaseApp.initializeApp(MainActivity.this);
+        firebaseFirestore = FirebaseFirestore.getInstance();
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        // uploadData();
+
+
+        getData();
+
+    }
+
+    private void uploadData() {
+        CollectionReference collectionReference = firebaseFirestore.collection(Constant.COLLECTION_USER);
+        Map<String, Object> user = new HashMap<>();
+        user.put("objectID", Utils.getRandomUUID());
+        user.put("documentId", "Admin");
+        user.put("account", "Admin");
+        user.put("password", "12345678");
+        user.put("displayName", "Doãn Chí Bình");
+        user.put("createAt", Utils.getCurrentDateTime());
+        user.put("updateAt", Utils.getCurrentDateTime());
+        user.put("role", Constant.ROLE_ADMIN);
+        collectionReference.document("admin").set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+            public void onComplete(@NonNull Task<Void> task) {
+                Log.wtf(TAG, "==============================> UPLOAD DONE");
             }
         });
     }
+
+
+    private void getData() {
+        final List<User> userList = new ArrayList<>();
+        firebaseFirestore.collection(Constant.COLLECTION_USER)
+                // .whereEqualTo()
+                //  .orderBy()
+                // .limit()
+                //.startAt()
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (DocumentSnapshot documentSnapshot : task.getResult()) {
+                        User user = documentSnapshot.toObject(User.class);
+                        userList.add(user);
+                        Log.wtf(TAG, "===========================> NAME: " + user.getDisplayName());
+                    }
+                }
+            }
+        });
+
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
