@@ -5,4 +5,8 @@
     <color name="colorAccent">#FF4081</color>
     <color name="header_row">#0683e2</color>
     <color name="btn_login">#79a7f2</color>
+    <color name="objective_label">#7E7E7F</color>
+    <color name="objective_text">#4B4A4A</color>
+    <color name="grey">#ACACAC</color>
+    <color name="statusGreen">#39B54A</color>
 </resources>

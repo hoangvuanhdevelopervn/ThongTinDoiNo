@@ -2,4 +2,15 @@
     <string name="app_name">Quản Lý Công Nợ</string>
     <string name="action_settings">Settings</string>
     <string name="you_offline">Bạn đang offline</string>
+    <string name="customer_name">Tên khách hàng</string>
+    <string name="take_date">Ngày vay</string>
+    <string name="money">Số tiền</string>
+    <string name="days">Số ngày vay</string>
+    <string name="out_date">Hết dây</string>
+    <string name="note">Ghi chú</string>
+    <string name="address">Địa chỉ</string>
+    <string name="phone">Số điện thoại</string>
+    <string name="customer_id">Số CMND</string>
+    <string name="user_care">Nhân viên thu</string>
+    <string name="add_customer">Thêm khách hàng</string>
 </resources>

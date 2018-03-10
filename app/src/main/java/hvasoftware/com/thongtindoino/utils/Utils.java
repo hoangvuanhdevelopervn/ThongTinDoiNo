@@ -1,6 +1,8 @@
 package hvasoftware.com.thongtindoino.utils;
 
 import android.app.Activity;
+import android.content.Context;
+import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
 import java.util.Date;
@@ -20,11 +22,17 @@ public class Utils {
         return new Date();
     }
 
-    public static void hideSoftKeyboard(Activity activity) {
-        InputMethodManager inputMethodManager =
-                (InputMethodManager) activity.getSystemService(
-                        Activity.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(
-                activity.getCurrentFocus().getWindowToken(), 0);
+    public static void HideSoftKeyboard(Context context, View view)
+    {
+        try
+        {
+            InputMethodManager inputMethodManager =
+                    (InputMethodManager) context.getSystemService(
+                            Activity.INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+        catch (Exception e)
+        {
+        }
     }
 }

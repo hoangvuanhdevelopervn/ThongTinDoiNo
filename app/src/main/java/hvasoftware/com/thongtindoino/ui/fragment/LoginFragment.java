@@ -15,6 +15,7 @@ public class LoginFragment extends BaseFragment {
 
     EditText edtAccount, edtPass;
     View btnLogin;
+
     @Override
     protected void OnViewCreated() {
     }
@@ -27,8 +28,8 @@ public class LoginFragment extends BaseFragment {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Utils.hideSoftKeyboard(GetMainAcitivity());
-                SwitchFragment(new DeptFragment(),false);
+                Utils.HideSoftKeyboard(getContext(), btnLogin);
+                SwitchFragment(new DeptFragment(), false);
             }
         });
     }
@@ -47,4 +48,11 @@ public class LoginFragment extends BaseFragment {
     public boolean IsHeaderVisible() {
         return false;
     }
+
+    @Override
+    public boolean IsToolbarVisible() {
+        return false;
+    }
+
+
 }

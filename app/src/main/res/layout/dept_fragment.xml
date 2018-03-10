@@ -35,7 +35,7 @@
                     android:layout_weight="3"
                     android:background="@drawable/cell_shape"
                     android:padding="5dp"
-                    android:text="Người vay"
+                    android:text="@string/customer_name"
                     android:textColor="@android:color/white"
                     android:textSize="@dimen/text_size_normal" />
 
@@ -45,7 +45,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/cell_shape"
                     android:padding="5dp"
-                    android:text="Ngày lấy"
+                    android:text="@string/take_date"
                     android:textColor="@android:color/white"
                     android:textSize="@dimen/text_size_normal" />
 
@@ -55,7 +55,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/cell_shape"
                     android:padding="5dp"
-                    android:text="Số tiền"
+                    android:text="@string/money"
                     android:textColor="@android:color/white"
                     android:textSize="@dimen/text_size_normal" />
 
@@ -65,7 +65,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/cell_shape"
                     android:padding="5dp"
-                    android:text="Số ngày"
+                    android:text="@string/days"
                     android:textColor="@android:color/white"
                     android:textSize="@dimen/text_size_normal" />
 
@@ -75,7 +75,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/cell_shape"
                     android:padding="5dp"
-                    android:text="Hết dây"
+                    android:text="@string/out_date"
                     android:textColor="@android:color/white"
                     android:textSize="@dimen/text_size_normal" />
 
@@ -85,22 +85,20 @@
                     android:layout_weight="3"
                     android:background="@drawable/cell_shape"
                     android:padding="5dp"
-                    android:text="Ghi chú"
+                    android:text="@string/note"
                     android:textColor="@android:color/white"
                     android:textSize="@dimen/text_size_normal" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/cell_shape"
                     android:padding="5dp"
-                    android:text="Nhân viên thu"
+                    android:text="@string/user_care"
                     android:textColor="@android:color/white"
                     android:textSize="@dimen/text_size_normal" />
             </TableRow>
-
-
         </TableLayout>
-
     </HorizontalScrollView>
 </ScrollView>

@@ -28,7 +28,6 @@ public class DeptFragment extends BaseFragment {
 
     @Override
     protected void OnViewCreated() {
-        GetMainAcitivity().setScreenOrientation(false);
 
         //todo:dummy data
         BindDataToTable();
@@ -70,6 +69,11 @@ public class DeptFragment extends BaseFragment {
         menu.show();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        GetMainAcitivity().setScreenOrientation(false);
+    }
 
     @Override
     public int GetLayoutId() {
@@ -79,5 +83,15 @@ public class DeptFragment extends BaseFragment {
     @Override
     protected String GetScreenTitle() {
         return getResources().getString(R.string.app_name);
+    }
+
+    @Override
+    public boolean IsFloatButtonVisible() {
+        return true;
+    }
+
+    @Override
+    public boolean IsBackButtonVisible() {
+        return false;
     }
 }
