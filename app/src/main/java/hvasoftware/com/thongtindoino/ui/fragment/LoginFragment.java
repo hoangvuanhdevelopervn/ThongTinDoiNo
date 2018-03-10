@@ -22,9 +22,9 @@ public class LoginFragment extends BaseFragment {
 
     @Override
     protected void OnBindView() {
-        edtAccount = (EditText) FindViewById(R.id.edt_acc);
-        edtPass = (EditText) FindViewById(R.id.edt_pass);
-        btnLogin = FindViewById(R.id.btn_login);
+        edtAccount = (EditText) findViewById(R.id.edt_acc);
+        edtPass = (EditText) findViewById(R.id.edt_pass);
+        btnLogin = findViewById(R.id.btn_login);
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

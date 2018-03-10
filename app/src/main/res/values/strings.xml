@@ -13,4 +13,5 @@
     <string name="customer_id">Số CMND</string>
     <string name="user_care">Nhân viên thu</string>
     <string name="add_customer">Thêm khách hàng</string>
+    <string name="manage_user">Quản lý nhân viên</string>
 </resources>

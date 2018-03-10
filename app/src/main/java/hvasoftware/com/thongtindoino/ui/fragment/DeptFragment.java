@@ -23,7 +23,7 @@ public class DeptFragment extends BaseFragment {
 
     @Override
     protected void OnBindView() {
-        deptTable = (TableLayout) FindViewById(R.id.dept_table);
+        deptTable = (TableLayout) findViewById(R.id.dept_table);
     }
 
     @Override

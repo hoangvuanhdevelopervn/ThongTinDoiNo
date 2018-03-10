@@ -41,7 +41,9 @@ import java.util.Map;
 
 import hvasoftware.com.thongtindoino.base.BaseActivity;
 import hvasoftware.com.thongtindoino.base.BaseFragment;
+import hvasoftware.com.thongtindoino.ui.dialog.ChangePassDialog;
 import hvasoftware.com.thongtindoino.ui.fragment.AddCustomerFragment;
+import hvasoftware.com.thongtindoino.ui.fragment.EmployeeManageFragment;
 import hvasoftware.com.thongtindoino.ui.fragment.LoginFragment;
 import hvasoftware.com.thongtindoino.utils.Constant;
 import hvasoftware.com.thongtindoino.utils.FragmentHelper;
@@ -98,7 +100,9 @@ public class MainActivity extends BaseActivity {
         fab1 = findViewById(R.id.fab_1);
         fab2 = findViewById(R.id.fab_2);
         fab3 = findViewById(R.id.fab_3);
-
+        fab1.setVisibility(View.INVISIBLE);
+        fab2.setVisibility(View.INVISIBLE);
+        fab3.setVisibility(View.INVISIBLE);
         //Animations
         show_fab_1 = AnimationUtils.loadAnimation(getApplication(), R.anim.fab1_show);
         hide_fab_1 = AnimationUtils.loadAnimation(getApplication(), R.anim.fab1_hide);
@@ -234,6 +238,14 @@ public class MainActivity extends BaseActivity {
             SwitchFragment(new AddCustomerFragment(), true);
             return true;
         }
+        if (id == R.id.user_manage) {
+            SwitchFragment(new EmployeeManageFragment(), true);
+            return true;
+        }
+        if (id == R.id.change_pass) {
+            ChangePassDialog changePassDialog = new ChangePassDialog();
+            changePassDialog.show(getFragmentManager(), "");
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -260,6 +272,9 @@ public class MainActivity extends BaseActivity {
 
     public void setFloatButtonVisible(boolean visible) {
         fab.setVisibility(visible ? View.VISIBLE : View.GONE);
+        fab1.setVisibility(visible ? View.VISIBLE : View.GONE);
+        fab2.setVisibility(visible ? View.VISIBLE : View.GONE);
+        fab3.setVisibility(visible ? View.VISIBLE : View.GONE);
     }
 
     public void setHeaderVisible(boolean isVisible) {
@@ -271,7 +286,7 @@ public class MainActivity extends BaseActivity {
     }
 
     public void setToolbarVisible(boolean visible) {
-        MainToolbar.setVisibility(visible?View.VISIBLE:View.GONE);
+        MainToolbar.setVisibility(visible ? View.VISIBLE : View.GONE);
     }
 
     public void setBackButtonVisible(boolean isVisible) {

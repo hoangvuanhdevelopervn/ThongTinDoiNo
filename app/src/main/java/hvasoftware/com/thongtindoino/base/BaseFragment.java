@@ -40,7 +40,7 @@ public abstract class BaseFragment extends Fragment implements View.OnTouchListe
 
     public abstract int GetLayoutId();
 
-    public View FindViewById(int resId) {
+    public View findViewById(int resId) {
         return rootView.findViewById(resId);
     }
 
