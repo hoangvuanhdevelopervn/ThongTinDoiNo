@@ -2,12 +2,7 @@ package hvasoftware.com.thongtindoino.ui.fragment;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.ContextMenu;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.PopupMenu;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,7 +53,7 @@ public class EmployeeManageFragment extends BaseFragment implements EmployeeMana
     @Override
     public void onResume() {
         super.onResume();
-        GetMainAcitivity().setScreenOrientation(true);
+        getMainAcitivity().setScreenOrientation(true);
     }
 
 
@@ -71,13 +66,18 @@ public class EmployeeManageFragment extends BaseFragment implements EmployeeMana
     }
 
     @Override
-    protected String GetScreenTitle() {
+    protected String getScreenTitle() {
         return getString(R.string.manage_user);
     }
 
     @Override
-    public boolean IsMenuVisible() {
+    public boolean isShowOverFlowMenu() {
         return false;
+    }
+
+    @Override
+    public boolean isImvAddUserVisible() {
+        return true;
     }
 }
 

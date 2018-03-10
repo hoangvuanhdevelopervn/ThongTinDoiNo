@@ -1,15 +1,6 @@
 package hvasoftware.com.thongtindoino.ui.fragment;
 
-import android.text.Layout;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.LinearLayout;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import hvasoftware.com.thongtindoino.R;
-import hvasoftware.com.thongtindoino.User;
 import hvasoftware.com.thongtindoino.base.BaseFragment;
 
 /**
@@ -36,18 +27,18 @@ public class AddCustomerFragment extends BaseFragment {
     }
 
     @Override
-    protected String GetScreenTitle() {
+    protected String getScreenTitle() {
         return getString(R.string.add_customer);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        GetMainAcitivity().setScreenOrientation(true);
+        getMainAcitivity().setScreenOrientation(true);
     }
 
     @Override
-    public boolean IsMenuVisible() {
+    public boolean isShowOverFlowMenu() {
         return false;
     }
 }

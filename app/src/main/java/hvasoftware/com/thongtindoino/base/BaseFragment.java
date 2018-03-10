@@ -45,7 +45,7 @@ public abstract class BaseFragment extends Fragment implements View.OnTouchListe
     }
 
     public void SwitchFragment(Fragment fragment, boolean IsAddToBackStack) {
-        GetMainAcitivity().SwitchFragment(fragment, IsAddToBackStack);
+        getMainAcitivity().SwitchFragment(fragment, IsAddToBackStack);
     }
 
     public void ReloadFragment() {
@@ -53,42 +53,34 @@ public abstract class BaseFragment extends Fragment implements View.OnTouchListe
     }
 
     public void FinishFragment() {
-        FragmentHelper.PopBackStack(GetMainAcitivity().getSupportFragmentManager());
+        FragmentHelper.PopBackStack(getMainAcitivity().getSupportFragmentManager());
     }
 
     public Fragment GetCurrentFragment() {
-        return GetMainAcitivity().getSupportFragmentManager().findFragmentById(R.id.root);
+        return getMainAcitivity().getSupportFragmentManager().findFragmentById(R.id.root);
     }
 
-    protected MainActivity GetMainAcitivity() {
+    protected MainActivity getMainAcitivity() {
         if (getActivity() instanceof MainActivity) {
             return ((MainActivity) getActivity());
         }
         return null;
     }
 
-    public void setupUI(View view)
-    {
-        if (!(view instanceof EditText))
-        {
+    public void setupUI(View view) {
+        if (!(view instanceof EditText)) {
             view.setOnTouchListener(this);
         }
-        if (view instanceof ViewGroup)
-        {
-            for (int i = 0; i < ((ViewGroup)view).getChildCount(); i++)
-            {
-                View innerView = ((ViewGroup)view).getChildAt(i);
+        if (view instanceof ViewGroup) {
+            for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
+                View innerView = ((ViewGroup) view).getChildAt(i);
                 boolean isNeedTouch = true;
-                if (innerView.getId() == R.id.btn_login)
-                {
+                if (innerView.getId() == R.id.btn_login) {
                     isNeedTouch = false;
-                }
-                else
-                {
+                } else {
                     isNeedTouch = true;
                 }
-                if (isNeedTouch)
-                {
+                if (isNeedTouch) {
                     setupUI(innerView);
                 }
             }
@@ -103,8 +95,7 @@ public abstract class BaseFragment extends Fragment implements View.OnTouchListe
         return false;
     }
 
-    public  boolean OnTouchView(View v, MotionEvent e)
-    {
+    public boolean OnTouchView(View v, MotionEvent e) {
         return false;
     }
 
@@ -112,42 +103,48 @@ public abstract class BaseFragment extends Fragment implements View.OnTouchListe
     public void onResume() {
         super.onResume();
         try {
-            GetMainAcitivity().SetScreenTitle(GetScreenTitle());
-            GetMainAcitivity().setHeaderVisible(IsHeaderVisible());
-            GetMainAcitivity().setBackButtonVisible(IsBackButtonVisible());
-            GetMainAcitivity().setMenuVisible(IsMenuVisible());
-            GetMainAcitivity().setFloatButtonVisible(IsFloatButtonVisible());
-            GetMainAcitivity().setToolbarVisible(IsToolbarVisible());
+            getMainAcitivity().setScreenTitle(getScreenTitle());
+            getMainAcitivity().setHeaderVisible(isHeaderVisible());
+            getMainAcitivity().setBackButtonVisible(isBackButtonVisible());
+            getMainAcitivity().setMenuVisible(isShowOverFlowMenu());
+            getMainAcitivity().setFloatButtonVisible(isFloatButtonVisible());
+            getMainAcitivity().setToolbarVisible(isToolbarVisible());
+            getMainAcitivity().setImvAddUserVisible(isImvAddUserVisible());
+
         } catch (Exception e) {
 
         }
     }
 
-    public boolean IsFloatButtonVisible() {
+    public boolean isImvAddUserVisible() {
         return false;
     }
 
-    public boolean IsToolbarVisible() {
+    public boolean isFloatButtonVisible() {
+        return false;
+    }
+
+    public boolean isToolbarVisible() {
         return true;
     }
 
-    public boolean IsMenuVisible() {
+    public boolean isShowOverFlowMenu() {
         return true;
     }
 
-    public boolean IsBackButtonVisible() {
+    public boolean isBackButtonVisible() {
         return true;
     }
 
-    public boolean IsHeaderVisible() {
+    public boolean isHeaderVisible() {
         return true;
     }
 
-    protected String GetScreenTitle() {
+    protected String getScreenTitle() {
         return "";
     }
 
-    public boolean OnBackPress() {
+    public boolean onBackPress() {
         return false;
     }
 }

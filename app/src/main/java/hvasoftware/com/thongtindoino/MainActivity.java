@@ -9,19 +9,14 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -54,6 +49,7 @@ public class MainActivity extends BaseActivity {
     private static final String TAG = "MainActivity";
     private FirebaseFirestore firebaseFirestore;
     View imvBack;
+    View imvAddUser;
     TextView tvTitle;
     android.support.v7.widget.Toolbar MainToolbar;
     boolean isMenuVisible;
@@ -85,6 +81,13 @@ public class MainActivity extends BaseActivity {
         MainToolbar = findViewById(R.id.mainToolbar);
         imvBack = findViewById(R.id.imvBack);
         tvTitle = findViewById(R.id.tvTitle);
+        imvAddUser = findViewById(R.id.add_user);
+        imvAddUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
         imvBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -249,7 +252,7 @@ public class MainActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void SetScreenTitle(String title) {
+    public void setScreenTitle(String title) {
         if (title == null) {
             return;
         }
@@ -259,7 +262,7 @@ public class MainActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         BaseFragment currentFragment = (BaseFragment) getSupportFragmentManager().findFragmentById(R.id.root);
-        if (currentFragment == null || !currentFragment.OnBackPress()) {
+        if (currentFragment == null || !currentFragment.onBackPress()) {
             super.onBackPressed();
             FragmentHelper.RemoveLastFragment(getSupportFragmentManager());
         }
@@ -287,6 +290,10 @@ public class MainActivity extends BaseActivity {
 
     public void setToolbarVisible(boolean visible) {
         MainToolbar.setVisibility(visible ? View.VISIBLE : View.GONE);
+    }
+
+    public void setImvAddUserVisible(boolean visible) {
+        imvAddUser.setVisibility(visible ? View.VISIBLE : View.GONE);
     }
 
     public void setBackButtonVisible(boolean isVisible) {

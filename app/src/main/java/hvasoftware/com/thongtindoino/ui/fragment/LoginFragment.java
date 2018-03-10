@@ -45,12 +45,12 @@ public class LoginFragment extends BaseFragment {
     }
 
     @Override
-    public boolean IsHeaderVisible() {
+    public boolean isHeaderVisible() {
         return false;
     }
 
     @Override
-    public boolean IsToolbarVisible() {
+    public boolean isToolbarVisible() {
         return false;
     }
 

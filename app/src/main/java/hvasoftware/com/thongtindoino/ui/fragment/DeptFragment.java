@@ -55,11 +55,11 @@ public class DeptFragment extends BaseFragment {
                 switch (id) {
                     case R.id.assign:
                         ChooseEmployeeDialog chooseEmployeeDialog = new ChooseEmployeeDialog();
-                        chooseEmployeeDialog.show(GetMainAcitivity().getFragmentManager(), "");
+                        chooseEmployeeDialog.show(getMainAcitivity().getFragmentManager(), "");
                         break;
                     case R.id.money:
                         InputMoneyDialog inputMoneyDialog = new InputMoneyDialog();
-                        inputMoneyDialog.show(GetMainAcitivity().getFragmentManager(), "");
+                        inputMoneyDialog.show(getMainAcitivity().getFragmentManager(), "");
                         break;
                 }
                 return true;
@@ -72,7 +72,7 @@ public class DeptFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        GetMainAcitivity().setScreenOrientation(false);
+        getMainAcitivity().setScreenOrientation(false);
     }
 
     @Override
@@ -81,17 +81,17 @@ public class DeptFragment extends BaseFragment {
     }
 
     @Override
-    protected String GetScreenTitle() {
+    protected String getScreenTitle() {
         return getResources().getString(R.string.app_name);
     }
 
     @Override
-    public boolean IsFloatButtonVisible() {
+    public boolean isFloatButtonVisible() {
         return true;
     }
 
     @Override
-    public boolean IsBackButtonVisible() {
+    public boolean isBackButtonVisible() {
         return false;
     }
 }
