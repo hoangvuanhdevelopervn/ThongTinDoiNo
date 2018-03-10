@@ -77,7 +77,7 @@ public class DeptFragment extends BaseFragment {
 
     @Override
     public int GetLayoutId() {
-        return R.layout.dept_fragment;
+        return R.layout.fragment_dept;
     }
 
     @Override

@@ -2,12 +2,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:maxHeight="180dp"
+    android:minHeight="125dp"
+    android:orientation="horizontal">
 
     <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="5dp"
@@ -17,7 +20,7 @@
 
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
             <ImageView
                 android:layout_width="40dp"
@@ -26,77 +29,169 @@
                 android:layout_marginLeft="5dp"
                 android:src="@drawable/ic_emp" />
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="5dp"
                 android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="5dp"
                 android:orientation="vertical">
 
-                <TextView
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="ID"
-                    android:textColor="@color/objective_label"
-                    android:textSize="@dimen/text_size_normal" />
+                    android:layout_alignParentTop="true"
+                    android:layout_marginBottom="10dp"
+                    android:orientation="vertical">
 
-                <TextView
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="ID"
+                        android:textColor="@color/objective_label"
+                        android:textSize="@dimen/text_size_normal" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:maxWidth="50dp"
+                        android:text="1212"
+                        android:textColor="@color/objective_text"
+                        android:textSize="@dimen/text_size_normal" />
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="1212"
-                    android:maxWidth="50dp"
-                    android:textColor="@color/objective_text"
-                    android:textSize="@dimen/text_size_normal" />
+                    android:layout_alignParentBottom="true"
+                    android:orientation="vertical">
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/user_acc"
+                        android:textColor="@color/objective_label"
+                        android:textSize="@dimen/text_size_normal" />
 
-            </LinearLayout>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="nampt7"
+                        android:textColor="@color/objective_text"
+                        android:textSize="@dimen/text_size_normal" />
+                </LinearLayout>
+            </RelativeLayout>
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="5dp"
                 android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="5dp"
                 android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Tên nhân viên"
-                    android:textColor="@color/objective_label"
-                    android:textSize="@dimen/text_size_normal" />
 
-                <TextView
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Phạm Thành Nam"
-                    android:maxWidth="130dp"
-                    android:textColor="@color/objective_text"
-                    android:textSize="@dimen/text_size_normal" />
-            </LinearLayout>
-            <LinearLayout
+                    android:layout_alignParentTop="true"
+                    android:layout_marginBottom="10dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:maxWidth="120dp"
+                        android:text="@string/user_name"
+                        android:textColor="@color/objective_label"
+                        android:textSize="@dimen/text_size_normal" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:maxWidth="120dp"
+                        android:text="Phạm Thành Nam sadasdasd"
+                        android:textColor="@color/objective_text"
+                        android:textSize="@dimen/text_size_normal" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/phone"
+                        android:textColor="@color/objective_label"
+                        android:textSize="@dimen/text_size_normal" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="097647130"
+                        android:textColor="@color/objective_text"
+                        android:textSize="@dimen/text_size_normal" />
+                </LinearLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="5dp"
                 android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="5dp"
                 android:orientation="vertical">
 
-                <TextView
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Ngày tạo"
-                    android:textColor="@color/objective_label"
-                    android:textSize="@dimen/text_size_normal" />
+                    android:layout_alignParentTop="true"
+                    android:orientation="vertical">
 
-                <TextView
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Ngày tạo"
+                        android:textColor="@color/objective_label"
+                        android:textSize="@dimen/text_size_normal" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="12/12/2018"
+                        android:textColor="@color/objective_text"
+                        android:textSize="@dimen/text_size_normal"
+
+
+                        />
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="12/12/2018"
-                    android:textColor="@color/objective_text"
-                    android:textSize="@dimen/text_size_normal" />
-            </LinearLayout>
+                    android:layout_alignParentBottom="true"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Quyền"
+                        android:textColor="@color/objective_label"
+                        android:textSize="@dimen/text_size_normal" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="User"
+                        android:textColor="@color/objective_text"
+                        android:textSize="@dimen/text_size_normal" />
+                </LinearLayout>
+            </RelativeLayout>
+
         </LinearLayout>
     </android.support.v7.widget.CardView>
 </LinearLayout>

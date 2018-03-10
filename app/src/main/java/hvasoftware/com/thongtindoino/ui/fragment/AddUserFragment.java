@@ -7,34 +7,25 @@ import hvasoftware.com.thongtindoino.base.BaseFragment;
  * Created by Thanh on 03/10/2018.
  */
 
-public class AddCustomerFragment extends BaseFragment {
-
+public class AddUserFragment extends BaseFragment {
     @Override
     protected void OnViewCreated() {
-
 
     }
 
     @Override
     protected void OnBindView() {
+
     }
-
-
 
     @Override
     public int GetLayoutId() {
-        return R.layout.fragment_add_customer;
+        return R.layout.fragment_add_user;
     }
 
     @Override
     protected String getScreenTitle() {
-        return getString(R.string.add_customer);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        getMainAcitivity().setScreenOrientation(true);
+        return getString(R.string.add_user);
     }
 
     @Override

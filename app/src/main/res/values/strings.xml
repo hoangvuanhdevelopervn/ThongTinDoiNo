@@ -14,4 +14,10 @@
     <string name="user_care">Nhân viên thu</string>
     <string name="add_customer">Thêm khách hàng</string>
     <string name="manage_user">Quản lý nhân viên</string>
+    <string name="user_name">Tên nhân viên</string>
+    <string name="user_acc">Tài khoản</string>
+    <string name="user_pass">Mật khẩu</string>
+    <string name="user_pass_repeat">Nhập lại mật khẩu</string>
+    <string name="user_role">Quyền</string>
+    <string name="add_user">Thêm nhân viên</string>
 </resources>

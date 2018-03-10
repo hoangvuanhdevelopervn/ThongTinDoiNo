@@ -38,6 +38,7 @@ import hvasoftware.com.thongtindoino.base.BaseActivity;
 import hvasoftware.com.thongtindoino.base.BaseFragment;
 import hvasoftware.com.thongtindoino.ui.dialog.ChangePassDialog;
 import hvasoftware.com.thongtindoino.ui.fragment.AddCustomerFragment;
+import hvasoftware.com.thongtindoino.ui.fragment.AddUserFragment;
 import hvasoftware.com.thongtindoino.ui.fragment.EmployeeManageFragment;
 import hvasoftware.com.thongtindoino.ui.fragment.LoginFragment;
 import hvasoftware.com.thongtindoino.utils.Constant;
@@ -85,7 +86,7 @@ public class MainActivity extends BaseActivity {
         imvAddUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                SwitchFragment(new AddUserFragment(), true);
             }
         });
         imvBack.setOnClickListener(new View.OnClickListener() {
@@ -103,9 +104,6 @@ public class MainActivity extends BaseActivity {
         fab1 = findViewById(R.id.fab_1);
         fab2 = findViewById(R.id.fab_2);
         fab3 = findViewById(R.id.fab_3);
-        fab1.setVisibility(View.INVISIBLE);
-        fab2.setVisibility(View.INVISIBLE);
-        fab3.setVisibility(View.INVISIBLE);
         //Animations
         show_fab_1 = AnimationUtils.loadAnimation(getApplication(), R.anim.fab1_show);
         hide_fab_1 = AnimationUtils.loadAnimation(getApplication(), R.anim.fab1_hide);
@@ -313,7 +311,7 @@ public class MainActivity extends BaseActivity {
 
         //Floating Action Button 1
         FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) fab1.getLayoutParams();
-        layoutParams.rightMargin += (int) (fab1.getWidth() * 1.3);
+        layoutParams.rightMargin += (int) (fab1.getWidth() * 1.5);
         layoutParams.bottomMargin += (int) (fab1.getHeight() * 0.1);
         fab1.setLayoutParams(layoutParams);
         fab1.startAnimation(show_fab_1);
@@ -321,8 +319,8 @@ public class MainActivity extends BaseActivity {
 
         //Floating Action Button 2
         FrameLayout.LayoutParams layoutParams2 = (FrameLayout.LayoutParams) fab2.getLayoutParams();
-        layoutParams2.rightMargin += (int) (fab2.getWidth() * 1.3);
-        layoutParams2.bottomMargin += (int) (fab2.getHeight() * 1.3);
+        layoutParams2.rightMargin += (int) (fab2.getWidth() * 1.5);
+        layoutParams2.bottomMargin += (int) (fab2.getHeight() * 1.5);
         fab2.setLayoutParams(layoutParams2);
         fab2.startAnimation(show_fab_2);
         fab2.setClickable(true);
@@ -330,7 +328,7 @@ public class MainActivity extends BaseActivity {
         //Floating Action Button 3
         FrameLayout.LayoutParams layoutParams3 = (FrameLayout.LayoutParams) fab3.getLayoutParams();
         layoutParams3.rightMargin += (int) (fab3.getWidth() * 0.1);
-        layoutParams3.bottomMargin += (int) (fab3.getHeight() * 1.3);
+        layoutParams3.bottomMargin += (int) (fab3.getHeight() * 1.5);
         fab3.setLayoutParams(layoutParams3);
         fab3.startAnimation(show_fab_3);
         fab3.setClickable(true);
@@ -341,7 +339,7 @@ public class MainActivity extends BaseActivity {
 
         //Floating Action Button 1
         FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) fab1.getLayoutParams();
-        layoutParams.rightMargin -= (int) (fab1.getWidth() * 1.3);
+        layoutParams.rightMargin -= (int) (fab1.getWidth() * 1.5);
         layoutParams.bottomMargin -= (int) (fab1.getHeight() * 0.1);
         fab1.setLayoutParams(layoutParams);
         fab1.startAnimation(hide_fab_1);
@@ -349,8 +347,8 @@ public class MainActivity extends BaseActivity {
 
         //Floating Action Button 2
         FrameLayout.LayoutParams layoutParams2 = (FrameLayout.LayoutParams) fab2.getLayoutParams();
-        layoutParams2.rightMargin -= (int) (fab2.getWidth() * 1.3);
-        layoutParams2.bottomMargin -= (int) (fab2.getHeight() * 1.3);
+        layoutParams2.rightMargin -= (int) (fab2.getWidth() * 1.5);
+        layoutParams2.bottomMargin -= (int) (fab2.getHeight() * 1.5);
         fab2.setLayoutParams(layoutParams2);
         fab2.startAnimation(hide_fab_2);
         fab2.setClickable(false);
@@ -358,7 +356,7 @@ public class MainActivity extends BaseActivity {
         //Floating Action Button 3
         FrameLayout.LayoutParams layoutParams3 = (FrameLayout.LayoutParams) fab3.getLayoutParams();
         layoutParams3.rightMargin -= (int) (fab3.getWidth() * 0.1);
-        layoutParams3.bottomMargin -= (int) (fab3.getHeight() * 1.3);
+        layoutParams3.bottomMargin -= (int) (fab3.getHeight() * 1.5);
         fab3.setLayoutParams(layoutParams3);
         fab3.startAnimation(hide_fab_3);
         fab3.setClickable(false);
