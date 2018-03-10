@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ThongTinDoiNo</string>
+    <string name="app_name">Quản Lý Công Nợ</string>
     <string name="action_settings">Settings</string>
     <string name="you_offline">Bạn đang offline</string>
 </resources>

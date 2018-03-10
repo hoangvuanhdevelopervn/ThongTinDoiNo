@@ -1,12 +1,30 @@
 package hvasoftware.com.thongtindoino;
 
+import android.content.pm.ActivityInfo;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -21,26 +39,122 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity {
+import hvasoftware.com.thongtindoino.base.BaseActivity;
+import hvasoftware.com.thongtindoino.base.BaseFragment;
+import hvasoftware.com.thongtindoino.ui.fragment.LoginFragment;
+import hvasoftware.com.thongtindoino.utils.Constant;
+import hvasoftware.com.thongtindoino.utils.FragmentHelper;
+import hvasoftware.com.thongtindoino.utils.Utils;
+
+import static hvasoftware.com.thongtindoino.utils.Utils.hideSoftKeyboard;
+
+public class MainActivity extends BaseActivity {
     private static final String TAG = "MainActivity";
     private FirebaseFirestore firebaseFirestore;
-
+    View imvBack;
+    TextView tvTitle;
+    android.support.v7.widget.Toolbar MainToolbar;
+    boolean isMenuVisible;
+    FloatingActionButton fab;
+    FloatingActionButton fab1;
+    FloatingActionButton fab2;
+    FloatingActionButton fab3;
+    //Animations
+    Animation show_fab_1;
+    Animation hide_fab_1;
+    Animation show_fab_2;
+    Animation hide_fab_2;
+    Animation show_fab_3;
+    Animation hide_fab_3;
+    private boolean FAB_Status = false;
+    @Override
+    protected String GetScreenTitle() {
+        return super.GetScreenTitle();
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+    protected void OnViewCreated() {
+    }
+
+    @Override
+    protected void OnBindView() {
+        ChangeStatusBar();
+        MainToolbar = findViewById(R.id.mainToolbar);
+        imvBack = findViewById(R.id.imvBack);
+        tvTitle = findViewById(R.id.tvTitle);
+        imvBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+        setSupportActionBar(MainToolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
+        setupUI(findViewById(R.id.root));
+        //Floating Action Buttons
+        fab = findViewById(R.id.fab);
+        fab1 = findViewById(R.id.fab_1);
+        fab2 = findViewById(R.id.fab_2);
+        fab3 = findViewById(R.id.fab_3);
+
+        //Animations
+        show_fab_1 = AnimationUtils.loadAnimation(getApplication(), R.anim.fab1_show);
+        hide_fab_1 = AnimationUtils.loadAnimation(getApplication(), R.anim.fab1_hide);
+        show_fab_2 = AnimationUtils.loadAnimation(getApplication(), R.anim.fab2_show);
+        hide_fab_2 = AnimationUtils.loadAnimation(getApplication(), R.anim.fab2_hide);
+        show_fab_3 = AnimationUtils.loadAnimation(getApplication(), R.anim.fab3_show);
+        hide_fab_3 = AnimationUtils.loadAnimation(getApplication(), R.anim.fab3_hide);
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (FAB_Status == false) {
+                    //Display FAB menu
+                    expandFAB();
+                    FAB_Status = true;
+                } else {
+                    //Close FAB menu
+                    hideFAB();
+                    FAB_Status = false;
+                }
+            }
+        });
+
+        fab1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplication(), "Floating Action Button 1", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        fab2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplication(), "Floating Action Button 2", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        fab3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplication(), "Floating Action Button 3", Toast.LENGTH_SHORT).show();
+            }
+        });
+        SwitchFragment(new LoginFragment(), false);
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
+        super.onCreate(savedInstanceState, persistentState);
         FirebaseApp.initializeApp(MainActivity.this);
         firebaseFirestore = FirebaseFirestore.getInstance();
-
         // uploadData();
-
-
         getData();
-
     }
+
 
     private void uploadData() {
         CollectionReference collectionReference = firebaseFirestore.collection(Constant.COLLECTION_USER);
@@ -81,12 +195,30 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
     }
 
+    @Override
+    protected int GetLayoutId() {
+        return R.layout.activity_main;
+    }
+
+    public void ChangeStatusBar() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = this.getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.setStatusBarColor(ContextCompat.getColor(this, R.color.colorPrimary));
+        }
+    }
+
+    @Override
+    public void SwitchFragment(Fragment fragment, boolean IsAddToBackStack) {
+        super.SwitchFragment(fragment, IsAddToBackStack);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
@@ -94,16 +226,122 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
+    }
+
+    public void SetScreenTitle(String title) {
+        if (title == null) {
+            return;
+        }
+        tvTitle.setText(title);
+    }
+
+    @Override
+    public void onBackPressed() {
+        BaseFragment currentFragment = (BaseFragment) getSupportFragmentManager().findFragmentById(R.id.root);
+        if (currentFragment == null || !currentFragment.OnBackPress()) {
+            super.onBackPressed();
+            FragmentHelper.RemoveLastFragment(getSupportFragmentManager());
+        }
+    }
+
+    public void setMenuVisible(boolean visible) {
+        isMenuVisible = visible;
+        invalidateOptionsMenu();
+    }
+
+    public void setHeaderVisible(boolean isVisible) {
+        if (isVisible) {
+            MainToolbar.setVisibility(View.VISIBLE);
+        } else {
+            MainToolbar.setVisibility(View.GONE);
+        }
+    }
+
+    public void setBackButtonVisible(boolean isVisible) {
+        if (isVisible) {
+            imvBack.setVisibility(View.VISIBLE);
+        } else {
+            imvBack.setVisibility(View.GONE);
+        }
+    }
+
+    public void setScreenOrientation(boolean isPotraitMode) {
+        setRequestedOrientation(isPotraitMode ? ActivityInfo.SCREEN_ORIENTATION_PORTRAIT : ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+    }
+
+    public void setupUI(View view) {
+        if (!(view instanceof EditText)) {
+            view.setOnTouchListener(new View.OnTouchListener() {
+                public boolean onTouch(View v, MotionEvent event) {
+                    hideSoftKeyboard(MainActivity.this);
+                    return false;
+                }
+            });
+        }
+        if (view instanceof ViewGroup) {
+            for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
+                View innerView = ((ViewGroup) view).getChildAt(i);
+                setupUI(innerView);
+            }
+        }
+    }
+    private void expandFAB() {
+
+        //Floating Action Button 1
+        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) fab1.getLayoutParams();
+        layoutParams.rightMargin += (int) (fab1.getWidth() * 1.2);
+        layoutParams.bottomMargin += (int) (fab1.getHeight() * 0.1);
+        fab1.setLayoutParams(layoutParams);
+        fab1.startAnimation(show_fab_1);
+        fab1.setClickable(true);
+
+        //Floating Action Button 2
+        FrameLayout.LayoutParams layoutParams2 = (FrameLayout.LayoutParams) fab2.getLayoutParams();
+        layoutParams2.rightMargin += (int) (fab2.getWidth() * 1.2);
+        layoutParams2.bottomMargin += (int) (fab2.getHeight() * 1.2);
+        fab2.setLayoutParams(layoutParams2);
+        fab2.startAnimation(show_fab_2);
+        fab2.setClickable(true);
+
+        //Floating Action Button 3
+        FrameLayout.LayoutParams layoutParams3 = (FrameLayout.LayoutParams) fab3.getLayoutParams();
+        layoutParams3.rightMargin += (int) (fab3.getWidth() * 0.1);
+        layoutParams3.bottomMargin += (int) (fab3.getHeight() * 1.2);
+        fab3.setLayoutParams(layoutParams3);
+        fab3.startAnimation(show_fab_3);
+        fab3.setClickable(true);
+    }
+
+
+    private void hideFAB() {
+
+        //Floating Action Button 1
+        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) fab1.getLayoutParams();
+        layoutParams.rightMargin -= (int) (fab1.getWidth() * 1.2);
+        layoutParams.bottomMargin -= (int) (fab1.getHeight() * 0.1);
+        fab1.setLayoutParams(layoutParams);
+        fab1.startAnimation(hide_fab_1);
+        fab1.setClickable(false);
+
+        //Floating Action Button 2
+        FrameLayout.LayoutParams layoutParams2 = (FrameLayout.LayoutParams) fab2.getLayoutParams();
+        layoutParams2.rightMargin -= (int) (fab2.getWidth() * 1.2);
+        layoutParams2.bottomMargin -= (int) (fab2.getHeight() * 1.2);
+        fab2.setLayoutParams(layoutParams2);
+        fab2.startAnimation(hide_fab_2);
+        fab2.setClickable(false);
+
+        //Floating Action Button 3
+        FrameLayout.LayoutParams layoutParams3 = (FrameLayout.LayoutParams) fab3.getLayoutParams();
+        layoutParams3.rightMargin -= (int) (fab3.getWidth() * 0.1);
+        layoutParams3.bottomMargin -= (int) (fab3.getHeight() * 1.2);
+        fab3.setLayoutParams(layoutParams3);
+        fab3.startAnimation(hide_fab_3);
+        fab3.setClickable(false);
     }
 }

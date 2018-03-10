@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <HorizontalScrollView
+        android:id="@+id/horizontalView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scrollbars="horizontal|vertical">
+
+        <TableLayout
+            android:id="@+id/dept_table"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TableRow
+                android:id="@+id/table_header"
+                android:background="@color/header_row">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/cell_shape"
+                    android:padding="5dp"
+                    android:text="ID"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/text_size_normal" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:background="@drawable/cell_shape"
+                    android:padding="5dp"
+                    android:text="Người vay"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/text_size_normal" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/cell_shape"
+                    android:padding="5dp"
+                    android:text="Ngày lấy"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/text_size_normal" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/cell_shape"
+                    android:padding="5dp"
+                    android:text="Số tiền"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/text_size_normal" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/cell_shape"
+                    android:padding="5dp"
+                    android:text="Số ngày"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/text_size_normal" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/cell_shape"
+                    android:padding="5dp"
+                    android:text="Hết dây"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/text_size_normal" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:background="@drawable/cell_shape"
+                    android:padding="5dp"
+                    android:text="Ghi chú"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/text_size_normal" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/cell_shape"
+                    android:padding="5dp"
+                    android:text="Nhân viên thu"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/text_size_normal" />
+            </TableRow>
+
+
+        </TableLayout>
+
+    </HorizontalScrollView>
+</ScrollView>

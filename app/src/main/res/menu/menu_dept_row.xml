@@ -3,14 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="hvasoftware.com.thongtinthutien.MainActivity">
     <item
-        android:id="@+id/add_customer"
+        android:id="@+id/assign"
         android:orderInCategory="100"
-        android:title="Thêm khách hàng"
+        android:title="Gán cho nhân viên"
         app:showAsAction="never" />
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/money"
         android:orderInCategory="100"
-        android:title="Đăng xuất"
+        android:title="Thu tiền"
         app:showAsAction="never" />
 
 </menu>

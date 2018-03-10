@@ -1,4 +1,4 @@
-package hvasoftware.com.thongtindoino;
+package hvasoftware.com.thongtindoino.utils;
 
 /**
  * Created by HoangVuAnh on 3/7/18.
