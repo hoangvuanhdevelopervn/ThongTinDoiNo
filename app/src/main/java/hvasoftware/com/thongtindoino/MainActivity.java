@@ -101,6 +101,7 @@ public class MainActivity extends BaseActivity {
         }
         //Floating Action Buttons
         fab = findViewById(R.id.fab);
+        fab.bringToFront();
         fab1 = findViewById(R.id.fab_1);
         fab2 = findViewById(R.id.fab_2);
         fab3 = findViewById(R.id.fab_3);
