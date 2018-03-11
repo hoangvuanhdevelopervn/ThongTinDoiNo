@@ -79,9 +79,10 @@
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
         android:layout_marginTop="30dp"
-        android:background="@drawable/round_btn"
+        android:background="@drawable/login_btn"
         android:gravity="center"
         android:text="ĐĂNG NHẬP"
         android:textColor="@android:color/white"
+        android:clickable="true"
         android:textSize="18sp" />
 </RelativeLayout>

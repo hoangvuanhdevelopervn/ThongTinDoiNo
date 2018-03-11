@@ -60,7 +60,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right|center_vertical"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginRight="15dp"
                     android:src="@drawable/ic_add_2" />
             </FrameLayout>
         </FrameLayout>
@@ -81,7 +81,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_margin="@dimen/fab_margin"
-        android:src="@android:drawable/ic_menu_help" />
+        android:src="@android:drawable/ic_menu_sort_by_size" />
 
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -107,7 +107,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:layout_margin="@dimen/fab_margin"
-            android:src="@android:drawable/ic_menu_myplaces"
+            android:src="@drawable/ic_username"
             android:visibility="invisible"
             app:backgroundTint="@color/colorPrimary"
             app:fabSize="mini" />
@@ -118,7 +118,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:layout_margin="@dimen/fab_margin"
-            android:src="@android:drawable/ic_menu_share"
+            android:src="@android:drawable/ic_menu_day"
             android:visibility="invisible"
             app:backgroundTint="@color/colorPrimary"
             app:fabSize="mini" />

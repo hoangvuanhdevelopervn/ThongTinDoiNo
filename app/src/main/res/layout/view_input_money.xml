@@ -48,8 +48,10 @@
             android:layout_height="30dp"
             android:layout_margin="10dp"
             android:layout_weight="1"
-            android:background="@color/btn_login"
+            android:textColor="@android:color/white"
+            android:background="@drawable/login_btn"
             android:gravity="center"
+            android:clickable="true"
             android:text="Hủy" />
 
         <TextView
@@ -58,8 +60,10 @@
             android:layout_height="30dp"
             android:layout_margin="10dp"
             android:layout_weight="1"
-            android:background="@color/btn_login"
+            android:background="@drawable/login_btn"
             android:gravity="center"
+            android:textColor="@android:color/white"
+            android:clickable="true"
             android:text="Gửi" />
 
     </LinearLayout>

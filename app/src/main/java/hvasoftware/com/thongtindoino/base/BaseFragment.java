@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.widget.EditText;
 
 import hvasoftware.com.thongtindoino.MainActivity;
@@ -36,6 +38,17 @@ public abstract class BaseFragment extends Fragment implements View.OnTouchListe
         }
         setupUI(rootView);
         return rootView;
+    }
+
+    @Override
+    public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
+        if (FragmentHelper.sDisableFragmentAnimations)
+        {
+            AlphaAnimation a = new AlphaAnimation(getContext(), null);
+            a.setDuration(0);
+            return a;
+        }
+        return super.onCreateAnimation(transit, enter, nextAnim);
     }
 
     public abstract int GetLayoutId();

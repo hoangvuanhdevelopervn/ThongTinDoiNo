@@ -14,14 +14,17 @@ import hvasoftware.com.thongtindoino.R;
 
 public class FragmentHelper {
     public static String LAST_FRAGMENT_TAG;
-
+    public static boolean sDisableFragmentAnimations;
     public static void SwitchFragment(FragmentManager fm, Fragment fragment, boolean IsAddToBackStack) {
         try {
+            sDisableFragmentAnimations = true;
             if (fragment == null || fm == null) {
                 throw new OperationApplicationException("FragmentManager null or fragment null");
             }
 
             FragmentTransaction fragmentTransaction = fm.beginTransaction();
+            fragmentTransaction.setCustomAnimations(R.anim.enter_from_right,R.anim.exit_to_left,R.anim.enter_from_left,R.anim.exit_to_right);
+
             Calendar c = Calendar.getInstance();
             String tag = fragment.getTag() + c.get(Calendar.MILLISECOND);
             Fragment lastFragment = fm.findFragmentByTag(LAST_FRAGMENT_TAG);
@@ -44,6 +47,7 @@ public class FragmentHelper {
             //the fragment incoming will be set as last fragment
             LAST_FRAGMENT_TAG = tag;
             fragmentTransaction.commitAllowingStateLoss();
+            sDisableFragmentAnimations = false;
         } catch (Exception e) {
 
         }

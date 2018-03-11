@@ -66,6 +66,7 @@ public class EmployeeManageAdapter extends RecyclerView.Adapter {
             super(itemView);
             this.callBack = callBack;
             itemView.setOnCreateContextMenuListener(this);
+
         }
 
         public void bindView(User user){
