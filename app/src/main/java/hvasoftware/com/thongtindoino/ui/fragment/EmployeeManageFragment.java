@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import hvasoftware.com.thongtindoino.R;
-import hvasoftware.com.thongtindoino.User;
 import hvasoftware.com.thongtindoino.base.BaseFragment;
+import hvasoftware.com.thongtindoino.model.User;
 import hvasoftware.com.thongtindoino.ui.adapter.EmployeeManageAdapter;
 
 /**

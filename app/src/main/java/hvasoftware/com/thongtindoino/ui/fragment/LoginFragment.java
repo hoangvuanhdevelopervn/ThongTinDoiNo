@@ -1,10 +1,21 @@
 package hvasoftware.com.thongtindoino.ui.fragment;
 
+import android.support.annotation.NonNull;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import hvasoftware.com.thongtindoino.R;
 import hvasoftware.com.thongtindoino.base.BaseFragment;
+import hvasoftware.com.thongtindoino.model.User;
+import hvasoftware.com.thongtindoino.utils.Constant;
 import hvasoftware.com.thongtindoino.utils.Utils;
 
 /**
@@ -13,11 +24,15 @@ import hvasoftware.com.thongtindoino.utils.Utils;
 
 public class LoginFragment extends BaseFragment {
 
-    EditText edtAccount, edtPass;
-    View btnLogin;
+    private static final String TAG = "LoginFragment";
+    private EditText edtAccount, edtPass;
+    private View btnLogin;
+    private ProgressBar progressBar;
+
 
     @Override
     protected void OnViewCreated() {
+
     }
 
     @Override
@@ -25,11 +40,59 @@ public class LoginFragment extends BaseFragment {
         edtAccount = (EditText) findViewById(R.id.edt_acc);
         edtPass = (EditText) findViewById(R.id.edt_pass);
         btnLogin = findViewById(R.id.btn_login);
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        Utils.setUpProgressBar(progressBar, true);
+        SwitchFragment(new DeptFragment(), false);
+
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+
                 Utils.HideSoftKeyboard(getContext(), btnLogin);
-                SwitchFragment(new DeptFragment(), false);
+                final String account = edtAccount.getText().toString().trim();
+                final String password = edtPass.getText().toString().trim();
+
+                if (TextUtils.isEmpty(account)) {
+                    Toast.makeText(getContext(), R.string.not_input_account, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if (TextUtils.isEmpty(password)) {
+                    Toast.makeText(getContext(), R.string.not_input_password, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                progressBar.setVisibility(View.VISIBLE);
+                firebaseFirestore.collection(Constant.COLLECTION_USER)
+                        .document(account).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        progressBar.setVisibility(View.GONE);
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document != null && document.exists()) {
+                                User user = document.toObject(User.class);
+                                if (account.equals(user.getAccount()) && password.equals(user.getPassword())) {
+                                    Toast.makeText(getContext(), R.string.login_success, Toast.LENGTH_SHORT).show();
+                                    //SwitchFragment(new DeptFragment(), false);
+                                } else {
+                                    Toast.makeText(getContext(), R.string.wrong_account_pass_check_again, Toast.LENGTH_SHORT).show();
+                                }
+                            } else {
+                                Toast.makeText(getContext(), R.string.account_not_exitsts, Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            Toast.makeText(getContext(), R.string.error_check_connected, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        progressBar.setVisibility(View.GONE);
+                        Toast.makeText(getContext(), R.string.error_check_connected, Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
     }

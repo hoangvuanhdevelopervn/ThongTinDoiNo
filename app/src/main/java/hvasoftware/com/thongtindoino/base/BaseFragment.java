@@ -11,6 +11,8 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.EditText;
 
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import hvasoftware.com.thongtindoino.MainActivity;
 import hvasoftware.com.thongtindoino.R;
 import hvasoftware.com.thongtindoino.utils.FragmentHelper;
@@ -23,6 +25,7 @@ import hvasoftware.com.thongtindoino.utils.Utils;
 
 public abstract class BaseFragment extends Fragment implements View.OnTouchListener {
     public View rootView;
+    public FirebaseFirestore firebaseFirestore;
 
     protected abstract void OnViewCreated();
 
@@ -33,6 +36,7 @@ public abstract class BaseFragment extends Fragment implements View.OnTouchListe
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (rootView == null) {
             rootView = inflater.inflate(GetLayoutId(), container, false);
+            firebaseFirestore = FirebaseFirestore.getInstance();
             OnBindView();
             OnViewCreated();
         }
@@ -88,11 +92,7 @@ public abstract class BaseFragment extends Fragment implements View.OnTouchListe
             for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
                 View innerView = ((ViewGroup) view).getChildAt(i);
                 boolean isNeedTouch = true;
-                if (innerView.getId() == R.id.btn_login) {
-                    isNeedTouch = false;
-                } else {
-                    isNeedTouch = true;
-                }
+                isNeedTouch = innerView.getId() != R.id.btn_login;
                 if (isNeedTouch) {
                     setupUI(innerView);
                 }

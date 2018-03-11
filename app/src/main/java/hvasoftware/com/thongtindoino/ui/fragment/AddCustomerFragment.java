@@ -12,7 +12,6 @@ public class AddCustomerFragment extends BaseFragment {
     @Override
     protected void OnViewCreated() {
 
-
     }
 
     @Override

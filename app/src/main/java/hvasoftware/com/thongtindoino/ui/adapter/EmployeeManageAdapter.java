@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import hvasoftware.com.thongtindoino.R;
-import hvasoftware.com.thongtindoino.User;
+import hvasoftware.com.thongtindoino.model.User;
 
 /**
  * Created by Thanh on 03/10/2018.
@@ -20,13 +20,8 @@ import hvasoftware.com.thongtindoino.User;
 
 public class EmployeeManageAdapter extends RecyclerView.Adapter {
 
-    public interface CallBack {
-        void onMenuAction(User object, MenuItem item, int position);
-    }
-
     public CallBack CallBack;
     public List<User> users;
-
     public EmployeeManageAdapter() {
         users = new ArrayList<>();
     }
@@ -56,6 +51,10 @@ public class EmployeeManageAdapter extends RecyclerView.Adapter {
     @Override
     public int getItemCount() {
         return users.size();
+    }
+
+    public interface CallBack {
+        void onMenuAction(User object, MenuItem item, int position);
     }
 
     public class UserViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener, PopupMenu.OnMenuItemClickListener {

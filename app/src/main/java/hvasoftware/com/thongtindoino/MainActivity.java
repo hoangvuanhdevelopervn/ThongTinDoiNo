@@ -36,6 +36,7 @@ import java.util.Map;
 
 import hvasoftware.com.thongtindoino.base.BaseActivity;
 import hvasoftware.com.thongtindoino.base.BaseFragment;
+import hvasoftware.com.thongtindoino.model.User;
 import hvasoftware.com.thongtindoino.ui.dialog.ChangePassDialog;
 import hvasoftware.com.thongtindoino.ui.fragment.AddCustomerFragment;
 import hvasoftware.com.thongtindoino.ui.fragment.AddUserFragment;
@@ -48,7 +49,6 @@ import hvasoftware.com.thongtindoino.utils.Utils;
 
 public class MainActivity extends BaseActivity {
     private static final String TAG = "MainActivity";
-    private FirebaseFirestore firebaseFirestore;
     View imvBack;
     View imvAddUser;
     TextView tvTitle;
@@ -65,6 +65,7 @@ public class MainActivity extends BaseActivity {
     Animation hide_fab_2;
     Animation show_fab_3;
     Animation hide_fab_3;
+    private FirebaseFirestore firebaseFirestore;
     private boolean FAB_Status = false;
 
     @Override

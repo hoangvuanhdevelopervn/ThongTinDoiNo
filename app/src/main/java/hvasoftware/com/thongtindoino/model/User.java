@@ -1,4 +1,4 @@
-package hvasoftware.com.thongtindoino;
+package hvasoftware.com.thongtindoino.model;
 
 import java.util.Date;
 
@@ -7,18 +7,20 @@ import java.util.Date;
  */
 
 public class User {
-
     private String objectID;
     private String documentId;
+    private String displayName;
     private String account;
     private String password;
-    private String displayName;
+    private String address;
+    private String phone;
     private Date createAt;
     private Date updateAt;
     private String role;
 
 
     public User() {
+
     }
 
     public String getObjectID() {
@@ -51,6 +53,22 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public String getDisplayName() {

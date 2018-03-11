@@ -20,4 +20,10 @@
     <string name="user_pass_repeat">Nhập lại mật khẩu</string>
     <string name="user_role">Quyền</string>
     <string name="add_user">Thêm nhân viên</string>
+    <string name="not_input_account">Bạn chưa nhập tài khoản</string>
+    <string name="not_input_password">Bạn chưa nhập mật khẩu</string>
+    <string name="error_check_connected">Có lỗi xảy ra vui lòng kiểm tra lại kết nối</string>
+    <string name="login_success">Đăng nhập thành công</string>
+    <string name="account_not_exitsts">Tài khoản không có trên hệ thống</string>
+    <string name="wrong_account_pass_check_again">Sai tên tài khoản hoặc mật khẩu! Vui lòng kiểm tra lại</string>
 </resources>

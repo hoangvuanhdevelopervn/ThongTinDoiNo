@@ -2,10 +2,14 @@ package hvasoftware.com.thongtindoino.utils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ProgressBar;
 
 import java.util.Date;
+import java.util.Random;
 import java.util.UUID;
 
 /**
@@ -22,17 +26,26 @@ public class Utils {
         return new Date();
     }
 
-    public static void HideSoftKeyboard(Context context, View view)
-    {
-        try
-        {
+    public static void setUpProgressBar(ProgressBar progressBar, boolean isVisible) {
+        progressBar.getIndeterminateDrawable().setColorFilter(Utils.getRandomColor(), PorterDuff.Mode.SRC_IN);
+        if (isVisible) {
+            progressBar.setVisibility(View.GONE);
+        } else {
+            progressBar.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public static int getRandomColor() {
+        return Color.rgb(new Random().nextInt(255), new Random().nextInt(255), new Random().nextInt(255));
+    }
+
+    public static void HideSoftKeyboard(Context context, View view) {
+        try {
             InputMethodManager inputMethodManager =
                     (InputMethodManager) context.getSystemService(
                             Activity.INPUT_METHOD_SERVICE);
             inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
         }
     }
 }

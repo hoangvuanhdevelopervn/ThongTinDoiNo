@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background_login">
@@ -69,6 +70,19 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@android:color/white" />
+
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dip"
+            android:indeterminate="true"
+            android:indeterminateTint="@color/colorAccent"
+            tools:targetApi="lollipop" />
+
     </LinearLayout>
 
     <TextView
@@ -80,9 +94,11 @@
         android:layout_marginRight="30dp"
         android:layout_marginTop="30dp"
         android:background="@drawable/login_btn"
+        android:clickable="true"
         android:gravity="center"
         android:text="ĐĂNG NHẬP"
         android:textColor="@android:color/white"
-        android:clickable="true"
         android:textSize="18sp" />
+
+
 </RelativeLayout>
