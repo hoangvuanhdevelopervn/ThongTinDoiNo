@@ -1,5 +1,6 @@
 package hvasoftware.com.thongtindoino.ui.fragment;
 
+import android.annotation.SuppressLint;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
@@ -36,6 +37,7 @@ import hvasoftware.com.thongtindoino.utils.Utils;
  * Created by Thanh on 03/10/2018.
  */
 
+@SuppressLint("ValidFragment")
 public class AddCustomerFragment extends BaseFragment {
     private static final String TAG = "AddCustomerFragment";
     private EditText edt_CustomerName;
@@ -52,6 +54,16 @@ public class AddCustomerFragment extends BaseFragment {
     private TextView tvUpload;
     private ProgressBar progressBar;
     private CustomerBusiness customerBusiness;
+
+    ScreenType screenType;
+
+    public enum ScreenType {
+        Add, View
+    }
+
+    public AddCustomerFragment(ScreenType screenType) {
+        this.screenType = screenType;
+    }
 
 
     @Override

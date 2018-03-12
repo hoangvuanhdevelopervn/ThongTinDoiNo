@@ -60,9 +60,9 @@ public class DateSortDialog extends DialogFragment implements com.wdullaer.mater
     @Override
     public void onDateSet(com.wdullaer.materialdatetimepicker.date.DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
         if (view == fromDateDialog) {
-            tvFrom.setText(dayOfMonth + " Tháng " + monthOfYear + 1 + " Năm " + year);
+            tvFrom.setText(dayOfMonth + " Tháng " + (monthOfYear + 1) + " Năm " + year);
         } else {
-            tvTo.setText(dayOfMonth + " Tháng " + monthOfYear + 1 + " Năm " + year);
+            tvTo.setText(dayOfMonth + " Tháng " + (monthOfYear + 1) + " Năm " + year);
         }
     }
 }
