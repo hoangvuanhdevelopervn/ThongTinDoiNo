@@ -61,6 +61,9 @@ public class DeptFragment extends BaseFragment {
                         InputMoneyDialog inputMoneyDialog = new InputMoneyDialog();
                         inputMoneyDialog.show(getMainAcitivity().getFragmentManager(), "");
                         break;
+                    case R.id.detail:
+                        SwitchFragment(new AddCustomerFragment(AddCustomerFragment.ScreenType.View),true);
+                        break;
                 }
                 return true;
             }

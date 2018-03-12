@@ -12,97 +12,110 @@
         android:clickable="true"
         android:scrollbars="horizontal|vertical">
 
-        <TableLayout
-            android:id="@+id/dept_table"
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:clickable="true">
+            android:orientation="vertical"
+            android:background="@android:color/white"
+            >
 
-            <TableRow
-                android:id="@+id/table_header"
-                android:background="@color/header_row"
+            <TableLayout
+                android:id="@+id/dept_table"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:clickable="true">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@drawable/cell_shape"
-                    android:padding="5dp"
-                    android:text="ID"
-                    android:textColor="@android:color/white"
-                    android:textSize="@dimen/text_size_normal" />
+                <TableRow
+                    android:id="@+id/table_header"
+                    android:background="@color/header_row"
+                    android:clickable="true">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="3"
-                    android:background="@drawable/cell_shape"
-                    android:padding="5dp"
-                    android:text="@string/customer_name"
-                    android:textColor="@android:color/white"
-                    android:textSize="@dimen/text_size_normal" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/cell_shape"
+                        android:padding="5dp"
+                        android:text="ID"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/text_size_normal" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@drawable/cell_shape"
-                    android:padding="5dp"
-                    android:text="@string/take_date"
-                    android:textColor="@android:color/white"
-                    android:textSize="@dimen/text_size_normal" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3"
+                        android:background="@drawable/cell_shape"
+                        android:padding="5dp"
+                        android:text="@string/customer_name"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/text_size_normal" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@drawable/cell_shape"
-                    android:padding="5dp"
-                    android:text="@string/money"
-                    android:textColor="@android:color/white"
-                    android:textSize="@dimen/text_size_normal" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/cell_shape"
+                        android:padding="5dp"
+                        android:text="@string/take_date"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/text_size_normal" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@drawable/cell_shape"
-                    android:padding="5dp"
-                    android:text="@string/days"
-                    android:textColor="@android:color/white"
-                    android:textSize="@dimen/text_size_normal" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/cell_shape"
+                        android:padding="5dp"
+                        android:text="@string/money"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/text_size_normal" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@drawable/cell_shape"
-                    android:padding="5dp"
-                    android:text="@string/out_date"
-                    android:textColor="@android:color/white"
-                    android:textSize="@dimen/text_size_normal" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/cell_shape"
+                        android:padding="5dp"
+                        android:text="@string/days"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/text_size_normal" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="3"
-                    android:background="@drawable/cell_shape"
-                    android:padding="5dp"
-                    android:text="@string/note"
-                    android:textColor="@android:color/white"
-                    android:textSize="@dimen/text_size_normal" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/cell_shape"
+                        android:padding="5dp"
+                        android:text="@string/out_date"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/text_size_normal" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@drawable/cell_shape"
-                    android:padding="5dp"
-                    android:text="@string/user_care"
-                    android:textColor="@android:color/white"
-                    android:textSize="@dimen/text_size_normal" />
-            </TableRow>
-        </TableLayout>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3"
+                        android:background="@drawable/cell_shape"
+                        android:padding="5dp"
+                        android:text="@string/note"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/text_size_normal" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/cell_shape"
+                        android:padding="5dp"
+                        android:text="@string/user_care"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/text_size_normal" />
+                </TableRow>
+            </TableLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:background="@color/background" />
+        </LinearLayout>
     </HorizontalScrollView>
 </ScrollView>

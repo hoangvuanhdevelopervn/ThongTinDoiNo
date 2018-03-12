@@ -38,6 +38,7 @@ import hvasoftware.com.thongtindoino.base.BaseActivity;
 import hvasoftware.com.thongtindoino.base.BaseFragment;
 import hvasoftware.com.thongtindoino.model.User;
 import hvasoftware.com.thongtindoino.ui.dialog.ChangePassDialog;
+import hvasoftware.com.thongtindoino.ui.dialog.DateSortDialog;
 import hvasoftware.com.thongtindoino.ui.fragment.AddCustomerFragment;
 import hvasoftware.com.thongtindoino.ui.fragment.AddUserFragment;
 import hvasoftware.com.thongtindoino.ui.fragment.EmployeeManageFragment;
@@ -54,18 +55,13 @@ public class MainActivity extends BaseActivity {
     TextView tvTitle;
     android.support.v7.widget.Toolbar MainToolbar;
     boolean isMenuVisible;
-    FloatingActionButton fab;
-    FloatingActionButton fab1;
-    FloatingActionButton fab2;
-    FloatingActionButton fab3;
-    //Animations
-    Animation show_fab_1;
-    Animation hide_fab_1;
-    Animation show_fab_2;
-    Animation hide_fab_2;
-    Animation show_fab_3;
-    Animation hide_fab_3;
+    FloatingActionButton fab, fab1, fab2, fab3;
+
     private FirebaseFirestore firebaseFirestore;
+    //Animations
+    Animation show_fab_1, hide_fab_1, show_fab_2, hide_fab_2, show_fab_3, hide_fab_3;
+    View wrapFab1, wrapFab2, wrapFab3;
+
     private boolean FAB_Status = false;
 
     @Override
@@ -79,6 +75,9 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void OnBindView() {
+        wrapFab1 = findViewById(R.id.wrap_fab1);
+        wrapFab2 = findViewById(R.id.wrap_fab2);
+        wrapFab3 = findViewById(R.id.wrap_fab3);
         ChangeStatusBar();
         MainToolbar = findViewById(R.id.mainToolbar);
         imvBack = findViewById(R.id.imvBack);
@@ -148,6 +147,8 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getApplication(), "Floating Action Button 3", Toast.LENGTH_SHORT).show();
+                DateSortDialog dateSortDialog = new DateSortDialog();
+                dateSortDialog.show(getFragmentManager(), "");
             }
         });
         SwitchFragment(new LoginFragment(), false);
@@ -238,7 +239,7 @@ public class MainActivity extends BaseActivity {
             return true;
         }
         if (id == R.id.add_customer) {
-            SwitchFragment(new AddCustomerFragment(), true);
+            SwitchFragment(new AddCustomerFragment(AddCustomerFragment.ScreenType.Add), true);
             return true;
         }
         if (id == R.id.user_manage) {
@@ -312,55 +313,51 @@ public class MainActivity extends BaseActivity {
     private void expandFAB() {
 
         //Floating Action Button 1
-        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) fab1.getLayoutParams();
-        layoutParams.rightMargin += (int) (fab1.getWidth() * 1.5);
-        layoutParams.bottomMargin += (int) (fab1.getHeight() * 0.1);
-        fab1.setLayoutParams(layoutParams);
-        fab1.startAnimation(show_fab_1);
-        fab1.setClickable(true);
+        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) wrapFab1.getLayoutParams();
+        layoutParams.rightMargin += (int) (wrapFab1.getWidth() * 1.5);
+        wrapFab1.setLayoutParams(layoutParams);
+        wrapFab1.startAnimation(show_fab_1);
+        wrapFab1.setClickable(true);
 
         //Floating Action Button 2
-        FrameLayout.LayoutParams layoutParams2 = (FrameLayout.LayoutParams) fab2.getLayoutParams();
-        layoutParams2.rightMargin += (int) (fab2.getWidth() * 1.5);
-        layoutParams2.bottomMargin += (int) (fab2.getHeight() * 1.5);
-        fab2.setLayoutParams(layoutParams2);
-        fab2.startAnimation(show_fab_2);
-        fab2.setClickable(true);
+        FrameLayout.LayoutParams layoutParams2 = (FrameLayout.LayoutParams) wrapFab2.getLayoutParams();
+        layoutParams2.rightMargin += (int) (wrapFab2.getWidth() * 1.5);
+        layoutParams2.bottomMargin += (int) (wrapFab2.getHeight() * 1.5);
+        wrapFab2.setLayoutParams(layoutParams2);
+        wrapFab2.startAnimation(show_fab_2);
+        wrapFab2.setClickable(true);
 
         //Floating Action Button 3
-        FrameLayout.LayoutParams layoutParams3 = (FrameLayout.LayoutParams) fab3.getLayoutParams();
-        layoutParams3.rightMargin += (int) (fab3.getWidth() * 0.1);
-        layoutParams3.bottomMargin += (int) (fab3.getHeight() * 1.5);
-        fab3.setLayoutParams(layoutParams3);
-        fab3.startAnimation(show_fab_3);
-        fab3.setClickable(true);
+        FrameLayout.LayoutParams layoutParams3 = (FrameLayout.LayoutParams) wrapFab3.getLayoutParams();
+        layoutParams3.bottomMargin += (int) (wrapFab3.getHeight() * 1.5);
+        wrapFab3.setLayoutParams(layoutParams3);
+        wrapFab3.startAnimation(show_fab_3);
+        wrapFab3.setClickable(true);
     }
 
 
     private void hideFAB() {
 
         //Floating Action Button 1
-        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) fab1.getLayoutParams();
-        layoutParams.rightMargin -= (int) (fab1.getWidth() * 1.5);
-        layoutParams.bottomMargin -= (int) (fab1.getHeight() * 0.1);
-        fab1.setLayoutParams(layoutParams);
-        fab1.startAnimation(hide_fab_1);
-        fab1.setClickable(false);
+        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) wrapFab1.getLayoutParams();
+        layoutParams.rightMargin -= (int) (wrapFab1.getWidth() * 1.5);
+        wrapFab1.setLayoutParams(layoutParams);
+        wrapFab1.startAnimation(hide_fab_1);
+        wrapFab1.setClickable(false);
 
         //Floating Action Button 2
-        FrameLayout.LayoutParams layoutParams2 = (FrameLayout.LayoutParams) fab2.getLayoutParams();
-        layoutParams2.rightMargin -= (int) (fab2.getWidth() * 1.5);
-        layoutParams2.bottomMargin -= (int) (fab2.getHeight() * 1.5);
-        fab2.setLayoutParams(layoutParams2);
-        fab2.startAnimation(hide_fab_2);
-        fab2.setClickable(false);
+        FrameLayout.LayoutParams layoutParams2 = (FrameLayout.LayoutParams) wrapFab2.getLayoutParams();
+        layoutParams2.rightMargin -= (int) (wrapFab2.getWidth() * 1.5);
+        layoutParams2.bottomMargin -= (int) (wrapFab2.getHeight() * 1.5);
+        wrapFab2.setLayoutParams(layoutParams2);
+        wrapFab2.startAnimation(hide_fab_2);
+        wrapFab2.setClickable(false);
 
         //Floating Action Button 3
-        FrameLayout.LayoutParams layoutParams3 = (FrameLayout.LayoutParams) fab3.getLayoutParams();
-        layoutParams3.rightMargin -= (int) (fab3.getWidth() * 0.1);
-        layoutParams3.bottomMargin -= (int) (fab3.getHeight() * 1.5);
-        fab3.setLayoutParams(layoutParams3);
-        fab3.startAnimation(hide_fab_3);
-        fab3.setClickable(false);
+        FrameLayout.LayoutParams layoutParams3 = (FrameLayout.LayoutParams) wrapFab3.getLayoutParams();
+        layoutParams3.bottomMargin -= (int) (wrapFab3.getHeight() * 1.5);
+        wrapFab3.setLayoutParams(layoutParams3);
+        wrapFab3.startAnimation(hide_fab_3);
+        wrapFab3.setClickable(false);
     }
 }
