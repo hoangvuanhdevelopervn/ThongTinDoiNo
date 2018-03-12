@@ -16,18 +16,20 @@ public class Customer {
     private Double sotien;
     private Double songayvay;
 
-    private String hetday;
+    private Date hetday;
     private String ghichu;
     private String diachi;
     private String sodienthoai;
     private String cmnd;
     private String nhanvienthu;
+    private String nhanvienthuDocumentId;
     private Date createAt;
     private Date updateAt;
-    private boolean trangthai;
+    private int trangthai;
 
 
     public Customer() {
+
     }
 
     public String getObjectID() {
@@ -94,11 +96,11 @@ public class Customer {
         this.songayvay = songayvay;
     }
 
-    public String getHetday() {
+    public Date getHetday() {
         return hetday;
     }
 
-    public void setHetday(String hetday) {
+    public void setHetday(Date hetday) {
         this.hetday = hetday;
     }
 
@@ -150,11 +152,19 @@ public class Customer {
         this.updateAt = updateAt;
     }
 
-    public boolean isTrangthai() {
+    public int getTrangthai() {
         return trangthai;
     }
 
-    public void setTrangthai(boolean trangthai) {
+    public void setTrangthai(int trangthai) {
         this.trangthai = trangthai;
+    }
+
+    public String getNhanvienthuDocumentId() {
+        return nhanvienthuDocumentId;
+    }
+
+    public void setNhanvienthuDocumentId(String nhanvienthuDocumentId) {
+        this.nhanvienthuDocumentId = nhanvienthuDocumentId;
     }
 }

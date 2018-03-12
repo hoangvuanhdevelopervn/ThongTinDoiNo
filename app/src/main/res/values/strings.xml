@@ -26,4 +26,6 @@
     <string name="login_success">Đăng nhập thành công</string>
     <string name="account_not_exitsts">Tài khoản không có trên hệ thống</string>
     <string name="wrong_account_pass_check_again">Sai tên tài khoản hoặc mật khẩu! Vui lòng kiểm tra lại</string>
+    <string name="pay_date">Ngày trả</string>
+    <string name="assign_staff">Nhân viên thu</string>
 </resources>

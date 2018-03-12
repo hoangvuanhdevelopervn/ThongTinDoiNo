@@ -9,7 +9,9 @@ public class Constant {
     public static final String COLLECTION_CUSTOMER = "Customer";
     public static final String ROLE_ADMIN = "ADMIN";
     public static final String ROLE_STAFF = "STAFF";
-    public static final String ACCOUNT_ADMIN = "admin";
+    public static final int STATE_ONE = 1;
+    public static final int STATE_TWO = 2;
+    public static final int STATE_THREE = 3;
 
 
 

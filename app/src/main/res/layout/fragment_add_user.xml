@@ -446,6 +446,7 @@
             android:layout_marginTop="16dip"
             android:indeterminate="true"
             android:indeterminateTint="@color/colorAccent"
+            android:visibility="gone"
             tools:targetApi="lollipop" />
 
 
@@ -454,10 +455,10 @@
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_below="@+id/wrap_pass"
-            android:layout_marginBottom="30dp"
+            android:layout_marginBottom="60dp"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="60dp"
             android:background="@drawable/login_btn"
             android:clickable="true"
             android:gravity="center"

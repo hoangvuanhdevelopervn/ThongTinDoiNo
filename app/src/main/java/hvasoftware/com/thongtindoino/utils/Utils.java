@@ -1,5 +1,6 @@
 package hvasoftware.com.thongtindoino.utils;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
@@ -8,6 +9,9 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ProgressBar;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;
 import java.util.UUID;
@@ -47,5 +51,23 @@ public class Utils {
             inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
         } catch (Exception e) {
         }
+    }
+
+    public static Date parseStringToDate(String stringDate) {
+        @SuppressLint("SimpleDateFormat") DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+        Date date = null;
+        try {
+            date = dateFormat.parse(stringDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date;
+    }
+
+    public static String parseDateToString(Date date) {
+        @SuppressLint("SimpleDateFormat") DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+        String stringDate = null;
+        stringDate = dateFormat.format(date);
+        return stringDate;
     }
 }
