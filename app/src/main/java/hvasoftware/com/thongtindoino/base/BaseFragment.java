@@ -92,7 +92,11 @@ public abstract class BaseFragment extends Fragment implements View.OnTouchListe
             for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
                 View innerView = ((ViewGroup) view).getChildAt(i);
                 boolean isNeedTouch = true;
-                isNeedTouch = innerView.getId() != R.id.btn_login;
+                if (innerView.getId() == R.id.btn_login) {
+                    isNeedTouch = false;
+                } else {
+                    isNeedTouch = true;
+                }
                 if (isNeedTouch) {
                     setupUI(innerView);
                 }
