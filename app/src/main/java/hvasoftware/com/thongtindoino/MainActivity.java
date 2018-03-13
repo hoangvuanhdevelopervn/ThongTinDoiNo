@@ -56,12 +56,10 @@ public class MainActivity extends BaseActivity {
     android.support.v7.widget.Toolbar MainToolbar;
     boolean isMenuVisible;
     FloatingActionButton fab, fab1, fab2, fab3;
-
-    private FirebaseFirestore firebaseFirestore;
     //Animations
     Animation show_fab_1, hide_fab_1, show_fab_2, hide_fab_2, show_fab_3, hide_fab_3;
     View wrapFab1, wrapFab2, wrapFab3;
-
+    private FirebaseFirestore firebaseFirestore;
     private boolean FAB_Status = false;
 
     @Override
@@ -117,7 +115,7 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
 
-                if (FAB_Status == false) {
+                if (!FAB_Status) {
                     //Display FAB menu
                     expandFAB();
                     FAB_Status = true;

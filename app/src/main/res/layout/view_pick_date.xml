@@ -5,11 +5,10 @@
     android:orientation="vertical">
 
     <LinearLayout
+        android:id="@+id/wrap_from"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:id="@+id/wrap_from"
-        >
+        android:padding="10dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -24,10 +23,10 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/wrap_to"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:id="@+id/wrap_to">
+        android:padding="10dp">
 
         <TextView
             android:layout_width="wrap_content"

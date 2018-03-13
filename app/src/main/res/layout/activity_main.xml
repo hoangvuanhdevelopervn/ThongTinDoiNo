@@ -4,9 +4,9 @@
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/white"
     android:fitsSystemWindows="true"
-    android:orientation="vertical"
-    android:background="@android:color/white">
+    android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/mainToolbar"
@@ -88,19 +88,17 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        >
+        android:layout_alignParentTop="true">
 
         <LinearLayout
             android:id="@+id/wrap_fab1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
-            android:layout_marginRight="@dimen/fab_margin"
             android:layout_marginBottom="5dp"
+            android:layout_marginRight="@dimen/fab_margin"
             android:orientation="vertical"
-            android:visibility="invisible"
-            >
+            android:visibility="invisible">
 
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/fab_1"
@@ -120,8 +118,8 @@
                 android:text="Nhân viên"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@android:color/holo_red_dark"
-                android:textStyle="bold"
-                android:textSize="12sp" />
+                android:textSize="12sp"
+                android:textStyle="bold" />
 
         </LinearLayout>
 
@@ -134,8 +132,7 @@
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:orientation="vertical"
-            android:visibility="invisible"
-            >
+            android:visibility="invisible">
 
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/fab_2"
@@ -154,10 +151,10 @@
                 android:layout_gravity="bottom"
                 android:paddingTop="2dp"
                 android:text="Khách hàng"
-                android:textStyle="bold"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@android:color/holo_red_dark"
                 android:textSize="12sp"
+                android:textStyle="bold"
 
                 />
         </LinearLayout>
@@ -167,12 +164,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
-            android:layout_marginTop="5dp"
             android:layout_marginBottom="@dimen/fab_margin"
             android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"
             android:orientation="vertical"
-            android:visibility="invisible"
-            >
+            android:visibility="invisible">
 
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/fab_3"
@@ -189,12 +185,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:text="Ngày/tháng"
                 android:paddingTop="2dp"
-                android:textStyle="bold"
+                android:text="Ngày/tháng"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@android:color/holo_red_dark"
-                android:textSize="12sp" />
+                android:textSize="12sp"
+                android:textStyle="bold" />
         </LinearLayout>
     </FrameLayout>
 </RelativeLayout>

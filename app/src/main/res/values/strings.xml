@@ -28,4 +28,5 @@
     <string name="wrong_account_pass_check_again">Sai tên tài khoản hoặc mật khẩu! Vui lòng kiểm tra lại</string>
     <string name="pay_date">Ngày trả</string>
     <string name="assign_staff">Nhân viên thu</string>
+    <string name="view_customer">Chi tiết khách hàng</string>
 </resources>

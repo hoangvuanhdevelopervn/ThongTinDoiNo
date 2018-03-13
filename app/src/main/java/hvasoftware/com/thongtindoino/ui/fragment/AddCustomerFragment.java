@@ -1,5 +1,6 @@
 package hvasoftware.com.thongtindoino.ui.fragment;
 
+import android.annotation.SuppressLint;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
@@ -36,8 +37,10 @@ import hvasoftware.com.thongtindoino.utils.Utils;
  * Created by Thanh on 03/10/2018.
  */
 
+@SuppressLint("ValidFragment")
 public class AddCustomerFragment extends BaseFragment {
     private static final String TAG = "AddCustomerFragment";
+    ScreenType screenType;
     private EditText edt_CustomerName;
     private EditText edt_NgayVay;
     private EditText edt_NgayTra;
@@ -53,6 +56,10 @@ public class AddCustomerFragment extends BaseFragment {
     private ProgressBar progressBar;
     private CustomerBusiness customerBusiness;
 
+    @SuppressLint("ValidFragment")
+    public AddCustomerFragment(ScreenType screenType) {
+        this.screenType = screenType;
+    }
 
     @Override
     protected void OnViewCreated() {
@@ -77,7 +84,6 @@ public class AddCustomerFragment extends BaseFragment {
         tvUpload = (TextView) findViewById(R.id.tvUpload);
         customerBusiness = CustomerBusiness.newInstance(getContext());
         setUpSpiner();
-
 
     }
 
@@ -108,7 +114,6 @@ public class AddCustomerFragment extends BaseFragment {
 
                         }
                     });
-
 
                     uploadCustomer(user[0]);
                 }
@@ -242,13 +247,13 @@ public class AddCustomerFragment extends BaseFragment {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         progressBar.setVisibility(View.GONE);
+                        Toast.makeText(getContext(), "Thêm khách hàng thất bại! Vui lòng thử lại sau", Toast.LENGTH_SHORT).show();
                         Log.wtf(TAG, "==============================>" + e.getMessage());
                     }
                 });
             }
         });
     }
-
 
     @Override
     public int GetLayoutId() {
@@ -257,7 +262,7 @@ public class AddCustomerFragment extends BaseFragment {
 
     @Override
     protected String getScreenTitle() {
-        return getString(R.string.add_customer);
+        return getString(screenType == ScreenType.Add ? R.string.add_customer : R.string.view_customer);
     }
 
     @Override
@@ -269,5 +274,9 @@ public class AddCustomerFragment extends BaseFragment {
     @Override
     public boolean isShowOverFlowMenu() {
         return false;
+    }
+
+    public enum ScreenType {
+        Add, View
     }
 }

@@ -1,6 +1,5 @@
 package hvasoftware.com.thongtindoino.ui.dialog;
 
-import android.app.DatePickerDialog;
 import android.app.DialogFragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -16,7 +15,8 @@ import hvasoftware.com.thongtindoino.R;
  */
 
 public class DateSortDialog extends DialogFragment {
-    View wrapFrom,wrapTo;
+    View wrapFrom, wrapTo;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
