@@ -30,9 +30,9 @@ public class Utils {
         return new Date();
     }
 
-    public static void setUpProgressBar(ProgressBar progressBar, boolean isVisible) {
+    public static void setUpProgressBar(ProgressBar progressBar, boolean isGone) {
         progressBar.getIndeterminateDrawable().setColorFilter(Utils.getRandomColor(), PorterDuff.Mode.SRC_IN);
-        if (isVisible) {
+        if (isGone) {
             progressBar.setVisibility(View.GONE);
         } else {
             progressBar.setVisibility(View.VISIBLE);

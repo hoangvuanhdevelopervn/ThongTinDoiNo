@@ -103,6 +103,14 @@ public class AddUserFragment extends BaseFragment {
                     return;
                 }
 
+                /*
+                if (userPhone.length() < 10 || userPhone.length() > 11){
+                    Toast.makeText(getContext(), "Định dạng điện thoại không đúng! Vui lòng nhập lại", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                 */
+
+
                 progressBar.setVisibility(View.VISIBLE);
                 CollectionReference collectionReference = firebaseFirestore.collection(Constant.COLLECTION_USER);
 
@@ -124,7 +132,7 @@ public class AddUserFragment extends BaseFragment {
                     public void onComplete(@NonNull Task<Void> task) {
                         progressBar.setVisibility(View.GONE);
                         Toast.makeText(getContext(), "Thêm nhân viên thành công", Toast.LENGTH_SHORT).show();
-                        Log.wtf("TAG", "========================> UPLOAD DONE");
+                        getActivity().onBackPressed();
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
@@ -134,9 +142,6 @@ public class AddUserFragment extends BaseFragment {
                         Log.wtf("TAG", "========================> UPLOAD FAILED: " + e.getMessage());
                     }
                 });
-
-                //userBusiness.uploadUser(objectMap, userAccount, progressBar);
-
             }
         });
 

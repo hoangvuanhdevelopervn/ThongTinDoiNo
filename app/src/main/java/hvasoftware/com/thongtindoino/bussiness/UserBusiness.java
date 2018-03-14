@@ -43,7 +43,7 @@ public class UserBusiness {
 
     public void updateUser(String documentId, String field, String content) {
         WriteBatch writeBatch = firebaseFirestore.batch();
-        DocumentReference updateQuoteShareAmount = firebaseFirestore.collection(Constant.COLLECTION_CUSTOMER).document(documentId);
+        DocumentReference updateQuoteShareAmount = firebaseFirestore.collection(Constant.COLLECTION_USER).document(documentId);
         writeBatch.update(updateQuoteShareAmount, field, content);
         writeBatch.update(updateQuoteShareAmount, "updateAt", DateTimeUtils.getDateTime());
         writeBatch.commit();

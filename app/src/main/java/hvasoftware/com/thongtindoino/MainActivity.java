@@ -157,51 +157,10 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState, persistentState);
         FirebaseApp.initializeApp(MainActivity.this);
         firebaseFirestore = FirebaseFirestore.getInstance();
-        // uploadData();
-        getData();
+
     }
 
 
-    private void uploadData() {
-        CollectionReference collectionReference = firebaseFirestore.collection(Constant.COLLECTION_USER);
-        Map<String, Object> user = new HashMap<>();
-        user.put("objectID", Utils.getRandomUUID());
-        user.put("documentId", "Admin");
-        user.put("account", "Admin");
-        user.put("password", "12345678");
-        user.put("displayName", "Doãn Chí Bình");
-        user.put("createAt", Utils.getCurrentDateTime());
-        user.put("updateAt", Utils.getCurrentDateTime());
-        user.put("role", Constant.ROLE_ADMIN);
-        collectionReference.document("admin").set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                Log.wtf(TAG, "==============================> UPLOAD DONE");
-            }
-        });
-    }
-
-
-    private void getData() {
-        final List<User> userList = new ArrayList<>();
-        firebaseFirestore.collection(Constant.COLLECTION_USER)
-                // .whereEqualTo()
-                //  .orderBy()
-                // .limit()
-                //.startAt()
-                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (DocumentSnapshot documentSnapshot : task.getResult()) {
-                        User user = documentSnapshot.toObject(User.class);
-                        userList.add(user);
-                        Log.wtf(TAG, "===========================> NAME: " + user.getDisplayName());
-                    }
-                }
-            }
-        });
-    }
 
     @Override
     protected int GetLayoutId() {
@@ -233,7 +192,8 @@ public class MainActivity extends BaseActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_log_out) {
+            SwitchFragment(new LoginFragment(), false);
             return true;
         }
         if (id == R.id.add_customer) {
@@ -245,7 +205,7 @@ public class MainActivity extends BaseActivity {
             return true;
         }
         if (id == R.id.change_pass) {
-            ChangePassDialog changePassDialog = new ChangePassDialog();
+            ChangePassDialog changePassDialog = new ChangePassDialog(MainActivity.this);
             changePassDialog.show(getFragmentManager(), "");
         }
         return super.onOptionsItemSelected(item);
@@ -256,6 +216,10 @@ public class MainActivity extends BaseActivity {
             return;
         }
         tvTitle.setText(title);
+    }
+
+    public void switchFragment(Fragment fragment, boolean isAddToBackStack){
+        SwitchFragment(fragment, true);
     }
 
     @Override
@@ -334,7 +298,6 @@ public class MainActivity extends BaseActivity {
         wrapFab3.startAnimation(show_fab_3);
         wrapFab3.setClickable(true);
     }
-
 
     private void hideFAB() {
 

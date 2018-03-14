@@ -1,199 +1,160 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:maxHeight="180dp"
-    android:minHeight="125dp"
-    android:orientation="horizontal"
-    android:foreground="?android:attr/selectableItemBackground"
-    android:clickable="true">
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:layout_marginTop="5dp"
+    android:layout_marginBottom="8dip"
+    app:cardCornerRadius="4dp">
 
-    <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <RelativeLayout
+        android:id="@+id/relativeLayoutUser"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="5dp"
-        android:elevation="2dp"
-        app:cardCornerRadius="2dp"
-        >
+        android:background="#ffffff"
+        android:paddingBottom="8dip">
+
+
+        <ImageButton
+            android:id="@+id/ibRemove"
+            android:layout_width="24dip"
+            android:layout_height="24dip"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="4dip"
+            android:layout_marginEnd="4dip"
+            android:backgroundTint="#e12c2c"
+            android:background="@drawable/ic_delete_black_24dp"
+            tools:ignore="UnusedAttribute" />
+
+        <ImageView
+            android:id="@+id/ivUser"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="@dimen/text_size_normal"
+            android:layout_marginTop="@dimen/text_size_normal"
+            android:src="@drawable/ic_emp" />
+
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dip"
+            android:layout_toEndOf="@+id/ivUser"
+            android:orientation="vertical">
 
-            <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="5dp"
-                android:src="@drawable/ic_emp" />
 
-            <RelativeLayout
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dip"
+                android:orientation="horizontal"
+                android:paddingEnd="4dip"
+                android:paddingStart="4dip">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/user_name"
+                    android:textColor="@color/objective_label"
+                    android:textSize="@dimen/text_size_normal" />
+
+                <TextView
+                    android:id="@+id/tvUserName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Ten nhan vien"
+                    android:textColor="@color/objective_text"
+                    android:textSize="@dimen/text_size_normal" />
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/tvUserCreateAt"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="5dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="5dp"
-                android:orientation="vertical">
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dip"
+                android:fontFamily="sans-serif-light"
+                android:textColor="@color/objective_label"
+                android:textSize="14sp" />
 
-                <LinearLayout
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dip"
+                android:orientation="horizontal"
+                android:paddingEnd="4dip"
+                android:paddingStart="4dip">
+
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginBottom="10dp"
-                    android:orientation="vertical">
+                    android:text="@string/user_acc"
+                    android:textColor="@color/objective_label"
+                    android:textSize="@dimen/text_size_normal" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="ID"
-                        android:textColor="@color/objective_label"
-                        android:textSize="@dimen/text_size_normal" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:maxWidth="50dp"
-                        android:text="1212"
-                        android:textColor="@color/objective_text"
-                        android:textSize="@dimen/text_size_normal" />
-                </LinearLayout>
-
-                <LinearLayout
+                <TextView
+                    android:id="@+id/tvUserAccount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:orientation="vertical">
+                    android:text="nampt7"
+                    android:textColor="@color/objective_text"
+                    android:textSize="@dimen/text_size_normal" />
+            </LinearLayout>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/user_acc"
-                        android:textColor="@color/objective_label"
-                        android:textSize="@dimen/text_size_normal" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dip"
+                android:orientation="horizontal"
+                android:paddingEnd="4dip"
+                android:paddingStart="4dip">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="nampt7"
-                        android:textColor="@color/objective_text"
-                        android:textSize="@dimen/text_size_normal" />
-                </LinearLayout>
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="5dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="5dp"
-                android:orientation="vertical">
-
-
-                <LinearLayout
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginBottom="10dp"
-                    android:orientation="vertical">
+                    android:text="@string/phone"
+                    android:textColor="@color/objective_label"
+                    android:textSize="@dimen/text_size_normal" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:maxWidth="120dp"
-                        android:text="@string/user_name"
-                        android:textColor="@color/objective_label"
-                        android:textSize="@dimen/text_size_normal" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:maxWidth="120dp"
-                        android:text="Phạm Thành Nam sadasdasd"
-                        android:textColor="@color/objective_text"
-                        android:textSize="@dimen/text_size_normal" />
-
-                </LinearLayout>
-
-                <LinearLayout
+                <TextView
+                    android:id="@+id/tvUserPhone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:orientation="vertical">
+                    android:text="0976761993"
+                    android:textColor="@color/objective_text"
+                    android:textSize="@dimen/text_size_normal" />
+            </LinearLayout>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/phone"
-                        android:textColor="@color/objective_label"
-                        android:textSize="@dimen/text_size_normal" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dip"
+                android:orientation="horizontal"
+                android:paddingEnd="4dip"
+                android:paddingStart="4dip">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="097647130"
-                        android:textColor="@color/objective_text"
-                        android:textSize="@dimen/text_size_normal" />
-                </LinearLayout>
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="5dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="5dp"
-                android:orientation="vertical">
-
-                <LinearLayout
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:orientation="vertical">
+                    android:text="@string/user_role"
+                    android:textColor="@color/objective_label"
+                    android:textSize="@dimen/text_size_normal" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Ngày tạo"
-                        android:textColor="@color/objective_label"
-                        android:textSize="@dimen/text_size_normal" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="12/12/2018"
-                        android:textColor="@color/objective_text"
-                        android:textSize="@dimen/text_size_normal"
-
-
-                        />
-                </LinearLayout>
-
-                <LinearLayout
+                <TextView
+                    android:id="@+id/tvUserRole"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Quyền"
-                        android:textColor="@color/objective_label"
-                        android:textSize="@dimen/text_size_normal" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="User"
-                        android:textColor="@color/objective_text"
-                        android:textSize="@dimen/text_size_normal" />
-                </LinearLayout>
-            </RelativeLayout>
+                    android:text="Nhan vien"
+                    android:textColor="@color/objective_text"
+                    android:textSize="@dimen/text_size_normal" />
+            </LinearLayout>
 
         </LinearLayout>
-    </android.support.v7.widget.CardView>
-</LinearLayout>
+    </RelativeLayout>
+</android.support.v7.widget.CardView>

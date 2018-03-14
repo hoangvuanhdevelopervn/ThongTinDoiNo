@@ -1,5 +1,6 @@
 package hvasoftware.com.thongtindoino.ui.dialog;
 
+import android.annotation.SuppressLint;
 import android.app.DialogFragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -8,11 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.TextView;
-
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
-
 import java.util.Calendar;
-
 import hvasoftware.com.thongtindoino.R;
 
 /**
@@ -57,6 +55,7 @@ public class DateSortDialog extends DialogFragment implements com.wdullaer.mater
         super.onViewCreated(view, savedInstanceState);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onDateSet(com.wdullaer.materialdatetimepicker.date.DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
         if (view == fromDateDialog) {

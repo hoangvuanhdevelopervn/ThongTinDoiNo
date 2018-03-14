@@ -16,6 +16,7 @@ import hvasoftware.com.thongtindoino.R;
 import hvasoftware.com.thongtindoino.base.BaseFragment;
 import hvasoftware.com.thongtindoino.model.User;
 import hvasoftware.com.thongtindoino.utils.Constant;
+import hvasoftware.com.thongtindoino.utils.DatabaseUser;
 import hvasoftware.com.thongtindoino.utils.Utils;
 
 /**
@@ -23,11 +24,11 @@ import hvasoftware.com.thongtindoino.utils.Utils;
  */
 
 public class LoginFragment extends BaseFragment {
-
     private static final String TAG = "LoginFragment";
     private EditText edtAccount, edtPass;
     private View btnLogin;
     private ProgressBar progressBar;
+    private DatabaseUser databaseUser;
 
 
     @Override
@@ -37,6 +38,7 @@ public class LoginFragment extends BaseFragment {
 
     @Override
     protected void OnBindView() {
+        databaseUser = DatabaseUser.newInstance(getContext());
         edtAccount = (EditText) findViewById(R.id.edt_acc);
         edtPass = (EditText) findViewById(R.id.edt_pass);
         btnLogin = findViewById(R.id.btn_login);
@@ -76,6 +78,7 @@ public class LoginFragment extends BaseFragment {
                                 if (account.equals(user.getAccount()) && password.equals(user.getPassword())) {
                                     Toast.makeText(getContext(), R.string.login_success, Toast.LENGTH_SHORT).show();
                                     //SwitchFragment(new DeptFragment(), false);
+                                    databaseUser.insertUser(user);
                                 } else {
                                     Toast.makeText(getContext(), R.string.wrong_account_pass_check_again, Toast.LENGTH_SHORT).show();
                                 }
@@ -105,6 +108,7 @@ public class LoginFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
+        getMainAcitivity().setScreenOrientation(true);
     }
 
     @Override

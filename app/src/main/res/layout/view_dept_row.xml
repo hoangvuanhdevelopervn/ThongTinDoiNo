@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TableRow xmlns:android="http://schemas.android.com/apk/res/android"
-    android:clickable="true"
-   >
+    android:clickable="true">
 
     <TextView
+        android:id="@+id/tvCustomerId"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
@@ -13,10 +13,10 @@
         android:paddingRight="@dimen/pading_smallest"
         android:paddingTop="@dimen/pading_smallest"
         android:text="1"
-        android:textColor="@android:color/black"
-        />
+        android:textColor="@android:color/black" />
 
     <TextView
+        android:id="@+id/tvCustomerName"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="3"
@@ -31,6 +31,7 @@
         android:textSize="14sp" />
 
     <TextView
+        android:id="@+id/tvCustomerNgayVay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
@@ -43,6 +44,7 @@
         android:textColor="@android:color/black" />
 
     <TextView
+        android:id="@+id/tvCustomerSoTien"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
@@ -55,6 +57,7 @@
         android:textColor="@android:color/black" />
 
     <TextView
+        android:id="@+id/tvCustomerSoNgayVay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
@@ -67,6 +70,7 @@
         android:textColor="@android:color/black" />
 
     <TextView
+        android:id="@+id/tvCustomerHetHan"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
@@ -79,6 +83,7 @@
         android:textColor="@android:color/black" />
 
     <TextView
+        android:id="@+id/tvCustomerGhiChu"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="3"
@@ -90,7 +95,9 @@
         android:paddingTop="@dimen/pading_smallest"
         android:text="Đặt trước 5 triệu"
         android:textColor="@android:color/black" />
+
     <TextView
+        android:id="@+id/tvCustomerNhanVienThu"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"

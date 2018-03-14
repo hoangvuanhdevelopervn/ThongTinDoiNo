@@ -61,7 +61,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="right|center_vertical"
                     android:layout_marginEnd="15dp"
-                    android:src="@drawable/ic_add_2" />
+                    android:src="@drawable/ic_action_add" />
             </FrameLayout>
         </FrameLayout>
     </android.support.v7.widget.Toolbar>

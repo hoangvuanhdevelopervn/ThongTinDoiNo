@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -19,8 +20,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -38,7 +41,7 @@ import hvasoftware.com.thongtindoino.utils.Utils;
  */
 
 @SuppressLint("ValidFragment")
-public class AddCustomerFragment extends BaseFragment {
+public class AddCustomerFragment extends BaseFragment implements DatePickerDialog.OnDateSetListener {
     private static final String TAG = "AddCustomerFragment";
     ScreenType screenType;
     private EditText edt_CustomerName;
@@ -122,6 +125,17 @@ public class AddCustomerFragment extends BaseFragment {
     }
 
     private void uploadCustomer(final User user) {
+
+        edt_NgayVay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDateTimepicker();
+                Log.wtf(TAG, "===========================> CLICK edt_NgayVay");
+            }
+        });
+
+
+
         tvUpload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -159,6 +173,10 @@ public class AddCustomerFragment extends BaseFragment {
                     Toast.makeText(getContext(), "Bạn chưa nhập tên khách hàng", Toast.LENGTH_SHORT).show();
                     return;
                 }
+
+
+
+
 
                 if (customerNgayVay == null) {
                     Toast.makeText(getContext(), "Bạn chưa nhập ngày vay", Toast.LENGTH_SHORT).show();
@@ -223,7 +241,7 @@ public class AddCustomerFragment extends BaseFragment {
                 objectMap.put("ten", customerName);
                 objectMap.put("ngayVay", customerNgayVay);
                 objectMap.put("ngayPhaiTra", customerNgayTra);
-                objectMap.put("hetday", customerHetDay);
+                objectMap.put("hethan", customerHetDay);
                 objectMap.put("sotien", customerSoTienVay);
                 objectMap.put("songayvay", customerSoNgayVay);
                 objectMap.put("ghichu", customerGhiChu);
@@ -255,6 +273,23 @@ public class AddCustomerFragment extends BaseFragment {
         });
     }
 
+    @SuppressWarnings("ConstantConditions")
+    private void showDateTimepicker() {
+
+        Calendar now = Calendar.getInstance();
+        DatePickerDialog dpd = DatePickerDialog.newInstance(
+                (DatePickerDialog.OnDateSetListener) getContext(),
+                now.get(Calendar.YEAR),
+                now.get(Calendar.MONTH),
+                now.get(Calendar.DAY_OF_MONTH)
+        );
+
+
+        dpd.show(getMainAcitivity().getFragmentManager(), "Datepickerdialog");
+
+    }
+
+
     @Override
     public int GetLayoutId() {
         return R.layout.fragment_add_customer;
@@ -274,6 +309,12 @@ public class AddCustomerFragment extends BaseFragment {
     @Override
     public boolean isShowOverFlowMenu() {
         return false;
+    }
+
+    @Override
+    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+        Log.wtf(TAG, "=====================================> YEAR: " + year);
+
     }
 
     public enum ScreenType {

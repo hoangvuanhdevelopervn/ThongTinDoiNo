@@ -16,7 +16,7 @@ public class Customer {
     private Double sotien;
     private Double songayvay;
 
-    private Date hetday;
+    private Date hethan;
     private String ghichu;
     private String diachi;
     private String sodienthoai;
@@ -96,12 +96,12 @@ public class Customer {
         this.songayvay = songayvay;
     }
 
-    public Date getHetday() {
-        return hetday;
+    public Date getHethan() {
+        return hethan;
     }
 
-    public void setHetday(Date hetday) {
-        this.hetday = hetday;
+    public void setHethan(Date hethan) {
+        this.hethan = hethan;
     }
 
     public String getGhichu() {
