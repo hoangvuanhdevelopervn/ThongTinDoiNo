@@ -14,13 +14,16 @@
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Từ : " />
+            android:layout_height="match_parent"
+            android:text="Từ :   "
+            android:gravity="center_vertical"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Chọn ngày tháng"
+            android:text="12/1/2018"
+            android:textStyle="bold"
+            android:textSize="@dimen/text_size_normal"
             android:id="@+id/tv_from"
             android:textColor="@color/colorPrimary" />
     </LinearLayout>
@@ -33,13 +36,16 @@
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Đến : " />
+            android:layout_height="match_parent"
+            android:text="Đến : "
+            android:gravity="center_vertical"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Chọn ngày tháng"
+            android:text="18/9/2018"
+            android:textStyle="bold"
+            android:textSize="@dimen/text_size_normal"
             android:id="@+id/tv_to"
             android:textColor="@color/colorPrimary" />
     </LinearLayout>
