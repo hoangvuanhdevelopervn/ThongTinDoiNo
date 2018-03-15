@@ -37,6 +37,7 @@ import hvasoftware.com.thongtindoino.R;
 import hvasoftware.com.thongtindoino.model.User;
 import hvasoftware.com.thongtindoino.utils.Constant;
 import hvasoftware.com.thongtindoino.utils.DateTimeUtils;
+import hvasoftware.com.thongtindoino.utils.IOnCompleteListener;
 import hvasoftware.com.thongtindoino.utils.Utils;
 
 /**
@@ -49,6 +50,7 @@ public class EmployeeManageAdapter extends RecyclerView.Adapter {
     public List<User> users;
     private Activity activity;
     private FirebaseFirestore firebaseFirestore;
+    private IOnCompleteListener iOnCompleteListener;
 
     public EmployeeManageAdapter(Activity activity) {
         users = new ArrayList<>();
@@ -178,6 +180,7 @@ public class EmployeeManageAdapter extends RecyclerView.Adapter {
                                     Toast.makeText(activity, "Cập nhật thành công", Toast.LENGTH_SHORT).show();
                                     progressBar.setVisibility(View.GONE);
                                     dialog.dismiss();
+                                    iOnCompleteListener.onComplete("Name", "Name");
                                 }
                             }).addOnFailureListener(new OnFailureListener() {
                                 @Override
@@ -222,6 +225,10 @@ public class EmployeeManageAdapter extends RecyclerView.Adapter {
                 }
             });
         }
+    }
+
+    public void setiOnCompleteListener(IOnCompleteListener onCompleteListener){
+        this.iOnCompleteListener = onCompleteListener;
     }
 
     @Override

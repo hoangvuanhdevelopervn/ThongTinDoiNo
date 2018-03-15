@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingEnd="8dip"
+    android:paddingStart="8dip">
+
+    <!--<TextView-->
+        <!--android:id="@+id/cancel"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="30dp"-->
+        <!--android:layout_margin="10dp"-->
+        <!--android:layout_weight="1"-->
+        <!--android:textColor="@android:color/white"-->
+        <!--android:background="@drawable/login_btn"-->
+        <!--android:gravity="center"-->
+        <!--android:clickable="true"-->
+        <!--android:text="Hủy" />-->
+
+    <TextView
+        android:id="@+id/tvUserName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/login_btn"
+        android:ellipsize="end"
+        android:fontFamily="sans-serif-condensed"
+        android:maxLines="2"
+        android:textAlignment="center"
+        android:paddingBottom="10dip"
+        android:paddingEnd="8dip"
+        android:paddingStart="8dip"
+        android:clickable="true"
+        android:paddingTop="10dip"
+        android:text="@string/app_name"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
+        android:focusable="true" />
+
+</LinearLayout>

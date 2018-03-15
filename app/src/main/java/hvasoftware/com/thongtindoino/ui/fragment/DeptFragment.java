@@ -1,6 +1,9 @@
 package hvasoftware.com.thongtindoino.ui.fragment;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
+import android.content.Context;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.Gravity;
@@ -8,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.PopupMenu;
 import android.widget.TableLayout;
 import android.widget.TextView;
@@ -28,8 +32,10 @@ import hvasoftware.com.thongtindoino.model.Customer;
 import hvasoftware.com.thongtindoino.model.User;
 import hvasoftware.com.thongtindoino.ui.dialog.ChooseEmployeeDialog;
 import hvasoftware.com.thongtindoino.ui.dialog.InputMoneyDialog;
+import hvasoftware.com.thongtindoino.utils.CheckInternet;
 import hvasoftware.com.thongtindoino.utils.Constant;
 import hvasoftware.com.thongtindoino.utils.DateTimeUtils;
+import hvasoftware.com.thongtindoino.utils.Utils;
 
 
 /**
@@ -39,20 +45,21 @@ import hvasoftware.com.thongtindoino.utils.DateTimeUtils;
 public class DeptFragment extends BaseFragment {
     TableLayout deptTable;
     private final String TAG = "DeptFragment";
+    private CheckInternet checkInternet;
 
     @Override
     protected void OnBindView() {
         deptTable = (TableLayout) findViewById(R.id.dept_table);
+        checkInternet = CheckInternet.getInstance(getContext());
+        bindDataToTable();
     }
 
     @Override
     protected void OnViewCreated() {
 
-        //todo:dummy data
-        BindDataToTable();
     }
 
-    public void BindDataToTable() {
+    public void bindDataToTable() {
         firebaseFirestore.collection(Constant.COLLECTION_CUSTOMER)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -60,12 +67,12 @@ public class DeptFragment extends BaseFragment {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
-                            if (task.getResult().size() == 0){
-                                Toast.makeText(getContext(), "Không có khách hàng nào", Toast.LENGTH_SHORT).show();
+                            if (task.getResult().size() == 0) {
+                                Toast.makeText(getContext(), R.string.no_customer, Toast.LENGTH_SHORT).show();
                                 return;
                             }
                             for (DocumentSnapshot documentSnapshot : task.getResult()) {
-                                Customer customer = documentSnapshot.toObject(Customer.class);
+                                final Customer customer = documentSnapshot.toObject(Customer.class);
                                 final View dataRow = LayoutInflater.from(getContext()).inflate(R.layout.view_dept_row, null);
                                 final TextView tvCustomerId = dataRow.findViewById(R.id.tvCustomerId);
                                 final TextView tvCustomerName = dataRow.findViewById(R.id.tvCustomerName);
@@ -79,7 +86,7 @@ public class DeptFragment extends BaseFragment {
                                 tvCustomerId.setText(customer.getObjectID().substring(0, 10) + "...");
                                 tvCustomerName.setText(customer.getTen());
                                 tvCustomerNgayVay.setText(DateTimeUtils.formatDatetime(getMainAcitivity(), customer.getNgayVay()));
-                                tvCustomerSoTien.setText("" + customer.getSotien());
+                                tvCustomerSoTien.setText("" + Utils.formatCurrency(customer.getSotien()));
                                 tvCustomerSoNgayVay.setText("" + customer.getSongayvay());
                                 tvCustomerHetHan.setText(DateTimeUtils.formatDatetime(getMainAcitivity(), customer.getHethan()));
                                 tvCustomerGhiChu.setText(customer.getGhichu());
@@ -89,7 +96,7 @@ public class DeptFragment extends BaseFragment {
                                 dataRow.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
-                                        showMenu(dataRow);
+                                        showMenu(dataRow, customer);
                                     }
                                 });
 
@@ -105,7 +112,7 @@ public class DeptFragment extends BaseFragment {
         });
     }
 
-    public void showMenu(View view) {
+    public void showMenu(View view, final Customer customer) {
         PopupMenu menu = new PopupMenu(getContext(), view, Gravity.END);
         menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
@@ -114,14 +121,25 @@ public class DeptFragment extends BaseFragment {
                 switch (id) {
                     case R.id.assign:
                         ChooseEmployeeDialog chooseEmployeeDialog = new ChooseEmployeeDialog();
-                        chooseEmployeeDialog.show(getMainAcitivity().getFragmentManager(), "");
+                        Bundle bundle = new Bundle();
+                        bundle.putString(Constant.KEY, customer.getDocumentId());
+                        chooseEmployeeDialog.setArguments(bundle);
+                        chooseEmployeeDialog.show(getMainAcitivity().getFragmentManager(), TAG);
                         break;
                     case R.id.money:
                         InputMoneyDialog inputMoneyDialog = new InputMoneyDialog();
-                        inputMoneyDialog.show(getMainAcitivity().getFragmentManager(), "");
+                        Bundle bundle2 = new Bundle();
+                        bundle2.putString(Constant.KEY, customer.getDocumentId());
+                        bundle2.putInt(Constant.MONEY, customer.getSotien());
+                        inputMoneyDialog.setArguments(bundle2);
+                        inputMoneyDialog.show(getMainAcitivity().getFragmentManager(), TAG);
                         break;
                     case R.id.detail:
-                        SwitchFragment(new AddCustomerFragment(AddCustomerFragment.ScreenType.View), true);
+                        AddCustomerFragment addCustomerFragment = new AddCustomerFragment(AddCustomerFragment.ScreenType.View);
+                        Bundle bundle1 = new Bundle();
+                        bundle1.putString(Constant.KEY, customer.getDocumentId());
+                        addCustomerFragment.setArguments(bundle1);
+                        SwitchFragment(addCustomerFragment, true);
                         break;
                 }
                 return true;

@@ -29,4 +29,6 @@
     <string name="pay_date">Ngày trả</string>
     <string name="assign_staff">Nhân viên thu</string>
     <string name="view_customer">Chi tiết khách hàng</string>
+    <string name="updapte_success">Cập nhật thành công</string>
+    <string name="no_customer">Không có khách hàng nào</string>
 </resources>

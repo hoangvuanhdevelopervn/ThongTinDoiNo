@@ -10,9 +10,11 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ProgressBar;
 
 import java.text.DateFormat;
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Random;
 import java.util.UUID;
 
@@ -37,6 +39,13 @@ public class Utils {
         } else {
             progressBar.setVisibility(View.VISIBLE);
         }
+    }
+
+    public static String formatCurrency(int number) {
+        NumberFormat format = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        String currency = format.format(number);
+        System.out.println("Currency in VietNam : " + currency);
+        return currency;
     }
 
     public static int getRandomColor() {

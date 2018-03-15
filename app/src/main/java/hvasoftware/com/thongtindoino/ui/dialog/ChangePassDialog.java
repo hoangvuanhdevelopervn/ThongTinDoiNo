@@ -56,7 +56,6 @@ public class ChangePassDialog extends DialogFragment {
     private FirebaseFirestore firebaseFirestore;
     private MainActivity mainActivity;
 
-
     public ChangePassDialog(MainActivity mainActivity) {
         this.mainActivity = mainActivity;
     }

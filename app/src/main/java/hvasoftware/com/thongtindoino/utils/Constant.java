@@ -14,5 +14,6 @@ public class Constant {
     public static final int STATE_THREE = 3;
 
 
-
+    public static final String KEY = "KEY";
+    public static final String MONEY = "MONEY";
 }

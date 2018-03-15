@@ -13,8 +13,8 @@ public class Customer {
     private Date ngayVay;
     private Date ngayPhaiTra;
 
-    private Double sotien;
-    private Double songayvay;
+    private int sotien;
+    private int songayvay;
 
     private Date hethan;
     private String ghichu;
@@ -80,19 +80,19 @@ public class Customer {
         this.ngayPhaiTra = ngayPhaiTra;
     }
 
-    public Double getSotien() {
+    public int getSotien() {
         return sotien;
     }
 
-    public void setSotien(Double sotien) {
+    public void setSotien(int sotien) {
         this.sotien = sotien;
     }
 
-    public Double getSongayvay() {
+    public int getSongayvay() {
         return songayvay;
     }
 
-    public void setSongayvay(Double songayvay) {
+    public void setSongayvay(int songayvay) {
         this.songayvay = songayvay;
     }
 

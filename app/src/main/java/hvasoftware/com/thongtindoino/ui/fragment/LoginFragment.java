@@ -1,5 +1,8 @@
 package hvasoftware.com.thongtindoino.ui.fragment;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.view.View;
@@ -15,6 +18,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import hvasoftware.com.thongtindoino.R;
 import hvasoftware.com.thongtindoino.base.BaseFragment;
 import hvasoftware.com.thongtindoino.model.User;
+import hvasoftware.com.thongtindoino.utils.CheckInternet;
 import hvasoftware.com.thongtindoino.utils.Constant;
 import hvasoftware.com.thongtindoino.utils.DatabaseUser;
 import hvasoftware.com.thongtindoino.utils.Utils;
@@ -29,7 +33,7 @@ public class LoginFragment extends BaseFragment {
     private View btnLogin;
     private ProgressBar progressBar;
     private DatabaseUser databaseUser;
-
+    private CheckInternet checkInternet;
 
     @Override
     protected void OnViewCreated() {
@@ -38,18 +42,26 @@ public class LoginFragment extends BaseFragment {
 
     @Override
     protected void OnBindView() {
+        checkInternet = CheckInternet.getInstance(getContext());
         databaseUser = DatabaseUser.newInstance(getContext());
         edtAccount = (EditText) findViewById(R.id.edt_acc);
         edtPass = (EditText) findViewById(R.id.edt_pass);
         btnLogin = findViewById(R.id.btn_login);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         Utils.setUpProgressBar(progressBar, true);
-        SwitchFragment(new DeptFragment(), false);
+         SwitchFragment(new DeptFragment(), false);
+
+        if (!checkInternet.isOnline()) {
+            showDialogNoInternet();
+        }
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                if (!checkInternet.isOnline()) {
+                    showDialogNoInternet();
+                    return;
+                }
 
                 Utils.HideSoftKeyboard(getContext(), btnLogin);
                 final String account = edtAccount.getText().toString().trim();
@@ -98,6 +110,24 @@ public class LoginFragment extends BaseFragment {
                 });
             }
         });
+    }
+
+    private void showDialogNoInternet() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Không kết nối!")
+                .setMessage("Vui lòng bật kết nối để tiếp tục sử dụng")
+                .setNegativeButton("Bật", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        startActivityForResult(new Intent(android.provider.Settings.ACTION_SETTINGS), 0);
+                    }
+                }).setPositiveButton("Thoát", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+                getMainAcitivity().onBackPressed();
+            }
+        }).create().show();
     }
 
     @Override

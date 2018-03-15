@@ -24,6 +24,7 @@ import hvasoftware.com.thongtindoino.base.BaseFragment;
 import hvasoftware.com.thongtindoino.model.User;
 import hvasoftware.com.thongtindoino.ui.adapter.EmployeeManageAdapter;
 import hvasoftware.com.thongtindoino.utils.Constant;
+import hvasoftware.com.thongtindoino.utils.IOnCompleteListener;
 import hvasoftware.com.thongtindoino.utils.Utils;
 
 /**
@@ -38,9 +39,16 @@ public class EmployeeManageFragment extends BaseFragment implements EmployeeMana
 
     @Override
     protected void OnViewCreated() {
+
+    }
+
+    private void fetchData() {
+        Utils.setUpProgressBar(progressBar, false);
+        userList.clear();
         firebaseFirestore.collection(Constant.COLLECTION_USER)
                 .whereEqualTo("role", Constant.ROLE_STAFF)
-                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
@@ -49,11 +57,10 @@ public class EmployeeManageFragment extends BaseFragment implements EmployeeMana
                         userList.add(user);
                     }
                     progressBar.setVisibility(View.GONE);
-                    if (userList.size() > 0){
-                        //todo: call this method after get data success
+                    if (userList.size() > 0) {
                         addEmployeeView(userList);
                         rcvUser.setVisibility(View.VISIBLE);
-                    }else {
+                    } else {
                         Toast.makeText(getContext(), "Không có nhân viên nào", Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -73,10 +80,17 @@ public class EmployeeManageFragment extends BaseFragment implements EmployeeMana
         rcvUser = (RecyclerView) findViewById(R.id.rcv_user);
         rcvUser.setVisibility(View.GONE);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
-        Utils.setUpProgressBar(progressBar, false);
         rcvUser.setLayoutManager(new LinearLayoutManager(getContext()));
         rcvUser.setAdapter(employeeManageAdapter);
+        employeeManageAdapter.setiOnCompleteListener(new IOnCompleteListener() {
+            @Override
+            public void onComplete(String staffName, String staffDocumentId) {
+                fetchData();
+            }
+        });
+
     }
+
 
     public void addEmployeeView(List<User> users) {
         employeeManageAdapter.insertUser(users);
@@ -91,6 +105,7 @@ public class EmployeeManageFragment extends BaseFragment implements EmployeeMana
     public void onResume() {
         super.onResume();
         getMainAcitivity().setScreenOrientation(true);
+        fetchData();
     }
 
 

@@ -133,12 +133,34 @@
             android:orientation="vertical"
             android:visibility="invisible">
 
+            <!--<android.support.design.widget.FloatingActionButton-->
+            <!--android:id="@+id/fab_2"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="top|center_horizontal"-->
+            <!--android:src="@drawable/ic_username"-->
+            <!--app:backgroundTint="@color/colorPrimary"-->
+            <!--app:fabSize="mini" />-->
+
+
+            <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="bottom"-->
+            <!--android:paddingTop="2dp"-->
+            <!--android:text="Khách hàng"-->
+            <!--android:textAppearance="?android:attr/textAppearanceMedium"-->
+            <!--android:textColor="@android:color/holo_red_dark"-->
+            <!--android:textSize="12sp"-->
+            <!--android:textStyle="bold"-->
+            <!--/>-->
+
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/fab_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="top|center_horizontal"
-                android:src="@drawable/ic_username"
+                android:src="@drawable/ic_action_status"
                 app:backgroundTint="@color/colorPrimary"
                 app:fabSize="mini" />
 
@@ -148,13 +170,11 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
                 android:paddingTop="2dp"
-                android:text="Khách hàng"
+                android:text="Trạng thái"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@android:color/holo_red_dark"
                 android:textSize="12sp"
-                android:textStyle="bold"
-
-                />
+                android:textStyle="bold" />
         </LinearLayout>
 
         <LinearLayout

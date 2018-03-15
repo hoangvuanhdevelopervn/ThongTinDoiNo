@@ -6,7 +6,8 @@
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ffffff"
         android:orientation="vertical">
 
         <RelativeLayout
@@ -33,12 +34,11 @@
                 android:id="@+id/label_obj_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:layout_toRightOf="@id/ic_obj_name"
+                android:layout_marginStart="15dp"
+                android:layout_toEndOf="@id/ic_obj_name"
                 android:text="@string/customer_name"
                 android:textColor="@color/objective_label"
                 android:textSize="@dimen/text_size_normal" />
-
 
             <EditText
                 android:id="@+id/edt_obj_name"
@@ -49,7 +49,7 @@
                 android:layout_below="@id/label_obj_name"
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="10dp"
-                android:layout_toRightOf="@id/ic_obj_name"
+                android:layout_toEndOf="@id/ic_obj_name"
                 android:background="@null"
                 android:gravity="left|bottom"
                 android:imeOptions="actionNext"
@@ -64,10 +64,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
                 android:layout_below="@id/edt_obj_name"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="@dimen/margin_normal"
+                android:layout_marginEnd="@dimen/margin_normal"
+                android:layout_marginStart="15dp"
                 android:layout_marginTop="2dp"
-                android:layout_toRightOf="@id/ic_obj_name"
+                android:layout_toEndOf="@id/ic_obj_name"
                 android:background="@color/grey" />
 
             <TextView
@@ -113,22 +113,21 @@
                 android:textColor="@color/objective_label"
                 android:textSize="@dimen/text_size_normal" />
 
-            <EditText
+            <TextView
                 android:id="@+id/edt_take_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/label_take_date"
-                android:layout_marginLeft="15dp"
+                android:layout_marginStart="15dp"
                 android:layout_marginTop="10dp"
-                android:layout_toRightOf="@id/ic_take_date"
-                android:background="@null"
-                android:gravity="left|bottom"
-                android:imeOptions="actionNext"
-                android:inputType="date"
+                android:layout_toEndOf="@id/ic_take_date"
+                android:gravity="bottom"
                 android:minHeight="32dp"
                 android:scrollHorizontally="true"
-                android:textColor="@color/objective_text"
-                android:textSize="@dimen/text_size_normal" />
+                android:text="Ấn vào đây để đặt ngày vay"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/text_size_normal"
+                android:textStyle="bold" />
 
             <View
                 android:id="@+id/line2"
@@ -185,22 +184,23 @@
                 android:textColor="@color/objective_label"
                 android:textSize="@dimen/text_size_normal" />
 
-            <EditText
+            <TextView
                 android:id="@+id/edt_pay_day"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/label_day_pay"
                 android:layout_marginLeft="15dp"
                 android:layout_marginTop="10dp"
-                android:layout_toRightOf="@id/ic_day_pay"
+                android:layout_toEndOf="@id/ic_day_pay"
                 android:background="@null"
                 android:gravity="left|bottom"
-                android:imeOptions="actionNext"
                 android:inputType="date"
                 android:minHeight="32dp"
                 android:scrollHorizontally="true"
-                android:textColor="@color/objective_text"
-                android:textSize="@dimen/text_size_normal" />
+                android:text="Ấn vào đây để đặt ngày trả"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/text_size_normal"
+                android:textStyle="bold" />
 
             <View
                 android:id="@+id/line3"
@@ -257,7 +257,7 @@
                 android:textSize="@dimen/text_size_normal" />
 
 
-            <EditText
+            <TextView
                 android:id="@+id/edt_day"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -266,13 +266,14 @@
                 android:layout_below="@id/label_day"
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="10dp"
-                android:layout_toRightOf="@id/ic_day"
+                android:layout_toEndOf="@id/ic_day"
                 android:background="@null"
                 android:gravity="left|bottom"
                 android:imeOptions="actionNext"
                 android:inputType="number"
                 android:minHeight="32dp"
                 android:scrollHorizontally="true"
+                android:text="@string/days"
                 android:textColor="@color/objective_text"
                 android:textSize="@dimen/text_size_normal" />
 
@@ -342,7 +343,7 @@
                 android:background="@null"
                 android:gravity="left|bottom"
                 android:imeOptions="actionNext"
-                android:inputType="numberDecimal"
+                android:inputType="number"
                 android:minHeight="32dp"
                 android:scrollHorizontally="true"
                 android:textColor="@color/objective_text"
@@ -371,7 +372,6 @@
                 android:textSize="@dimen/recog_text_size_small"
                 android:visibility="gone" />
         </RelativeLayout>
-
 
 
         <RelativeLayout
@@ -404,7 +404,7 @@
                 android:textColor="@color/objective_label"
                 android:textSize="@dimen/text_size_normal" />
 
-            <EditText
+            <TextView
                 android:id="@+id/edt_out"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -414,12 +414,12 @@
                 android:layout_toEndOf="@id/ic_out"
                 android:background="@null"
                 android:gravity="left|bottom"
-                android:imeOptions="actionNext"
-                android:inputType="date"
                 android:minHeight="32dp"
                 android:scrollHorizontally="true"
-                android:textColor="@color/objective_text"
-                android:textSize="@dimen/text_size_normal" />
+                android:text="Ấn vào đây để đặt ngày hết hạn"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/text_size_normal"
+                android:textStyle="bold" />
 
             <View
                 android:id="@+id/line_out"
@@ -757,22 +757,23 @@
                 android:textColor="@color/objective_label"
                 android:textSize="@dimen/text_size_normal" />
 
-            <Spinner
-                android:id="@+id/spinner_staff"
+            <TextView
+                android:id="@+id/tvChooseStaff"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/label_staff"
-                android:layout_marginLeft="15dp"
+                android:layout_marginStart="15dp"
                 android:layout_marginTop="10dp"
-                android:layout_toRightOf="@id/ic_staff"
+                android:layout_toEndOf="@id/ic_staff"
                 android:background="@null"
                 android:gravity="left|bottom"
-                android:imeOptions="actionNext"
-                android:inputType="textCapSentences"
+                android:textStyle="bold"
                 android:minHeight="32dp"
                 android:scrollHorizontally="true"
-                android:textColor="@color/objective_text"
-                android:textSize="@dimen/text_size_normal" />
+                android:text="Ấn vào đây để chọn nhân viên thu"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/text_size_normal"
+                tools:ignore="RtlHardcoded" />
 
         </RelativeLayout>
 
