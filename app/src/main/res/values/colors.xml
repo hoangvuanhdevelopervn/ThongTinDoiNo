@@ -10,4 +10,5 @@
     <color name="grey">#ACACAC</color>
     <color name="statusGreen">#39B54A</color>
     <color name="background">#f0f1f3</color>
+    <color name="black_semi_transparent">#B2000000</color>
 </resources>

@@ -104,7 +104,7 @@
                 android:id="@+id/fab_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="top|center_horizontal"
+                android:layout_gravity="center_horizontal"
                 android:src="@android:drawable/ic_menu_compass"
                 app:backgroundTint="@color/colorPrimary"
                 app:fabSize="mini" />
@@ -113,12 +113,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:paddingTop="2dp"
                 android:text="Nhân viên"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@android:color/holo_red_dark"
+                android:textColor="@android:color/white"
                 android:textSize="12sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:paddingLeft="1dp"
+                android:paddingRight="1dp"
+                android:background="@color/black_semi_transparent"
+                android:gravity="center"/>
 
         </LinearLayout>
 
@@ -127,9 +130,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
-            android:layout_marginBottom="@dimen/fab_margin"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
+            android:layout_marginBottom="11dp"
+            android:layout_marginRight="11dp"
             android:orientation="vertical"
             android:visibility="invisible">
 
@@ -137,7 +139,7 @@
                 android:id="@+id/fab_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="top|center_horizontal"
+                android:layout_gravity="center_horizontal"
                 android:src="@drawable/ic_username"
                 app:backgroundTint="@color/colorPrimary"
                 app:fabSize="mini" />
@@ -147,13 +149,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:paddingTop="2dp"
                 android:text="Khách hàng"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@android:color/holo_red_dark"
+                android:textColor="@android:color/white"
                 android:textSize="12sp"
                 android:textStyle="bold"
-
+                android:background="@color/black_semi_transparent"
+                android:gravity="center"
+                android:paddingLeft="1dp"
+                android:paddingRight="1dp"
                 />
         </LinearLayout>
 
@@ -164,7 +168,6 @@
             android:layout_gravity="bottom|end"
             android:layout_marginBottom="@dimen/fab_margin"
             android:layout_marginRight="5dp"
-            android:layout_marginTop="5dp"
             android:orientation="vertical"
             android:visibility="invisible">
 
@@ -172,7 +175,7 @@
                 android:id="@+id/fab_3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="top|center_horizontal"
+                android:layout_gravity="center_horizontal"
                 android:src="@android:drawable/ic_menu_day"
                 app:backgroundTint="@color/colorPrimary"
                 app:fabSize="mini" />
@@ -182,12 +185,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:paddingTop="2dp"
                 android:text="Ngày/tháng"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@android:color/holo_red_dark"
+                android:textColor="@android:color/white"
                 android:textSize="12sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:background="@color/black_semi_transparent"
+                android:gravity="center"
+                android:paddingLeft="1dp"
+                android:paddingRight="1dp"
+                />
         </LinearLayout>
     </FrameLayout>
 </RelativeLayout>
