@@ -11,12 +11,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,9 +21,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.WriteBatch;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import java.text.ParseException;
@@ -41,11 +40,9 @@ import java.util.Map;
 
 import hvasoftware.com.thongtindoino.R;
 import hvasoftware.com.thongtindoino.base.BaseFragment;
-import hvasoftware.com.thongtindoino.bussiness.CustomerBusiness;
 import hvasoftware.com.thongtindoino.model.Customer;
 import hvasoftware.com.thongtindoino.model.User;
 import hvasoftware.com.thongtindoino.ui.adapter.AdapterAssign;
-import hvasoftware.com.thongtindoino.ui.dialog.ChooseEmployeeDialog;
 import hvasoftware.com.thongtindoino.utils.Constant;
 import hvasoftware.com.thongtindoino.utils.DateTimeUtils;
 import hvasoftware.com.thongtindoino.utils.IOnCompleteListener;
@@ -55,16 +52,17 @@ import hvasoftware.com.thongtindoino.utils.Utils;
  * Created by Thanh on 03/10/2018.
  */
 
+@SuppressWarnings("SpellCheckingInspection")
 @SuppressLint("ValidFragment")
-public class AddCustomerFragment extends BaseFragment implements com.wdullaer.materialdatetimepicker.date.DatePickerDialog.OnDateSetListener {
+public class AddCustomerFragment extends BaseFragment {
     private static final String TAG = "AddCustomerFragment";
     private ScreenType screenType;
     private EditText edt_CustomerName;
-    private TextView tvNgayVay;
-    private TextView tvNgayTra;
+    private EditText edt_NgayVay;
+    private EditText edt_NgayTra;
     private TextView tvSoNgayVay;
     private EditText edt_SoTienVay;
-    private TextView tvHetHan;
+    private EditText edt_HetHan;
     private EditText edt_Note;
     private EditText edt_Address;
     private EditText edt_Phone;
@@ -75,15 +73,11 @@ public class AddCustomerFragment extends BaseFragment implements com.wdullaer.ma
     private DatePickerDialog ngayVay;
     private DatePickerDialog ngayTra;
     private DatePickerDialog hetHan;
-    private String userName = null;
-    private String userDocumentId = null;
+    private String staffName = null;
+    private String staffDocumentId = null;
     private FirebaseFirestore firebaseFirestore;
+    private String customerDocumentId;
 
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
 
     @SuppressLint("ValidFragment")
     public AddCustomerFragment(ScreenType screenType) {
@@ -91,23 +85,31 @@ public class AddCustomerFragment extends BaseFragment implements com.wdullaer.ma
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        savedInstanceState = this.getArguments();
+        if (savedInstanceState != null) {
+            customerDocumentId = savedInstanceState.getString(Constant.KEY);
+        }
+    }
+
+    @Override
     protected void OnViewCreated() {
-        firebaseFirestore = FirebaseFirestore.getInstance();
-        Calendar calendar = Calendar.getInstance();
-        ngayVay = DatePickerDialog.newInstance(this, calendar);
-        ngayTra = DatePickerDialog.newInstance(this, calendar);
-        hetHan = DatePickerDialog.newInstance(this, calendar);
+//        Calendar calendar = Calendar.getInstance();
+//        ngayVay = DatePickerDialog.newInstance(this, calendar);
+//        ngayTra = DatePickerDialog.newInstance(this, calendar);
+//        hetHan = DatePickerDialog.newInstance(this, calendar);
     }
 
     @Override
     protected void OnBindView() {
+        firebaseFirestore = FirebaseFirestore.getInstance();
         edt_CustomerName = (EditText) findViewById(R.id.edt_obj_name);
-        tvNgayVay = (TextView) findViewById(R.id.edt_take_date);
-        tvNgayVay.setText(DateTimeUtils.getDateToday());
-        tvNgayTra = (TextView) findViewById(R.id.edt_pay_day);
+        edt_NgayVay = (EditText) findViewById(R.id.edt_take_date);
+        edt_NgayTra = (EditText) findViewById(R.id.edt_pay_day);
         tvSoNgayVay = (TextView) findViewById(R.id.edt_day);
         edt_SoTienVay = (EditText) findViewById(R.id.edt_money);
-        tvHetHan = (TextView) findViewById(R.id.edt_out);
+        edt_HetHan = (EditText) findViewById(R.id.edt_out);
         edt_Note = (EditText) findViewById(R.id.edt_note);
         edt_Address = (EditText) findViewById(R.id.edt_address);
         edt_Phone = (EditText) findViewById(R.id.edt_phone);
@@ -119,32 +121,57 @@ public class AddCustomerFragment extends BaseFragment implements com.wdullaer.ma
                 setUpNhanVienThu();
             }
         });
-
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         Utils.setUpProgressBar(progressBar, true);
         tvUpload = (TextView) findViewById(R.id.tvUpload);
 
-        tvNgayVay.setOnClickListener(new View.OnClickListener() {
+        if (!TextUtils.isEmpty(customerDocumentId)) {
+            bindData();
+            tvUpload.setText(R.string.update);
+        } else {
+            tvUpload.setText(getActivity().getString(R.string.add_customer));
+            edt_NgayVay.setText(DateTimeUtils.getDateToday());
+        }
+
+        tvUpload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ngayVay.show(getActivity().getFragmentManager(), TAG);
+                uploadCustomer();
             }
         });
 
-        tvNgayTra.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ngayTra.show(getActivity().getFragmentManager(), TAG);
-            }
-        });
+    }
 
-        tvHetHan.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                hetHan.show(getActivity().getFragmentManager(), TAG);
-            }
-        });
-        uploadCustomer();
+    private void bindData() {
+
+        firebaseFirestore.collection(Constant.COLLECTION_CUSTOMER)
+                .document(customerDocumentId)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @SuppressLint("SetTextI18n")
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document != null && document.exists()) {
+                                Customer customer = document.toObject(Customer.class);
+                                staffName = customer.getNhanvienthu();
+                                staffDocumentId = customer.getNhanvienthuDocumentId();
+                                edt_CustomerName.setText(customer.getTen());
+                                edt_NgayVay.setText(customer.getNgayVay());
+                                edt_NgayTra.setText(customer.getNgayPhaiTra());
+                                edt_SoTienVay.setText("" + customer.getSotien());
+                                tvSoNgayVay.setText("" + customer.getSongayvay());
+                                edt_HetHan.setText(customer.getHethan());
+                                edt_Note.setText(customer.getGhichu());
+                                edt_Address.setText(customer.getDiachi());
+                                edt_Phone.setText(customer.getSodienthoai());
+                                edt_CMND.setText(customer.getCmnd());
+                                tvChooseStaff.setText(staffName);
+                            }
+                        }
+                    }
+                });
     }
 
     private void setUpNhanVienThu() {
@@ -169,14 +196,17 @@ public class AddCustomerFragment extends BaseFragment implements com.wdullaer.ma
                         User user = documentSnapshot.toObject(User.class);
                         userList.add(user);
                     }
+                    if (userList.size() == 0) {
+                        Toast.makeText(getActivity(), "Không có nhân viên nào", Toast.LENGTH_SHORT).show();
+                    }
                     progressBar.setVisibility(View.GONE);
                     AdapterAssign adapterAssign = new AdapterAssign("", getActivity(), userList);
                     lvUser.setAdapter(adapterAssign);
                     adapterAssign.setOnCompleteListener(new IOnCompleteListener() {
                         @Override
                         public void onComplete(String staffName, String staffDocumentId) {
-                            userName = staffName;
-                            userDocumentId = staffDocumentId;
+                            AddCustomerFragment.this.staffName = staffName;
+                            AddCustomerFragment.this.staffDocumentId = staffDocumentId;
                             tvChooseStaff.setText(staffName);
                             dialog.dismiss();
                         }
@@ -193,104 +223,150 @@ public class AddCustomerFragment extends BaseFragment implements com.wdullaer.ma
         dialog.show();
     }
 
+
     @SuppressLint("ClickableViewAccessibility")
     private void uploadCustomer() {
-        tvUpload.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String customerName = edt_CustomerName.getText().toString().trim();
+        long customerSoTienVay;
+        int soNgayVay;
+        String customerName = edt_CustomerName.getText().toString().trim();
+        String ngayVay = edt_NgayVay.getText().toString().trim();
+        String ngayTra = edt_NgayTra.getText().toString().trim();
+        String hetHan = edt_HetHan.getText().toString().trim();
 
-                Date customerNgayVay = Utils.parseStringToDate(tvNgayVay.getText().toString().trim());
-                Date customerNgayTra = Utils.parseStringToDate(tvNgayTra.getText().toString().trim());
-                Date customerHetHan = Utils.parseStringToDate(tvHetHan.getText().toString().trim());
+        String customerGhiChu = edt_Note.getText().toString().trim();
+        String customerDiaChi = edt_Address.getText().toString().trim();
+        String customerSoDienThoai = edt_Phone.getText().toString().trim();
+        String customerCMND = edt_CMND.getText().toString().trim();
 
 
-                int customerSoTienVay = 0;
-                try {
-                    customerSoTienVay = Integer.valueOf(edt_SoTienVay.getText().toString().trim());
-                } catch (NumberFormatException e) {
-                    e.printStackTrace();
+        if (TextUtils.isEmpty(customerName)) {
+            Toast.makeText(getContext(), "Bạn chưa nhập tên khách hàng", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (TextUtils.isEmpty(ngayVay)) {
+            Toast.makeText(getContext(), "Bạn chưa nhập ngày vay", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (TextUtils.isEmpty(ngayTra)) {
+            Toast.makeText(getContext(), "Bạn chưa nhập ngày trả", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        soNgayVay = get_count_of_days(ngayVay, ngayTra);
+        tvSoNgayVay.setText("" + soNgayVay);
+        if (soNgayVay < 0) {
+            Toast.makeText(getActivity(), "Số ngày vay không thể nhỏ hơn 0", Toast.LENGTH_SHORT).show();
+        }
+
+        if (TextUtils.isEmpty(hetHan)) {
+            Toast.makeText(getContext(), "Bạn chưa nhập ngày hết hạn", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (TextUtils.isEmpty(edt_SoTienVay.getText().toString().trim())) {
+            Toast.makeText(getContext(), "Bạn chưa nhập số tiền vay", Toast.LENGTH_SHORT).show();
+            return;
+        } else {
+            customerSoTienVay = Integer.valueOf(edt_SoTienVay.getText().toString().trim());
+        }
+
+        if (TextUtils.isEmpty(customerGhiChu)) {
+            Toast.makeText(getContext(), "Bạn chưa nhập ghi chú", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+
+        if (TextUtils.isEmpty(customerDiaChi)) {
+            Toast.makeText(getContext(), "Bạn chưa nhập địa chỉ của khách hàng", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+
+        if (TextUtils.isEmpty(customerSoDienThoai)) {
+            Toast.makeText(getContext(), "Bạn chưa nhập số điện thoại của khách hàng", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+
+        if (TextUtils.isEmpty(customerCMND)) {
+            Toast.makeText(getContext(), "Bạn chưa nhập số chứng minh nhân dân", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        progressBar.setVisibility(View.VISIBLE);
+
+
+        if (TextUtils.isEmpty(customerDocumentId)) {
+            //upload new customer
+            CollectionReference collectionReference = firebaseFirestore.collection(Constant.COLLECTION_CUSTOMER);
+            String objectId = Utils.getRandomUUID();
+            Map<String, Object> objectMap = new HashMap<>();
+            objectMap.put("objectID", objectId);
+            objectMap.put("documentId", objectId);
+            objectMap.put("ten", customerName);
+            objectMap.put("ngayVay", ngayVay);
+            objectMap.put("ngayPhaiTra", ngayTra);
+            objectMap.put("hethan", hetHan);
+            objectMap.put("sotien", customerSoTienVay);
+            objectMap.put("songayvay", soNgayVay);
+            objectMap.put("ghichu", customerGhiChu);
+            objectMap.put("diachi", customerDiaChi);
+            objectMap.put("sodienthoai", customerSoDienThoai);
+            objectMap.put("cmnd", customerCMND);
+            objectMap.put("nhanvienthu", staffName);
+            objectMap.put("nhanvienthuDocumentId", staffDocumentId);
+            objectMap.put("createAt", Utils.getCurrentDateTime());
+            objectMap.put("updateAt", Utils.getCurrentDateTime());
+            objectMap.put("trangthai", Constant.STATE_ONE);
+            collectionReference.document(objectId).set(objectMap)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            progressBar.setVisibility(View.GONE);
+                            Toast.makeText(getContext(), "Thêm khách hàng thành công", Toast.LENGTH_SHORT).show();
+                            getActivity().onBackPressed();
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    progressBar.setVisibility(View.GONE);
+                    Toast.makeText(getContext(), "Thêm khách hàng thất bại! Vui lòng thử lại sau", Toast.LENGTH_SHORT).show();
+                    Log.wtf(TAG, "==============================>" + e.getMessage());
+                    getActivity().onBackPressed();
                 }
-
-
-                int customerSoNgayVay = Integer.parseInt(tvSoNgayVay.getText().toString());
-
-                String customerGhiChu = edt_Note.getText().toString().trim();
-                String customerDiaChi = edt_Address.getText().toString().trim();
-                String customerSoDienThoai = edt_Phone.getText().toString().trim();
-                String customerCMND = edt_CMND.getText().toString().trim();
-
-
-                if (TextUtils.isEmpty(customerName)) {
-                    Toast.makeText(getContext(), "Bạn chưa nhập tên khách hàng", Toast.LENGTH_SHORT).show();
-                    return;
+            });
+        } else {
+            WriteBatch writeBatch = firebaseFirestore.batch();
+            DocumentReference updateCustomer = firebaseFirestore.collection(Constant.COLLECTION_CUSTOMER).document(customerDocumentId);
+            writeBatch.update(updateCustomer, "ten", customerName);
+            writeBatch.update(updateCustomer, "ngayVay", ngayVay);
+            writeBatch.update(updateCustomer, "ngayPhaiTra", ngayTra);
+            writeBatch.update(updateCustomer, "hethan", hetHan);
+            writeBatch.update(updateCustomer, "sotien", customerSoTienVay);
+            writeBatch.update(updateCustomer, "songayvay", soNgayVay);
+            writeBatch.update(updateCustomer, "ghichu", customerGhiChu);
+            writeBatch.update(updateCustomer, "diachi", customerDiaChi);
+            writeBatch.update(updateCustomer, "sodienthoai", customerSoDienThoai);
+            writeBatch.update(updateCustomer, "cmnd", customerCMND);
+            writeBatch.update(updateCustomer, "nhanvienthu", staffName);
+            writeBatch.update(updateCustomer, "nhanvienthuDocumentId", staffDocumentId);
+            writeBatch.update(updateCustomer, "updateAt", Utils.getCurrentDateTime());
+            writeBatch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    Toast.makeText(getContext(), getActivity().getString(R.string.updapte_success), Toast.LENGTH_SHORT).show();
+                    getActivity().onBackPressed();
                 }
-
-                if (TextUtils.isEmpty(customerGhiChu)) {
-                    Toast.makeText(getContext(), "Bạn chưa nhập ghi chú", Toast.LENGTH_SHORT).show();
-                    return;
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(getContext(), getActivity().getString(R.string.updapte_failed), Toast.LENGTH_SHORT).show();
+                    getActivity().onBackPressed();
+                    Log.wtf(TAG, "==============================>" + e.getMessage());
                 }
-
-
-                if (TextUtils.isEmpty(customerDiaChi)) {
-                    Toast.makeText(getContext(), "Bạn chưa nhập địa chỉ của khách hàng", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-
-                if (TextUtils.isEmpty(customerSoDienThoai)) {
-                    Toast.makeText(getContext(), "Bạn chưa nhập số điện thoại của khách hàng", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-
-                if (TextUtils.isEmpty(customerCMND)) {
-                    Toast.makeText(getContext(), "Bạn chưa nhập số chứng minh nhân dân", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                progressBar.setVisibility(View.VISIBLE);
-                CollectionReference collectionReference = firebaseFirestore.collection(Constant.COLLECTION_CUSTOMER);
-
-
-                String objectId = Utils.getRandomUUID();
-                Map<String, Object> objectMap = new HashMap<>();
-                objectMap.put("objectID", objectId);
-                objectMap.put("documentId", objectId);
-                objectMap.put("ten", customerName);
-                objectMap.put("ngayVay", customerNgayVay);
-                objectMap.put("ngayPhaiTra", customerNgayTra);
-                objectMap.put("hethan", customerHetHan);
-                objectMap.put("sotien", customerSoTienVay);
-                objectMap.put("songayvay", customerSoNgayVay);
-                objectMap.put("ghichu", customerGhiChu);
-                objectMap.put("diachi", customerDiaChi);
-                objectMap.put("sodienthoai", customerSoDienThoai);
-                objectMap.put("cmnd", customerCMND);
-                objectMap.put("nhanvienthu", userName);
-                objectMap.put("nhanvienthuDocumentId", userDocumentId);
-                objectMap.put("createAt", Utils.getCurrentDateTime());
-                objectMap.put("updateAt", Utils.getCurrentDateTime());
-                objectMap.put("trangthai", Constant.STATE_ONE);
-                collectionReference.document(objectId).set(objectMap)
-                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                progressBar.setVisibility(View.GONE);
-                                Toast.makeText(getContext(), "Thêm khách hàng thành công", Toast.LENGTH_SHORT).show();
-                                getActivity().onBackPressed();
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        progressBar.setVisibility(View.GONE);
-                        Toast.makeText(getContext(), "Thêm khách hàng thất bại! Vui lòng thử lại sau", Toast.LENGTH_SHORT).show();
-                        Log.wtf(TAG, "==============================>" + e.getMessage());
-                        getActivity().onBackPressed();
-                    }
-                });
-            }
-        });
+            });
+        }
     }
 
     @Override
@@ -314,31 +390,7 @@ public class AddCustomerFragment extends BaseFragment implements com.wdullaer.ma
         return false;
     }
 
-    @SuppressLint("SetTextI18n")
-    @Override
-    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
-        int mStartYear = 0, mStartMonth = 0, mStartDay = 0;
-        int mEndYear = 0, mEndMonth = 0, mEndDay = 0;
-        if (view == ngayVay) {
-            mStartYear = year;
-            mStartMonth = monthOfYear + 1;
-            mStartDay = dayOfMonth;
-            tvNgayVay.setText(mStartDay + "/" + (mStartMonth) + "/" + mStartYear);
-        } else if (view == ngayTra) {
-            mEndYear = year;
-            mEndMonth = monthOfYear + 1;
-            mEndDay = dayOfMonth;
-            tvNgayTra.setText(mEndDay + "/" + (mEndMonth) + "/" + mEndYear);
-        } else {
-            tvHetHan.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
-        }
-
-        String startDate = mStartDay + "/" + mStartMonth + "/" + mStartYear;
-        String endDate = mEndDay + "/" + mEndMonth + "/" + mEndYear;
-        tvSoNgayVay.setText(get_count_of_days(startDate, endDate));
-    }
-
-    public String get_count_of_days(String Created_date_String, String Expire_date_String) {
+    public int get_count_of_days(String Created_date_String, String Expire_date_String) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
         Date Created_convertedDate = null, Expire_CovertedDate = null, todayWithZeroTime = null;
         try {
@@ -387,7 +439,7 @@ public class AddCustomerFragment extends BaseFragment implements com.wdullaer.ma
 
         long diff = date2.getTimeInMillis() - date1.getTimeInMillis();
         float dayCount = (float) diff / (24 * 60 * 60 * 1000);
-        return ("" + (int) dayCount + " Ngày");
+        return (int) dayCount;
     }
 
     public enum ScreenType {

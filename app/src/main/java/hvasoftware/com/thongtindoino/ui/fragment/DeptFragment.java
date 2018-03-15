@@ -1,8 +1,6 @@
 package hvasoftware.com.thongtindoino.ui.fragment;
 
 import android.annotation.SuppressLint;
-import android.app.Dialog;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -10,10 +8,10 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
+import android.widget.HorizontalScrollView;
 import android.widget.PopupMenu;
 import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,18 +21,13 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import hvasoftware.com.thongtindoino.R;
 import hvasoftware.com.thongtindoino.base.BaseFragment;
 import hvasoftware.com.thongtindoino.model.Customer;
-import hvasoftware.com.thongtindoino.model.User;
 import hvasoftware.com.thongtindoino.ui.dialog.ChooseEmployeeDialog;
 import hvasoftware.com.thongtindoino.ui.dialog.InputMoneyDialog;
 import hvasoftware.com.thongtindoino.utils.CheckInternet;
 import hvasoftware.com.thongtindoino.utils.Constant;
-import hvasoftware.com.thongtindoino.utils.DateTimeUtils;
 import hvasoftware.com.thongtindoino.utils.Utils;
 
 
@@ -43,15 +36,18 @@ import hvasoftware.com.thongtindoino.utils.Utils;
  */
 
 public class DeptFragment extends BaseFragment {
-    TableLayout deptTable;
     private final String TAG = "DeptFragment";
+    private TableLayout deptTable;
     private CheckInternet checkInternet;
+    private HorizontalScrollView horizontalView;
+    private TableRow table_header;
 
     @Override
     protected void OnBindView() {
         deptTable = (TableLayout) findViewById(R.id.dept_table);
+        table_header = (TableRow) findViewById(R.id.table_header);
+        horizontalView = (HorizontalScrollView) findViewById(R.id.horizontalView);
         checkInternet = CheckInternet.getInstance(getContext());
-        bindDataToTable();
     }
 
     @Override
@@ -60,6 +56,11 @@ public class DeptFragment extends BaseFragment {
     }
 
     public void bindDataToTable() {
+        final Customer[] customer = {null};
+        final View[] dataRow = new View[1];
+        deptTable.removeAllViews();
+        deptTable.addView(table_header);
+        horizontalView.setVisibility(View.GONE);
         firebaseFirestore.collection(Constant.COLLECTION_CUSTOMER)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -72,35 +73,33 @@ public class DeptFragment extends BaseFragment {
                                 return;
                             }
                             for (DocumentSnapshot documentSnapshot : task.getResult()) {
-                                final Customer customer = documentSnapshot.toObject(Customer.class);
-                                final View dataRow = LayoutInflater.from(getContext()).inflate(R.layout.view_dept_row, null);
-                                final TextView tvCustomerId = dataRow.findViewById(R.id.tvCustomerId);
-                                final TextView tvCustomerName = dataRow.findViewById(R.id.tvCustomerName);
-                                final TextView tvCustomerNgayVay = dataRow.findViewById(R.id.tvCustomerNgayVay);
-                                final TextView tvCustomerSoTien = dataRow.findViewById(R.id.tvCustomerSoTien);
-                                final TextView tvCustomerSoNgayVay = dataRow.findViewById(R.id.tvCustomerSoNgayVay);
-                                final TextView tvCustomerHetHan = dataRow.findViewById(R.id.tvCustomerHetHan);
-                                final TextView tvCustomerGhiChu = dataRow.findViewById(R.id.tvCustomerGhiChu);
-                                final TextView tvCustomerNhanVienThu = dataRow.findViewById(R.id.tvCustomerNhanVienThu);
+                                customer[0] = documentSnapshot.toObject(Customer.class);
+                                dataRow[0] = LayoutInflater.from(getContext()).inflate(R.layout.view_dept_row, null);
+                                final TextView tvCustomerId = dataRow[0].findViewById(R.id.tvCustomerId);
+                                final TextView tvCustomerName = dataRow[0].findViewById(R.id.tvCustomerName);
+                                final TextView tvCustomerNgayVay = dataRow[0].findViewById(R.id.tvCustomerNgayVay);
+                                final TextView tvCustomerSoTien = dataRow[0].findViewById(R.id.tvCustomerSoTien);
+                                final TextView tvCustomerSoNgayVay = dataRow[0].findViewById(R.id.tvCustomerSoNgayVay);
+                                final TextView tvCustomerHetHan = dataRow[0].findViewById(R.id.tvCustomerHetHan);
+                                final TextView tvCustomerGhiChu = dataRow[0].findViewById(R.id.tvCustomerGhiChu);
+                                final TextView tvCustomerNhanVienThu = dataRow[0].findViewById(R.id.tvCustomerNhanVienThu);
 
-                                tvCustomerId.setText(customer.getObjectID().substring(0, 10) + "...");
-                                tvCustomerName.setText(customer.getTen());
-                                tvCustomerNgayVay.setText(DateTimeUtils.formatDatetime(getMainAcitivity(), customer.getNgayVay()));
-                                tvCustomerSoTien.setText("" + Utils.formatCurrency(customer.getSotien()));
-                                tvCustomerSoNgayVay.setText("" + customer.getSongayvay());
-                                tvCustomerHetHan.setText(DateTimeUtils.formatDatetime(getMainAcitivity(), customer.getHethan()));
-                                tvCustomerGhiChu.setText(customer.getGhichu());
-                                tvCustomerNhanVienThu.setText(customer.getNhanvienthu());
-                                deptTable.addView(dataRow);
-
-                                dataRow.setOnClickListener(new View.OnClickListener() {
+                                tvCustomerId.setText(customer[0].getObjectID().substring(0, 10) + "...");
+                                tvCustomerName.setText(customer[0].getTen());
+                                tvCustomerNgayVay.setText(customer[0].getNgayVay());
+                                tvCustomerSoTien.setText("" + Utils.formatCurrency(customer[0].getSotien()));
+                                tvCustomerSoNgayVay.setText("" + customer[0].getSongayvay());
+                                tvCustomerHetHan.setText(customer[0].getHethan());
+                                tvCustomerGhiChu.setText(customer[0].getGhichu());
+                                tvCustomerNhanVienThu.setText(customer[0].getNhanvienthu());
+                                horizontalView.setVisibility(View.VISIBLE);
+                                deptTable.addView(dataRow[0]);
+                                dataRow[0].setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
-                                        showMenu(dataRow, customer);
+                                        showMenu(dataRow[0], customer[0]);
                                     }
                                 });
-
-
                             }
                         }
                     }
@@ -130,7 +129,7 @@ public class DeptFragment extends BaseFragment {
                         InputMoneyDialog inputMoneyDialog = new InputMoneyDialog();
                         Bundle bundle2 = new Bundle();
                         bundle2.putString(Constant.KEY, customer.getDocumentId());
-                        bundle2.putInt(Constant.MONEY, customer.getSotien());
+                        bundle2.putLong(Constant.MONEY, customer.getSotien());
                         inputMoneyDialog.setArguments(bundle2);
                         inputMoneyDialog.show(getMainAcitivity().getFragmentManager(), TAG);
                         break;
@@ -153,6 +152,7 @@ public class DeptFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
         getMainAcitivity().setScreenOrientation(false);
+        bindDataToTable();
     }
 
     @Override

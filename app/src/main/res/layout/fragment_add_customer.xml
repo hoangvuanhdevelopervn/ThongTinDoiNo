@@ -113,21 +113,21 @@
                 android:textColor="@color/objective_label"
                 android:textSize="@dimen/text_size_normal" />
 
-            <TextView
+            <EditText
                 android:id="@+id/edt_take_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/label_take_date"
-                android:layout_marginStart="15dp"
+                android:layout_marginLeft="15dp"
                 android:layout_marginTop="10dp"
                 android:layout_toEndOf="@id/ic_take_date"
-                android:gravity="bottom"
+                android:background="@null"
+                android:gravity="left|bottom"
+                android:inputType="date"
                 android:minHeight="32dp"
                 android:scrollHorizontally="true"
-                android:text="Ấn vào đây để đặt ngày vay"
                 android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/text_size_normal"
-                android:textStyle="bold" />
+                android:textSize="@dimen/text_size_normal" />
 
             <View
                 android:id="@+id/line2"
@@ -184,7 +184,7 @@
                 android:textColor="@color/objective_label"
                 android:textSize="@dimen/text_size_normal" />
 
-            <TextView
+            <EditText
                 android:id="@+id/edt_pay_day"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -197,10 +197,8 @@
                 android:inputType="date"
                 android:minHeight="32dp"
                 android:scrollHorizontally="true"
-                android:text="Ấn vào đây để đặt ngày trả"
                 android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/text_size_normal"
-                android:textStyle="bold" />
+                android:textSize="@dimen/text_size_normal" />
 
             <View
                 android:id="@+id/line3"
@@ -404,7 +402,7 @@
                 android:textColor="@color/objective_label"
                 android:textSize="@dimen/text_size_normal" />
 
-            <TextView
+            <EditText
                 android:id="@+id/edt_out"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -414,9 +412,9 @@
                 android:layout_toEndOf="@id/ic_out"
                 android:background="@null"
                 android:gravity="left|bottom"
+                android:inputType="date"
                 android:minHeight="32dp"
                 android:scrollHorizontally="true"
-                android:text="Ấn vào đây để đặt ngày hết hạn"
                 android:textColor="@color/colorPrimary"
                 android:textSize="@dimen/text_size_normal"
                 android:textStyle="bold" />
@@ -767,12 +765,12 @@
                 android:layout_toEndOf="@id/ic_staff"
                 android:background="@null"
                 android:gravity="left|bottom"
-                android:textStyle="bold"
                 android:minHeight="32dp"
                 android:scrollHorizontally="true"
                 android:text="Ấn vào đây để chọn nhân viên thu"
                 android:textColor="@color/colorPrimary"
                 android:textSize="@dimen/text_size_normal"
+                android:textStyle="bold"
                 tools:ignore="RtlHardcoded" />
 
         </RelativeLayout>
@@ -802,8 +800,9 @@
             android:background="@drawable/login_btn"
             android:clickable="true"
             android:gravity="center"
-            android:text="Thêm khách hàng"
+            android:text="@string/add_customer"
             android:textColor="@android:color/white"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            tools:ignore="ObsoleteLayoutParam" />
     </LinearLayout>
 </ScrollView>

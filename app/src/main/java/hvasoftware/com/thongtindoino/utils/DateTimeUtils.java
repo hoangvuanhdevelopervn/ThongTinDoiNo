@@ -3,8 +3,6 @@ package hvasoftware.com.thongtindoino.utils;
 import android.annotation.SuppressLint;
 import android.content.Context;
 
-import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -34,7 +32,6 @@ public class DateTimeUtils {
         String date = df.format(Calendar.getInstance().getTime());
         return date;
     }
-
 
     public static String formatDatetime(Context mContext, Date date) {
         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");

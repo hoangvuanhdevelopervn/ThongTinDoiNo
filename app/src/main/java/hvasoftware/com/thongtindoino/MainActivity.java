@@ -4,12 +4,10 @@ import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.PersistableBundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,32 +19,18 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
-import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import hvasoftware.com.thongtindoino.base.BaseActivity;
 import hvasoftware.com.thongtindoino.base.BaseFragment;
-import hvasoftware.com.thongtindoino.model.User;
 import hvasoftware.com.thongtindoino.ui.dialog.ChangePassDialog;
 import hvasoftware.com.thongtindoino.ui.dialog.DateSortDialog;
 import hvasoftware.com.thongtindoino.ui.fragment.AddCustomerFragment;
 import hvasoftware.com.thongtindoino.ui.fragment.AddUserFragment;
 import hvasoftware.com.thongtindoino.ui.fragment.EmployeeManageFragment;
 import hvasoftware.com.thongtindoino.ui.fragment.LoginFragment;
-import hvasoftware.com.thongtindoino.utils.Constant;
 import hvasoftware.com.thongtindoino.utils.FragmentHelper;
-import hvasoftware.com.thongtindoino.utils.Utils;
 
 
 public class MainActivity extends BaseActivity {
@@ -280,7 +264,7 @@ public class MainActivity extends BaseActivity {
         //Floating Action Button 1
         FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) wrapFab1.getLayoutParams();
         layoutParams.rightMargin += (int) (wrapFab1.getWidth() * 1.5);
-        layoutParams.bottomMargin += (int) (wrapFab1.getHeight() * 0);
+        layoutParams.bottomMargin += wrapFab1.getHeight() * 0;
         wrapFab1.setLayoutParams(layoutParams);
         wrapFab1.startAnimation(show_fab_1);
         wrapFab1.setClickable(true);
@@ -295,7 +279,7 @@ public class MainActivity extends BaseActivity {
 
         //Floating Action Button 3
         FrameLayout.LayoutParams layoutParams3 = (FrameLayout.LayoutParams) wrapFab3.getLayoutParams();
-        layoutParams3.rightMargin += (int) (wrapFab3.getWidth() * 0);
+        layoutParams3.rightMargin += wrapFab3.getWidth() * 0;
         layoutParams3.bottomMargin += (int) (wrapFab3.getHeight() * 1.5);
         wrapFab3.setLayoutParams(layoutParams3);
         wrapFab3.startAnimation(show_fab_3);
@@ -307,7 +291,7 @@ public class MainActivity extends BaseActivity {
         //Floating Action Button 1
         FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) wrapFab1.getLayoutParams();
         layoutParams.rightMargin -= (int) (wrapFab1.getWidth() * 1.5);
-        layoutParams.bottomMargin -= (int) (wrapFab1.getHeight() * 0);
+        layoutParams.bottomMargin -= wrapFab1.getHeight() * 0;
         wrapFab1.setLayoutParams(layoutParams);
         wrapFab1.startAnimation(hide_fab_1);
         wrapFab1.setClickable(false);
@@ -323,7 +307,7 @@ public class MainActivity extends BaseActivity {
         //Floating Action Button 3
         FrameLayout.LayoutParams layoutParams3 = (FrameLayout.LayoutParams) wrapFab3.getLayoutParams();
         layoutParams3.bottomMargin -= (int) (wrapFab3.getHeight() * 1.5);
-        layoutParams3.rightMargin -= (int) (wrapFab3.getWidth() * 0);
+        layoutParams3.rightMargin -= wrapFab3.getWidth() * 0;
         wrapFab3.setLayoutParams(layoutParams3);
         wrapFab3.startAnimation(hide_fab_3);
         wrapFab3.setClickable(false);

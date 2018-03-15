@@ -10,19 +10,20 @@ public class Customer {
     private String objectID;
     private String documentId;
     private String ten;
-    private Date ngayVay;
-    private Date ngayPhaiTra;
+    private String ngayVay;
+    private String ngayPhaiTra;
 
-    private int sotien;
+    private long sotien;
     private int songayvay;
 
-    private Date hethan;
+    private String hethan;
     private String ghichu;
     private String diachi;
     private String sodienthoai;
     private String cmnd;
     private String nhanvienthu;
     private String nhanvienthuDocumentId;
+
     private Date createAt;
     private Date updateAt;
     private int trangthai;
@@ -64,27 +65,35 @@ public class Customer {
         this.nhanvienthu = nhanvienthu;
     }
 
-    public Date getNgayVay() {
+    public String getNgayVay() {
         return ngayVay;
     }
 
-    public void setNgayVay(Date ngayVay) {
+    public void setNgayVay(String ngayVay) {
         this.ngayVay = ngayVay;
     }
 
-    public Date getNgayPhaiTra() {
+    public String getNgayPhaiTra() {
         return ngayPhaiTra;
     }
 
-    public void setNgayPhaiTra(Date ngayPhaiTra) {
+    public void setNgayPhaiTra(String ngayPhaiTra) {
         this.ngayPhaiTra = ngayPhaiTra;
     }
 
-    public int getSotien() {
+    public String getHethan() {
+        return hethan;
+    }
+
+    public void setHethan(String hethan) {
+        this.hethan = hethan;
+    }
+
+    public long getSotien() {
         return sotien;
     }
 
-    public void setSotien(int sotien) {
+    public void setSotien(long sotien) {
         this.sotien = sotien;
     }
 
@@ -96,13 +105,6 @@ public class Customer {
         this.songayvay = songayvay;
     }
 
-    public Date getHethan() {
-        return hethan;
-    }
-
-    public void setHethan(Date hethan) {
-        this.hethan = hethan;
-    }
 
     public String getGhichu() {
         return ghichu;

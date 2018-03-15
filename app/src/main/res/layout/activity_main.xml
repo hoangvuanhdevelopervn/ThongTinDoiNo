@@ -113,15 +113,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
+                android:background="@color/black_semi_transparent"
+                android:gravity="center"
+                android:paddingLeft="1dp"
+                android:paddingRight="1dp"
                 android:text="Nhân viên"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@android:color/white"
                 android:textSize="12sp"
-                android:textStyle="bold"
-                android:paddingLeft="1dp"
-                android:paddingRight="1dp"
-                android:background="@color/black_semi_transparent"
-                android:gravity="center"/>
+                android:textStyle="bold" />
 
         </LinearLayout>
 
@@ -141,8 +141,8 @@
                 android:id="@+id/fab_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_action_status"
                 android:layout_gravity="center_horizontal"
+                android:src="@drawable/ic_action_status"
                 app:backgroundTint="@color/colorPrimary"
                 app:fabSize="mini" />
 
@@ -151,17 +151,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
+                android:background="@color/black_semi_transparent"
+                android:gravity="center"
+                android:paddingLeft="1dp"
+                android:paddingRight="1dp"
                 android:paddingTop="2dp"
                 android:text="Khách hàng"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@android:color/white"
                 android:textSize="12sp"
-                android:textStyle="bold"
-                android:background="@color/black_semi_transparent"
-                android:gravity="center"
-                android:paddingLeft="1dp"
-                android:paddingRight="1dp"
-                />
+                android:textStyle="bold" />
         </LinearLayout>
 
         <LinearLayout
@@ -188,16 +187,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:text="Ngày/tháng"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@android:color/white"
-                android:textSize="12sp"
-                android:textStyle="bold"
                 android:background="@color/black_semi_transparent"
                 android:gravity="center"
                 android:paddingLeft="1dp"
                 android:paddingRight="1dp"
-                />
+                android:text="Ngày/tháng"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@android:color/white"
+                android:textSize="12sp"
+                android:textStyle="bold" />
         </LinearLayout>
     </FrameLayout>
 </RelativeLayout>

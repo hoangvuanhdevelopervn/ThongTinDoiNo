@@ -41,7 +41,7 @@ public class Utils {
         }
     }
 
-    public static String formatCurrency(int number) {
+    public static String formatCurrency(long number) {
         NumberFormat format = NumberFormat.getCurrencyInstance(Locale.getDefault());
         String currency = format.format(number);
         System.out.println("Currency in VietNam : " + currency);
@@ -54,11 +54,11 @@ public class Utils {
 
     public static void HideSoftKeyboard(Context context, View view) {
         try {
-            InputMethodManager inputMethodManager =
-                    (InputMethodManager) context.getSystemService(
-                            Activity.INPUT_METHOD_SERVICE);
+            InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
+            assert inputMethodManager != null;
             inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
         } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

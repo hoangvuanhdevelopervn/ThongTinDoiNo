@@ -31,4 +31,6 @@
     <string name="view_customer">Chi tiết khách hàng</string>
     <string name="updapte_success">Cập nhật thành công</string>
     <string name="no_customer">Không có khách hàng nào</string>
+    <string name="updapte_failed">Cập nhật thất bại</string>
+    <string name="update">Cập nhật</string>
 </resources>

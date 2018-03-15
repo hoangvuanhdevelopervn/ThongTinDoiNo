@@ -9,6 +9,9 @@ import hvasoftware.com.thongtindoino.base.BaseFragment;
 
 public class DetailCustomerFragment extends BaseFragment {
 
+
+
+
     /*
       if (!TextUtils.isEmpty(documentId)) {
             tvUpload.setText("Cập nhật");
