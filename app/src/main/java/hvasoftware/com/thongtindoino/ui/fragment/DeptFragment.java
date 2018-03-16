@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
@@ -56,7 +57,10 @@ public class DeptFragment extends BaseFragment {
     private CheckInternet checkInternet;
     private HorizontalScrollView horizontalView;
     private TableRow table_header;
-    private ProgressDialog progressDialog;
+    private String objectId = null;
+    private String type = null;
+    private Bundle bundle;
+
 
     @Override
     protected void OnBindView() {
@@ -64,7 +68,32 @@ public class DeptFragment extends BaseFragment {
         table_header = (TableRow) findViewById(R.id.table_header);
         horizontalView = (HorizontalScrollView) findViewById(R.id.horizontalView);
         checkInternet = CheckInternet.getInstance(getContext());
-        progressDialog = new ProgressDialog(getActivity());
+        if (bundle != null) {
+            objectId = bundle.getString(Constant.KEY);
+            type = bundle.getString(Constant.TYPE);
+            Log.wtf(TAG, "=============================> KEY: " + objectId);
+            Log.wtf(TAG, "=============================> TYPE: " + type);
+            if (type.equals(Constant.STAFF)) {
+                bindDataToTableByStaff(objectId);
+            }
+
+            if (type.equals(Constant.STATUS)) {
+                bindDataToTableByStatus(Integer.parseInt(objectId));
+            }
+
+            if (type.equals(Constant.DATETIME)) {
+                bindDataToTableByDate(objectId);
+            }
+        } else {
+            bindDataToTable();
+        }
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        this.bundle = savedInstanceState;
+        bundle = this.getArguments();
     }
 
     @Override
@@ -73,6 +102,7 @@ public class DeptFragment extends BaseFragment {
     }
 
     public void bindDataToTable() {
+        final ProgressDialog progressDialog = new ProgressDialog(getActivity());
         progressDialog.setTitle("Loading");
         progressDialog.setMessage("Đang load dữ liệu, đợi xíu");
         progressDialog.show();
@@ -82,6 +112,195 @@ public class DeptFragment extends BaseFragment {
         deptTable.addView(table_header);
         horizontalView.setVisibility(View.GONE);
         firebaseFirestore.collection(Constant.COLLECTION_CUSTOMER)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @SuppressLint("SetTextI18n")
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            progressDialog.dismiss();
+                            if (task.getResult().size() == 0) {
+                                Toast.makeText(getContext(), R.string.no_customer, Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            for (DocumentSnapshot documentSnapshot : task.getResult()) {
+                                customer[0] = documentSnapshot.toObject(Customer.class);
+                                dataRow[0] = LayoutInflater.from(getContext()).inflate(R.layout.view_dept_row, null);
+                                final TextView tvCustomerId = dataRow[0].findViewById(R.id.tvCustomerId);
+                                final TextView tvCustomerName = dataRow[0].findViewById(R.id.tvCustomerName);
+                                final TextView tvCustomerNgayVay = dataRow[0].findViewById(R.id.tvCustomerNgayVay);
+                                final TextView tvCustomerSoTien = dataRow[0].findViewById(R.id.tvCustomerSoTien);
+                                final TextView tvCustomerSoNgayVay = dataRow[0].findViewById(R.id.tvCustomerSoNgayVay);
+                                final TextView tvCustomerHetHan = dataRow[0].findViewById(R.id.tvCustomerHetHan);
+                                final TextView tvCustomerGhiChu = dataRow[0].findViewById(R.id.tvCustomerGhiChu);
+                                final TextView tvCustomerNhanVienThu = dataRow[0].findViewById(R.id.tvCustomerNhanVienThu);
+
+                                tvCustomerId.setText(customer[0].getObjectID().substring(0, 10) + "...");
+                                tvCustomerName.setText(customer[0].getTen());
+                                tvCustomerNgayVay.setText(customer[0].getNgayVay());
+                                tvCustomerSoTien.setText("" + Utils.formatCurrency(customer[0].getSotien()));
+                                tvCustomerSoNgayVay.setText("" + customer[0].getSongayvay());
+                                tvCustomerHetHan.setText(customer[0].getHethan());
+                                tvCustomerGhiChu.setText(customer[0].getGhichu());
+                                tvCustomerNhanVienThu.setText(customer[0].getNhanvienthu());
+
+                                countStatusOfCustomer(customer[0].getNgayPhaiTra(), customer[0].getSongayvay(), customer[0].getDocumentId());
+
+                                horizontalView.setVisibility(View.VISIBLE);
+                                deptTable.addView(dataRow[0]);
+                                dataRow[0].setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        showMenu(dataRow[0], customer[0]);
+                                    }
+                                });
+                            }
+                        }
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.wtf(TAG, "=================================> " + e.getMessage());
+            }
+        });
+    }
+
+    public void bindDataToTableByStaff(String staffName) {
+        final ProgressDialog progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setTitle("Loading");
+        progressDialog.setMessage("Đang load dữ liệu, đợi xíu");
+        progressDialog.show();
+        final Customer[] customer = {null};
+        final View[] dataRow = new View[1];
+        deptTable.removeAllViews();
+        deptTable.addView(table_header);
+        horizontalView.setVisibility(View.GONE);
+        firebaseFirestore.collection(Constant.COLLECTION_CUSTOMER)
+                .whereEqualTo("nhanvienthu", staffName)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @SuppressLint("SetTextI18n")
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            progressDialog.dismiss();
+                            if (task.getResult().size() == 0) {
+                                Toast.makeText(getContext(), R.string.no_customer, Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            for (DocumentSnapshot documentSnapshot : task.getResult()) {
+                                customer[0] = documentSnapshot.toObject(Customer.class);
+                                dataRow[0] = LayoutInflater.from(getContext()).inflate(R.layout.view_dept_row, null);
+                                final TextView tvCustomerId = dataRow[0].findViewById(R.id.tvCustomerId);
+                                final TextView tvCustomerName = dataRow[0].findViewById(R.id.tvCustomerName);
+                                final TextView tvCustomerNgayVay = dataRow[0].findViewById(R.id.tvCustomerNgayVay);
+                                final TextView tvCustomerSoTien = dataRow[0].findViewById(R.id.tvCustomerSoTien);
+                                final TextView tvCustomerSoNgayVay = dataRow[0].findViewById(R.id.tvCustomerSoNgayVay);
+                                final TextView tvCustomerHetHan = dataRow[0].findViewById(R.id.tvCustomerHetHan);
+                                final TextView tvCustomerGhiChu = dataRow[0].findViewById(R.id.tvCustomerGhiChu);
+                                final TextView tvCustomerNhanVienThu = dataRow[0].findViewById(R.id.tvCustomerNhanVienThu);
+
+                                tvCustomerId.setText(customer[0].getObjectID().substring(0, 10) + "...");
+                                tvCustomerName.setText(customer[0].getTen());
+                                tvCustomerNgayVay.setText(customer[0].getNgayVay());
+                                tvCustomerSoTien.setText("" + Utils.formatCurrency(customer[0].getSotien()));
+                                tvCustomerSoNgayVay.setText("" + customer[0].getSongayvay());
+                                tvCustomerHetHan.setText(customer[0].getHethan());
+                                tvCustomerGhiChu.setText(customer[0].getGhichu());
+                                tvCustomerNhanVienThu.setText(customer[0].getNhanvienthu());
+                                horizontalView.setVisibility(View.VISIBLE);
+                                deptTable.addView(dataRow[0]);
+                                dataRow[0].setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        showMenu(dataRow[0], customer[0]);
+                                    }
+                                });
+                            }
+                        }
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.wtf(TAG, "=================================> " + e.getMessage());
+            }
+        });
+    }
+
+    public void bindDataToTableByStatus(int trangthai) {
+        final ProgressDialog progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setTitle("Loading");
+        progressDialog.setMessage("Đang load dữ liệu, đợi xíu");
+        progressDialog.show();
+        final Customer[] customer = {null};
+        final View[] dataRow = new View[1];
+        deptTable.removeAllViews();
+        deptTable.addView(table_header);
+        horizontalView.setVisibility(View.GONE);
+        firebaseFirestore.collection(Constant.COLLECTION_CUSTOMER)
+                .whereEqualTo("trangthai", trangthai)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @SuppressLint("SetTextI18n")
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            progressDialog.dismiss();
+                            if (task.getResult().size() == 0) {
+                                Toast.makeText(getContext(), R.string.no_customer, Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            for (DocumentSnapshot documentSnapshot : task.getResult()) {
+                                customer[0] = documentSnapshot.toObject(Customer.class);
+                                dataRow[0] = LayoutInflater.from(getContext()).inflate(R.layout.view_dept_row, null);
+                                final TextView tvCustomerId = dataRow[0].findViewById(R.id.tvCustomerId);
+                                final TextView tvCustomerName = dataRow[0].findViewById(R.id.tvCustomerName);
+                                final TextView tvCustomerNgayVay = dataRow[0].findViewById(R.id.tvCustomerNgayVay);
+                                final TextView tvCustomerSoTien = dataRow[0].findViewById(R.id.tvCustomerSoTien);
+                                final TextView tvCustomerSoNgayVay = dataRow[0].findViewById(R.id.tvCustomerSoNgayVay);
+                                final TextView tvCustomerHetHan = dataRow[0].findViewById(R.id.tvCustomerHetHan);
+                                final TextView tvCustomerGhiChu = dataRow[0].findViewById(R.id.tvCustomerGhiChu);
+                                final TextView tvCustomerNhanVienThu = dataRow[0].findViewById(R.id.tvCustomerNhanVienThu);
+
+                                tvCustomerId.setText(customer[0].getObjectID().substring(0, 10) + "...");
+                                tvCustomerName.setText(customer[0].getTen());
+                                tvCustomerNgayVay.setText(customer[0].getNgayVay());
+                                tvCustomerSoTien.setText("" + Utils.formatCurrency(customer[0].getSotien()));
+                                tvCustomerSoNgayVay.setText("" + customer[0].getSongayvay());
+                                tvCustomerHetHan.setText(customer[0].getHethan());
+                                tvCustomerGhiChu.setText(customer[0].getGhichu());
+                                tvCustomerNhanVienThu.setText(customer[0].getNhanvienthu());
+                                horizontalView.setVisibility(View.VISIBLE);
+                                deptTable.addView(dataRow[0]);
+                                dataRow[0].setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        showMenu(dataRow[0], customer[0]);
+                                    }
+                                });
+                            }
+                        }
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.wtf(TAG, "=================================> " + e.getMessage());
+            }
+        });
+    }
+
+    public void bindDataToTableByDate(String ngayVay) {
+        final ProgressDialog progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setTitle("Loading");
+        progressDialog.setMessage("Đang load dữ liệu, đợi xíu");
+        progressDialog.show();
+        final Customer[] customer = {null};
+        final View[] dataRow = new View[1];
+        deptTable.removeAllViews();
+        deptTable.addView(table_header);
+        horizontalView.setVisibility(View.GONE);
+        firebaseFirestore.collection(Constant.COLLECTION_CUSTOMER)
+                .whereGreaterThanOrEqualTo("ngayVay", ngayVay)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @SuppressLint("SetTextI18n")
@@ -141,14 +360,6 @@ public class DeptFragment extends BaseFragment {
                 switch (id) {
                     case R.id.assign:
                         showDialogAssignToStaff(customer.getDocumentId());
-
-                        /**
-                         *  ChooseEmployeeDialog chooseEmployeeDialog = new ChooseEmployeeDialog();
-                         Bundle bundle = new Bundle();
-                         bundle.putString(Constant.KEY, customer.getDocumentId());
-                         chooseEmployeeDialog.setArguments(bundle);
-                         chooseEmployeeDialog.show(getMainAcitivity().getFragmentManager(), TAG);
-                         */
                         break;
                     case R.id.money:
                         showDialogInputmoney(customer.getDocumentId(), customer.getSotien());
@@ -210,7 +421,6 @@ public class DeptFragment extends BaseFragment {
         dialog.show();
     }
 
-
     private void showDialogInputmoney(final String documentId, final long oldMoney) {
         final Dialog dialog = new Dialog(getActivity());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -265,12 +475,41 @@ public class DeptFragment extends BaseFragment {
         dialog.show();
     }
 
+    private void countStatusOfCustomer(String end, int songayvay, String documentId) {
+        int status = 1;
+        String today = DateTimeUtils.getDateToday();
+        int dayLeft = Utils.get_count_of_days(today, end);
+        int dayPass = songayvay - dayLeft;
+        int percentage = (dayPass / songayvay) * 100;
+
+        Log.wtf(TAG, "============================> percentage: " + percentage + "%");
+        Log.wtf(TAG, "============================> dayLeft: " + dayLeft + " -- ");
+        Log.wtf(TAG, "============================> dayPass: " + dayPass + " -- ");
+
+        if (dayLeft < 0) {
+            status = 3;
+        }
+
+        if (dayLeft <= 5) {
+            status = 1;
+        }
+
+        if (dayLeft >= 5 && dayLeft <= 15) {
+            status = 2;
+        }
+
+        WriteBatch writeBatch = firebaseFirestore.batch();
+        DocumentReference updateQuoteShareAmount = firebaseFirestore.collection(Constant.COLLECTION_CUSTOMER).document(documentId);
+        writeBatch.update(updateQuoteShareAmount, "trangthai", status);
+        writeBatch.update(updateQuoteShareAmount, "updateAt", DateTimeUtils.getDateTime());
+
+
+    }
 
     @Override
     public void onResume() {
         super.onResume();
         getMainAcitivity().setScreenOrientation(false);
-        bindDataToTable();
     }
 
     @Override

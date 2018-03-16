@@ -1,13 +1,18 @@
 package hvasoftware.com.thongtindoino;
 
+import android.annotation.SuppressLint;
+import android.app.Dialog;
+import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.PersistableBundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,22 +20,40 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
+import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import hvasoftware.com.thongtindoino.base.BaseActivity;
 import hvasoftware.com.thongtindoino.base.BaseFragment;
+import hvasoftware.com.thongtindoino.model.User;
+import hvasoftware.com.thongtindoino.ui.adapter.AdapterAssign;
 import hvasoftware.com.thongtindoino.ui.dialog.ChangePassDialog;
 import hvasoftware.com.thongtindoino.ui.dialog.DateSortDialog;
 import hvasoftware.com.thongtindoino.ui.fragment.AddCustomerFragment;
 import hvasoftware.com.thongtindoino.ui.fragment.AddUserFragment;
+import hvasoftware.com.thongtindoino.ui.fragment.DeptFragment;
 import hvasoftware.com.thongtindoino.ui.fragment.EmployeeManageFragment;
 import hvasoftware.com.thongtindoino.ui.fragment.LoginFragment;
+import hvasoftware.com.thongtindoino.utils.Constant;
 import hvasoftware.com.thongtindoino.utils.FragmentHelper;
+import hvasoftware.com.thongtindoino.utils.IOnCompleteListener;
+import hvasoftware.com.thongtindoino.utils.Utils;
 
 
 public class MainActivity extends BaseActivity {
@@ -58,6 +81,7 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void OnBindView() {
+        firebaseFirestore = FirebaseFirestore.getInstance();
         wrapFab1 = findViewById(R.id.wrap_fab1);
         wrapFab2 = findViewById(R.id.wrap_fab2);
         wrapFab3 = findViewById(R.id.wrap_fab3);
@@ -115,23 +139,142 @@ public class MainActivity extends BaseActivity {
         fab1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplication(), "Floating Action Button 1", Toast.LENGTH_SHORT).show();
+                // STAFF
+                final List<User> userList = new ArrayList<>();
+                final Dialog dialog = new Dialog(MainActivity.this);
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                assert layoutInflater != null;
+                @SuppressLint("InflateParams") View dialogView = layoutInflater.inflate(R.layout.view_choose_employee, null);
+                dialog.setContentView(dialogView);
+                final ProgressBar progressBar = dialog.findViewById(R.id.progressBar);
+                Utils.setUpProgressBar(progressBar, false);
+                final ListView lvUser = dialog.findViewById(R.id.lvUser);
+                firebaseFirestore.collection(Constant.COLLECTION_USER)
+                        .whereEqualTo("role", Constant.ROLE_STAFF)
+                        .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (DocumentSnapshot documentSnapshot : task.getResult()) {
+                                User user = documentSnapshot.toObject(User.class);
+                                userList.add(user);
+                            }
+                            progressBar.setVisibility(View.GONE);
+                            AdapterAssign adapterAssign = new AdapterAssign(null, MainActivity.this, userList);
+                            lvUser.setAdapter(adapterAssign);
+                            adapterAssign.setOnCompleteListener(new IOnCompleteListener() {
+                                @Override
+                                public void onComplete(String staffName, String staffDocumentId) {
+                                    dialog.dismiss();
+                                    DeptFragment deptFragment = new DeptFragment();
+                                    Bundle bundle = new Bundle();
+                                    bundle.putString(Constant.KEY, staffName);
+                                    bundle.putString(Constant.TYPE, Constant.STAFF);
+                                    deptFragment.setArguments(bundle);
+                                    SwitchFragment(deptFragment, false);
+                                }
+                            });
+                        }
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        progressBar.setVisibility(View.GONE);
+                    }
+                });
+                dialog.show();
             }
         });
+
 
         fab2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplication(), "Floating Action Button 2", Toast.LENGTH_SHORT).show();
+                // STATUS
+                final String[] status = {"1"};
+                final Dialog dialog = new Dialog(MainActivity.this);
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                assert layoutInflater != null;
+                @SuppressLint("InflateParams") View dialogView = layoutInflater.inflate(R.layout.choose_status, null);
+                dialog.setContentView(dialogView);
+                Spinner spinner = dialog.findViewById(R.id.spinnerStatus);
+                TextView tvCancel = dialog.findViewById(R.id.tvCancel);
+                TextView tvChoose = dialog.findViewById(R.id.tvChoose);
+                tvCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                    }
+                });
+                final String[] strings = {"1", "2", "3"};
+                ArrayAdapter<String> stringArrayAdapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, strings);
+                spinner.setAdapter(stringArrayAdapter);
+                spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                        status[0] = strings[i];
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> adapterView) {
+
+                    }
+                });
+                tvChoose.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+
+                        /**
+                         *  final Dialog dialog = new Dialog(MainActivity.this);
+                         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                         LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                         assert layoutInflater != null;
+                         @SuppressLint("InflateParams") View dialogView = layoutInflater.inflate(R.layout.view_pick_date, null);
+                         dialog.setContentView(dialogView);
+                         dialog.show();
+                         */
+
+                        /*
+                          DeptFragment deptFragment = new DeptFragment();
+                        Bundle bundle = new Bundle();
+                        bundle.putString(Constant.KEY, status[0]);
+                        bundle.putString(Constant.TYPE, Constant.STATUS);
+                        deptFragment.setArguments(bundle);
+                        SwitchFragment(deptFragment, false);
+                        dialog.dismiss();
+                         */
+
+                    }
+                });
+                dialog.show();
             }
         });
 
         fab3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplication(), "Floating Action Button 3", Toast.LENGTH_SHORT).show();
-                DateSortDialog dateSortDialog = new DateSortDialog();
+
+                DateSortDialog dateSortDialog = new DateSortDialog(MainActivity.this);
                 dateSortDialog.show(getFragmentManager(), "");
+                dateSortDialog.setiOnCompleteListener(new IOnCompleteListener() {
+                    @Override
+                    public void onComplete(String staffName, String staffDocumentId) {
+                        DeptFragment deptFragment = new DeptFragment();
+                        Bundle bundle = new Bundle();
+                        bundle.putString(Constant.KEY, staffName);
+                        bundle.putString(Constant.TYPE, Constant.DATETIME);
+                        deptFragment.setArguments(bundle);
+                        SwitchFragment(deptFragment, false);
+                    }
+                });
+
+                /*
+
+                 */
+
             }
         });
         SwitchFragment(new LoginFragment(), false);
@@ -141,10 +284,7 @@ public class MainActivity extends BaseActivity {
     public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
         super.onCreate(savedInstanceState, persistentState);
         FirebaseApp.initializeApp(MainActivity.this);
-        firebaseFirestore = FirebaseFirestore.getInstance();
-
     }
-
 
 
     @Override
@@ -203,7 +343,7 @@ public class MainActivity extends BaseActivity {
         tvTitle.setText(title);
     }
 
-    public void switchFragment(Fragment fragment, boolean isAddToBackStack){
+    public void switchFragment(Fragment fragment, boolean isAddToBackStack) {
         SwitchFragment(fragment, true);
     }
 
@@ -227,8 +367,7 @@ public class MainActivity extends BaseActivity {
             wrapFab1.setAlpha(0);
             wrapFab2.setAlpha(0);
             wrapFab3.setAlpha(0);
-        }
-        else {
+        } else {
             wrapFab1.setAlpha(1);
             wrapFab2.setAlpha(1);
             wrapFab3.setAlpha(1);

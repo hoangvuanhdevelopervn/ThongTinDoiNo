@@ -156,7 +156,7 @@
                 android:paddingLeft="1dp"
                 android:paddingRight="1dp"
                 android:paddingTop="2dp"
-                android:text="Khách hàng"
+                android:text="@string/status"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@android:color/white"
                 android:textSize="12sp"

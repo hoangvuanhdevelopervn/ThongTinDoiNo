@@ -1,31 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:minWidth="200dp"
-    android:gravity="center"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:gravity="center"
+    android:minWidth="200dp"
+    android:orientation="vertical"
+    android:paddingBottom="8dip">
 
     <LinearLayout
         android:id="@+id/wrap_from"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dip"
         android:padding="10dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="Từ :   "
-            android:gravity="center_vertical"/>
+            android:gravity="center_vertical"
+            android:text="Từ :   " />
 
         <TextView
+            android:id="@+id/tv_from"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="12/1/2018"
-            android:textStyle="bold"
+            android:textColor="@color/colorPrimary"
             android:textSize="@dimen/text_size_normal"
-            android:id="@+id/tv_from"
-            android:textColor="@color/colorPrimary" />
+            android:textStyle="bold" />
     </LinearLayout>
 
     <LinearLayout
@@ -37,21 +39,21 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="Đến : "
-            android:gravity="center_vertical"/>
+            android:gravity="center_vertical"
+            android:text="Đến : " />
 
         <TextView
+            android:id="@+id/tv_to"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="18/9/2018"
-            android:textStyle="bold"
+            android:text="Ấn vào đây để nhập ngày"
+            android:textColor="@color/colorPrimary"
             android:textSize="@dimen/text_size_normal"
-            android:id="@+id/tv_to"
-            android:textColor="@color/colorPrimary" />
+            android:textStyle="bold" />
     </LinearLayout>
 
     <TextView
-        android:id="@+id/btn_login"
+        android:id="@+id/tvLoc"
         android:layout_width="match_parent"
         android:layout_height="30dp"
         android:layout_below="@+id/wrap_pass"

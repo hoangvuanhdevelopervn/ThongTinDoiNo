@@ -15,5 +15,9 @@ public class Constant {
 
 
     public static final String KEY = "KEY";
+    public static final String TYPE = "TYPE";
+    public static final String STAFF = "STAFF";
+    public static final String STATUS = "STATUS";
+    public static final String DATETIME = "DATETIME";
     public static final String MONEY = "MONEY";
 }

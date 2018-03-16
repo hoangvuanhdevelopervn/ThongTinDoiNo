@@ -245,14 +245,18 @@ public class AddCustomerFragment extends BaseFragment {
         }
         try {
             soNgayVay = get_count_of_days(ngayVay, ngayTra);
+
+            Log.wtf(TAG, "=========================> NgayVay: " + ngayVay);
+            Log.wtf(TAG, "=========================> NgayVay: " + ngayTra);
+
+            Log.wtf(TAG, "=========================> soNgayVay: " + soNgayVay);
+            tvSoNgayVay.setText("" + soNgayVay);
+            if (soNgayVay < 0) {
+                Toast.makeText(getActivity(), "Số ngày vay không thể nhỏ hơn 0", Toast.LENGTH_SHORT).show();
+            }
         } catch (Exception e) {
             Toast.makeText(getContext(), "Bạn nhập sai định dạng. Vui lòng nhập lại", Toast.LENGTH_SHORT).show();
             e.printStackTrace();
-        }
-
-        tvSoNgayVay.setText("" + soNgayVay);
-        if (soNgayVay < 0) {
-            Toast.makeText(getActivity(), "Số ngày vay không thể nhỏ hơn 0", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -287,7 +291,7 @@ public class AddCustomerFragment extends BaseFragment {
         }
 
         try {
-            soNgayVay = get_count_of_days(ngayVay, ngayTra);
+            soNgayVay = Utils.get_count_of_days(ngayVay, ngayTra);
         } catch (Exception e) {
             Toast.makeText(getContext(), "Bạn nhập sai định dạng. Vui lòng nhập lại", Toast.LENGTH_SHORT).show();
             e.printStackTrace();
@@ -429,7 +433,7 @@ public class AddCustomerFragment extends BaseFragment {
         return false;
     }
 
-    public int get_count_of_days(String Created_date_String, String Expire_date_String) {
+    private int get_count_of_days(String Created_date_String, String Expire_date_String) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
         Date Created_convertedDate = null, Expire_CovertedDate = null, todayWithZeroTime = null;
         try {
