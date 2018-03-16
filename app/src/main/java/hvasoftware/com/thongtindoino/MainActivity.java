@@ -224,9 +224,14 @@ public class MainActivity extends BaseActivity {
     public void setFloatButtonVisible(boolean visible) {
         fab.setVisibility(visible ? View.VISIBLE : View.GONE);
         if (!visible) {
-            wrapFab1.setVisibility(View.GONE);
-            wrapFab2.setVisibility(View.GONE);
-            wrapFab3.setVisibility(View.GONE);
+            wrapFab1.setAlpha(0);
+            wrapFab2.setAlpha(0);
+            wrapFab3.setAlpha(0);
+        }
+        else {
+            wrapFab1.setAlpha(1);
+            wrapFab2.setAlpha(1);
+            wrapFab3.setAlpha(1);
         }
     }
 
