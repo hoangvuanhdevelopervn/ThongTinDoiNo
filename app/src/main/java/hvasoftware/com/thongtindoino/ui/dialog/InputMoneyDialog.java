@@ -22,6 +22,7 @@ import com.google.firebase.firestore.WriteBatch;
 import hvasoftware.com.thongtindoino.R;
 import hvasoftware.com.thongtindoino.utils.Constant;
 import hvasoftware.com.thongtindoino.utils.DateTimeUtils;
+import hvasoftware.com.thongtindoino.utils.IOnCompleteListener;
 import hvasoftware.com.thongtindoino.utils.Utils;
 
 
@@ -37,6 +38,7 @@ public class InputMoneyDialog extends DialogFragment implements View.OnClickList
     private EditText edt_input;
     private FirebaseFirestore firebaseFirestore;
     private TextView tvMoney;
+    private IOnCompleteListener onCompleteListener;
 
     public InputMoneyDialog() {
 
@@ -77,6 +79,10 @@ public class InputMoneyDialog extends DialogFragment implements View.OnClickList
 
                 break;
         }
+    }
+
+    public void setOnCompleteListener(IOnCompleteListener onCompleteListener) {
+        this.onCompleteListener = onCompleteListener;
     }
 
     private void updateCustomer() {

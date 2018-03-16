@@ -26,7 +26,6 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.WriteBatch;
-import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -70,13 +69,14 @@ public class AddCustomerFragment extends BaseFragment {
     private TextView tvChooseStaff;
     private TextView tvUpload;
     private ProgressBar progressBar;
-    private DatePickerDialog ngayVay;
-    private DatePickerDialog ngayTra;
-    private DatePickerDialog hetHan;
     private String staffName = null;
     private String staffDocumentId = null;
     private FirebaseFirestore firebaseFirestore;
     private String customerDocumentId;
+    private int soNgayVay = 0;
+    private TextView tvCount;
+    private String ngayVay = null;
+    private String ngayTra = null;
 
 
     @SuppressLint("ValidFragment")
@@ -95,10 +95,6 @@ public class AddCustomerFragment extends BaseFragment {
 
     @Override
     protected void OnViewCreated() {
-//        Calendar calendar = Calendar.getInstance();
-//        ngayVay = DatePickerDialog.newInstance(this, calendar);
-//        ngayTra = DatePickerDialog.newInstance(this, calendar);
-//        hetHan = DatePickerDialog.newInstance(this, calendar);
     }
 
     @Override
@@ -108,6 +104,8 @@ public class AddCustomerFragment extends BaseFragment {
         edt_NgayVay = (EditText) findViewById(R.id.edt_take_date);
         edt_NgayTra = (EditText) findViewById(R.id.edt_pay_day);
         tvSoNgayVay = (TextView) findViewById(R.id.edt_day);
+        tvSoNgayVay.setText("" + soNgayVay);
+        tvCount = (TextView) findViewById(R.id.tvCount);
         edt_SoTienVay = (EditText) findViewById(R.id.edt_money);
         edt_HetHan = (EditText) findViewById(R.id.edt_out);
         edt_Note = (EditText) findViewById(R.id.edt_note);
@@ -140,10 +138,16 @@ public class AddCustomerFragment extends BaseFragment {
             }
         });
 
+        tvCount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                countSoNgayVay();
+            }
+        });
+
     }
 
     private void bindData() {
-
         firebaseFirestore.collection(Constant.COLLECTION_CUSTOMER)
                 .document(customerDocumentId)
                 .get()
@@ -174,6 +178,7 @@ public class AddCustomerFragment extends BaseFragment {
                 });
     }
 
+
     private void setUpNhanVienThu() {
         final Dialog dialog = new Dialog(getActivity());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -200,7 +205,7 @@ public class AddCustomerFragment extends BaseFragment {
                         Toast.makeText(getActivity(), "Không có nhân viên nào", Toast.LENGTH_SHORT).show();
                     }
                     progressBar.setVisibility(View.GONE);
-                    AdapterAssign adapterAssign = new AdapterAssign("", getActivity(), userList);
+                    AdapterAssign adapterAssign = new AdapterAssign(null, getActivity(), userList);
                     lvUser.setAdapter(adapterAssign);
                     adapterAssign.setOnCompleteListener(new IOnCompleteListener() {
                         @Override
@@ -224,13 +229,40 @@ public class AddCustomerFragment extends BaseFragment {
     }
 
 
-    @SuppressLint("ClickableViewAccessibility")
+    @SuppressLint("SetTextI18n")
+    private void countSoNgayVay() {
+        ngayVay = edt_NgayVay.getText().toString().trim();
+        ngayTra = edt_NgayTra.getText().toString().trim();
+
+        if (TextUtils.isEmpty(ngayVay)) {
+            Toast.makeText(getContext(), "Bạn chưa nhập ngày vay", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (TextUtils.isEmpty(ngayTra)) {
+            Toast.makeText(getContext(), "Bạn chưa nhập ngày trả", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        try {
+            soNgayVay = get_count_of_days(ngayVay, ngayTra);
+        } catch (Exception e) {
+            Toast.makeText(getContext(), "Bạn nhập sai định dạng. Vui lòng nhập lại", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        }
+
+        tvSoNgayVay.setText("" + soNgayVay);
+        if (soNgayVay < 0) {
+            Toast.makeText(getActivity(), "Số ngày vay không thể nhỏ hơn 0", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+    @SuppressLint({"ClickableViewAccessibility", "SetTextI18n"})
     private void uploadCustomer() {
         long customerSoTienVay;
-        int soNgayVay;
         String customerName = edt_CustomerName.getText().toString().trim();
-        String ngayVay = edt_NgayVay.getText().toString().trim();
-        String ngayTra = edt_NgayTra.getText().toString().trim();
+        ngayVay = edt_NgayVay.getText().toString().trim();
+        ngayTra = edt_NgayTra.getText().toString().trim();
         String hetHan = edt_HetHan.getText().toString().trim();
 
         String customerGhiChu = edt_Note.getText().toString().trim();
@@ -254,10 +286,24 @@ public class AddCustomerFragment extends BaseFragment {
             return;
         }
 
-        soNgayVay = get_count_of_days(ngayVay, ngayTra);
+        try {
+            soNgayVay = get_count_of_days(ngayVay, ngayTra);
+        } catch (Exception e) {
+            Toast.makeText(getContext(), "Bạn nhập sai định dạng. Vui lòng nhập lại", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        }
+
         tvSoNgayVay.setText("" + soNgayVay);
         if (soNgayVay < 0) {
             Toast.makeText(getActivity(), "Số ngày vay không thể nhỏ hơn 0", Toast.LENGTH_SHORT).show();
+        }
+
+
+        if (TextUtils.isEmpty(edt_SoTienVay.getText().toString().trim())) {
+            Toast.makeText(getContext(), "Bạn chưa nhập số tiền vay", Toast.LENGTH_SHORT).show();
+            return;
+        } else {
+            customerSoTienVay = Long.valueOf(edt_SoTienVay.getText().toString().trim());
         }
 
         if (TextUtils.isEmpty(hetHan)) {
@@ -265,18 +311,10 @@ public class AddCustomerFragment extends BaseFragment {
             return;
         }
 
-        if (TextUtils.isEmpty(edt_SoTienVay.getText().toString().trim())) {
-            Toast.makeText(getContext(), "Bạn chưa nhập số tiền vay", Toast.LENGTH_SHORT).show();
-            return;
-        } else {
-            customerSoTienVay = Integer.valueOf(edt_SoTienVay.getText().toString().trim());
-        }
-
         if (TextUtils.isEmpty(customerGhiChu)) {
             Toast.makeText(getContext(), "Bạn chưa nhập ghi chú", Toast.LENGTH_SHORT).show();
             return;
         }
-
 
         if (TextUtils.isEmpty(customerDiaChi)) {
             Toast.makeText(getContext(), "Bạn chưa nhập địa chỉ của khách hàng", Toast.LENGTH_SHORT).show();
@@ -294,11 +332,10 @@ public class AddCustomerFragment extends BaseFragment {
             Toast.makeText(getContext(), "Bạn chưa nhập số chứng minh nhân dân", Toast.LENGTH_SHORT).show();
             return;
         }
+
         progressBar.setVisibility(View.VISIBLE);
 
-
         if (TextUtils.isEmpty(customerDocumentId)) {
-            //upload new customer
             CollectionReference collectionReference = firebaseFirestore.collection(Constant.COLLECTION_CUSTOMER);
             String objectId = Utils.getRandomUUID();
             Map<String, Object> objectMap = new HashMap<>();
@@ -355,15 +392,17 @@ public class AddCustomerFragment extends BaseFragment {
             writeBatch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
+                    progressBar.setVisibility(View.GONE);
                     Toast.makeText(getContext(), getActivity().getString(R.string.updapte_success), Toast.LENGTH_SHORT).show();
                     getActivity().onBackPressed();
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
+                    progressBar.setVisibility(View.GONE);
                     Toast.makeText(getContext(), getActivity().getString(R.string.updapte_failed), Toast.LENGTH_SHORT).show();
                     getActivity().onBackPressed();
-                    Log.wtf(TAG, "==============================>" + e.getMessage());
+                    // Log.wtf(TAG, "==============================>" + e.getMessage());
                 }
             });
         }

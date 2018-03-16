@@ -286,19 +286,22 @@
                 android:layout_toRightOf="@id/ic_day"
                 android:background="@color/grey" />
 
-            <TextView
-                android:id="@+id/warning_day"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/line_day"
-                android:layout_marginLeft="15dp"
-                android:layout_toRightOf="@id/ic_day"
-                android:text="Please input full name"
-                android:textColor="@android:color/holo_red_dark"
-                android:textSize="@dimen/recog_text_size_small"
-                android:visibility="gone" />
         </RelativeLayout>
 
+        <TextView
+            android:id="@+id/tvCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dip"
+            android:background="@drawable/login_btn"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="8dip"
+            android:text="@string/count_day"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:textSize="16sp" />
 
         <RelativeLayout
             android:id="@+id/wrap_money"

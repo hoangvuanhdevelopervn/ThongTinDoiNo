@@ -49,7 +49,7 @@ public class LoginFragment extends BaseFragment {
         btnLogin = findViewById(R.id.btn_login);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         Utils.setUpProgressBar(progressBar, true);
-         SwitchFragment(new DeptFragment(), false);
+        //SwitchFragment(new DeptFragment(), false);
 
         if (!checkInternet.isOnline()) {
             showDialogNoInternet();
@@ -89,7 +89,7 @@ public class LoginFragment extends BaseFragment {
                                 User user = document.toObject(User.class);
                                 if (account.equals(user.getAccount()) && password.equals(user.getPassword())) {
                                     Toast.makeText(getContext(), R.string.login_success, Toast.LENGTH_SHORT).show();
-                                    //SwitchFragment(new DeptFragment(), false);
+                                    SwitchFragment(new DeptFragment(), false);
                                     databaseUser.insertUser(user);
                                 } else {
                                     Toast.makeText(getContext(), R.string.wrong_account_pass_check_again, Toast.LENGTH_SHORT).show();

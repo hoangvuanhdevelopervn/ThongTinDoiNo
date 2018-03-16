@@ -79,7 +79,7 @@ public class EmployeeManageAdapter extends RecyclerView.Adapter {
             timeViewHolder.bindView(users.get(position));
             final User user = users.get(position);
             ((UserViewHolder) holder).tvUserName.setText(": " + user.getDisplayName());
-            ((UserViewHolder) holder).tvUserCreateAt.setText(user.getCreateAt().toString());
+            ((UserViewHolder) holder).tvUserCreateAt.setText("Tạo ngày: " + DateTimeUtils.formatDatetime(activity, user.getCreateAt()));
             ((UserViewHolder) holder).tvUserAccount.setText(": " + user.getAccount());
             ((UserViewHolder) holder).tvUserPhone.setText(": " + user.getPhone());
             ((UserViewHolder) holder).tvUserRole.setText(": " + user.getRole());
@@ -94,21 +94,21 @@ public class EmployeeManageAdapter extends RecyclerView.Adapter {
                     assert layoutInflater != null;
                     @SuppressLint("InflateParams") View dialogView = layoutInflater.inflate(R.layout.fragment_add_user, null);
                     dialog.setContentView(dialogView);
-                    final EditText edt_userName = (EditText) dialog.findViewById(R.id.edt_obj_name);
+                    final EditText edt_userName = dialog.findViewById(R.id.edt_obj_name);
                     edt_userName.setText(user.getDisplayName());
-                    final EditText edt_userAccount = (EditText) dialog.findViewById(R.id.edt_take_date);
+                    final EditText edt_userAccount = dialog.findViewById(R.id.edt_take_date);
                     edt_userAccount.setText(user.getAccount());
-                    final EditText edt_userPassword = (EditText) dialog.findViewById(R.id.edt_money);
+                    final EditText edt_userPassword = dialog.findViewById(R.id.edt_money);
                     edt_userPassword.setText(user.getPassword());
-                    final EditText edt_userInputPassAgain = (EditText) dialog.findViewById(R.id.edt_day);
+                    final EditText edt_userInputPassAgain = dialog.findViewById(R.id.edt_day);
                     edt_userInputPassAgain.setText(user.getPassword());
-                    final EditText edt_userAddress = (EditText) dialog.findViewById(R.id.edt_address);
+                    final EditText edt_userAddress = dialog.findViewById(R.id.edt_address);
                     edt_userAddress.setText(user.getAddress());
-                    final EditText edt_userPhone = (EditText) dialog.findViewById(R.id.edt_phone);
+                    final EditText edt_userPhone = dialog.findViewById(R.id.edt_phone);
                     edt_userPhone.setText(user.getPhone());
-                    final ProgressBar progressBar = (ProgressBar) dialog.findViewById(R.id.progressBar);
+                    final ProgressBar progressBar = dialog.findViewById(R.id.progressBar);
                     Utils.setUpProgressBar(progressBar, true);
-                    TextView tvAddUser = (TextView) dialog.findViewById(R.id.btn_login);
+                    TextView tvAddUser = dialog.findViewById(R.id.btn_login);
                     tvAddUser.setText("Cập nhật");
                     tvAddUser.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -227,7 +227,7 @@ public class EmployeeManageAdapter extends RecyclerView.Adapter {
         }
     }
 
-    public void setiOnCompleteListener(IOnCompleteListener onCompleteListener){
+    public void setiOnCompleteListener(IOnCompleteListener onCompleteListener) {
         this.iOnCompleteListener = onCompleteListener;
     }
 
