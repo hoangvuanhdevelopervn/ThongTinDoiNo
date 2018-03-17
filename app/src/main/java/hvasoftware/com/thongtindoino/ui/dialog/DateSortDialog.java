@@ -64,6 +64,8 @@ public class DateSortDialog extends DialogFragment implements com.wdullaer.mater
         startDate = DateTimeUtils.getDateToday();
         tvFrom.setText(startDate);
         tvTo = view.findViewById(R.id.tv_to);
+        endDate = DateTimeUtils.getDateToday();
+        tvTo.setText(endDate);
         tvLoc = view.findViewById(R.id.tvLoc);
         wrapTo = view.findViewById(R.id.wrap_to);
         wrapFrom.setOnClickListener(new View.OnClickListener() {
