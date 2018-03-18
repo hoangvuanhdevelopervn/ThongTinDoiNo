@@ -12,6 +12,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -51,6 +52,7 @@ import hvasoftware.com.thongtindoino.ui.fragment.DeptFragment;
 import hvasoftware.com.thongtindoino.ui.fragment.EmployeeManageFragment;
 import hvasoftware.com.thongtindoino.ui.fragment.LoginFragment;
 import hvasoftware.com.thongtindoino.utils.Constant;
+import hvasoftware.com.thongtindoino.utils.DatabaseUser;
 import hvasoftware.com.thongtindoino.utils.FragmentHelper;
 import hvasoftware.com.thongtindoino.utils.IOnCompleteListener;
 import hvasoftware.com.thongtindoino.utils.Utils;
@@ -69,6 +71,7 @@ public class MainActivity extends BaseActivity {
     View wrapFab1, wrapFab2, wrapFab3;
     private FirebaseFirestore firebaseFirestore;
     private boolean FAB_Status = false;
+    private String role = null;
 
     @Override
     protected String GetScreenTitle() {
@@ -81,6 +84,9 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void OnBindView() {
+        DatabaseUser databaseUser = DatabaseUser.newInstance(MainActivity.this);
+        role = databaseUser.getAllUsers().get(0).getRole();
+        Log.wtf(TAG, "============================>: " + role);
         firebaseFirestore = FirebaseFirestore.getInstance();
         wrapFab1 = findViewById(R.id.wrap_fab1);
         wrapFab2 = findViewById(R.id.wrap_fab2);
@@ -112,6 +118,9 @@ public class MainActivity extends BaseActivity {
         fab1 = findViewById(R.id.fab_1);
         fab2 = findViewById(R.id.fab_2);
         fab3 = findViewById(R.id.fab_3);
+        if (role.equals(Constant.ROLE_STAFF)) {
+            wrapFab1.setVisibility(View.GONE);
+        }
         //Animations
         show_fab_1 = AnimationUtils.loadAnimation(getApplication(), R.anim.fab1_show);
         hide_fab_1 = AnimationUtils.loadAnimation(getApplication(), R.anim.fab1_hide);
@@ -241,7 +250,7 @@ public class MainActivity extends BaseActivity {
         fab3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                // DATE TIME
                 DateSortDialog dateSortDialog = new DateSortDialog(MainActivity.this);
                 dateSortDialog.show(getFragmentManager(), "");
                 dateSortDialog.setiOnCompleteListener(new IOnCompleteListener() {
@@ -293,9 +302,15 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        if (role.equals(Constant.ROLE_STAFF)) {
+            getMenuInflater().inflate(R.menu.menu_main_for_staff, menu);
+        }
+
+        if (role.equals(Constant.ROLE_ADMIN)) {
+            getMenuInflater().inflate(R.menu.menu_main, menu);
+        }
+
         return isMenuVisible;
     }
 

@@ -7,14 +7,23 @@
         android:orderInCategory="100"
         android:title="Gán cho nhân viên"
         app:showAsAction="never" />
+
     <item
         android:id="@+id/money"
         android:orderInCategory="100"
         android:title="Thu tiền"
         app:showAsAction="never" />
+
     <item
         android:id="@+id/detail"
         android:orderInCategory="100"
         android:title="Chi tiết khách hàng"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/remove"
+        android:orderInCategory="100"
+        android:title="Xóa khách hàng"
+        app:showAsAction="never" />
+
 </menu>

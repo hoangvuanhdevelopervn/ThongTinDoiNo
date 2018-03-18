@@ -1,0 +1,15 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="hvasoftware.com.thongtinthutien.MainActivity">
+    <item
+        android:id="@+id/change_pass"
+        android:orderInCategory="100"
+        android:title="Đổi mật khẩu"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_log_out"
+        android:orderInCategory="100"
+        android:title="Đăng xuất"
+        app:showAsAction="never" />
+</menu>

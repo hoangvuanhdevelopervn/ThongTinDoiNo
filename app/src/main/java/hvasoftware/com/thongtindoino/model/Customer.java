@@ -11,12 +11,13 @@ public class Customer {
     private String documentId;
     private String ten;
     private String ngayVay;
-    private String ngayPhaiTra;
+    private String ngayHetHan;
+
 
     private long sotien;
     private int songayvay;
+    private int dayleft;
 
-    private String hethan;
     private String ghichu;
     private String diachi;
     private String sodienthoai;
@@ -27,7 +28,6 @@ public class Customer {
     private Date createAt;
     private Date updateAt;
     private int trangthai;
-
 
     public Customer() {
 
@@ -73,20 +73,20 @@ public class Customer {
         this.ngayVay = ngayVay;
     }
 
-    public String getNgayPhaiTra() {
-        return ngayPhaiTra;
+    public int getDayleft() {
+        return dayleft;
     }
 
-    public void setNgayPhaiTra(String ngayPhaiTra) {
-        this.ngayPhaiTra = ngayPhaiTra;
+    public void setDayleft(int dayleft) {
+        this.dayleft = dayleft;
     }
 
-    public String getHethan() {
-        return hethan;
+    public String getNgayHetHan() {
+        return ngayHetHan;
     }
 
-    public void setHethan(String hethan) {
-        this.hethan = hethan;
+    public void setNgayHetHan(String ngayHetHan) {
+        this.ngayHetHan = ngayHetHan;
     }
 
     public long getSotien() {

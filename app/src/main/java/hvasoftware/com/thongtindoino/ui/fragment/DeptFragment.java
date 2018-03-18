@@ -142,11 +142,11 @@ public class DeptFragment extends BaseFragment {
                                 tvCustomerNgayVay.setText(customer[0].getNgayVay());
                                 tvCustomerSoTien.setText("" + Utils.formatCurrency(customer[0].getSotien()));
                                 tvCustomerSoNgayVay.setText("" + customer[0].getSongayvay());
-                                tvCustomerHetHan.setText(customer[0].getHethan());
+                                tvCustomerHetHan.setText(customer[0].getNgayHetHan());
                                 tvCustomerGhiChu.setText(customer[0].getGhichu());
                                 tvCustomerNhanVienThu.setText(customer[0].getNhanvienthu());
 
-                                countStatusOfCustomer(customer[0].getNgayPhaiTra(), customer[0].getSongayvay(), customer[0].getDocumentId());
+                                countStatusOfCustomer(customer[0].getNgayHetHan(), customer[0].getSongayvay(), customer[0].getDocumentId());
 
 
                                 horizontalView.setVisibility(View.VISIBLE);
@@ -211,11 +211,11 @@ public class DeptFragment extends BaseFragment {
                                 tvCustomerNgayVay.setText(customer[0].getNgayVay());
                                 tvCustomerSoTien.setText("" + Utils.formatCurrency(customer[0].getSotien()));
                                 tvCustomerSoNgayVay.setText("" + customer[0].getSongayvay());
-                                tvCustomerHetHan.setText(customer[0].getHethan());
+                                tvCustomerHetHan.setText(customer[0].getNgayHetHan());
                                 tvCustomerGhiChu.setText(customer[0].getGhichu());
                                 tvCustomerNhanVienThu.setText(customer[0].getNhanvienthu());
 
-                                countStatusOfCustomer(customer[0].getNgayPhaiTra(), customer[0].getSongayvay(), customer[0].getDocumentId());
+                                countStatusOfCustomer(customer[0].getNgayHetHan(), customer[0].getSongayvay(), customer[0].getDocumentId());
 
                                 horizontalView.setVisibility(View.VISIBLE);
                                 deptTable.addView(dataRow[0]);
@@ -279,11 +279,11 @@ public class DeptFragment extends BaseFragment {
                                 tvCustomerNgayVay.setText(customer[0].getNgayVay());
                                 tvCustomerSoTien.setText("" + Utils.formatCurrency(customer[0].getSotien()));
                                 tvCustomerSoNgayVay.setText("" + customer[0].getSongayvay());
-                                tvCustomerHetHan.setText(customer[0].getHethan());
+                                tvCustomerHetHan.setText(customer[0].getNgayHetHan());
                                 tvCustomerGhiChu.setText(customer[0].getGhichu());
                                 tvCustomerNhanVienThu.setText(customer[0].getNhanvienthu());
 
-                                countStatusOfCustomer(customer[0].getNgayPhaiTra(), customer[0].getSongayvay(), customer[0].getDocumentId());
+                                countStatusOfCustomer(customer[0].getNgayHetHan(), customer[0].getSongayvay(), customer[0].getDocumentId());
 
                                 horizontalView.setVisibility(View.VISIBLE);
                                 deptTable.addView(dataRow[0]);
@@ -348,11 +348,11 @@ public class DeptFragment extends BaseFragment {
                                 tvCustomerNgayVay.setText(customer[0].getNgayVay());
                                 tvCustomerSoTien.setText("" + Utils.formatCurrency(customer[0].getSotien()));
                                 tvCustomerSoNgayVay.setText("" + customer[0].getSongayvay());
-                                tvCustomerHetHan.setText(customer[0].getHethan());
+                                tvCustomerHetHan.setText(customer[0].getNgayHetHan());
                                 tvCustomerGhiChu.setText(customer[0].getGhichu());
                                 tvCustomerNhanVienThu.setText(customer[0].getNhanvienthu());
 
-                                countStatusOfCustomer(customer[0].getNgayPhaiTra(), customer[0].getSongayvay(), customer[0].getDocumentId());
+                                countStatusOfCustomer(customer[0].getNgayHetHan(), customer[0].getSongayvay(), customer[0].getDocumentId());
 
                                 horizontalView.setVisibility(View.VISIBLE);
                                 deptTable.addView(dataRow[0]);
@@ -387,17 +387,28 @@ public class DeptFragment extends BaseFragment {
                         showDialogInputmoney(customer.getDocumentId(), customer.getSotien());
                         break;
                     case R.id.detail:
-                        AddCustomerFragment addCustomerFragment = new AddCustomerFragment(AddCustomerFragment.ScreenType.View);
+                        /*
+                        DetailCustomerFragment addCustomerFragment = new DetailCustomerFragment(AddCustomerFragment.ScreenType.View);
                         Bundle bundle1 = new Bundle();
                         bundle1.putString(Constant.KEY, customer.getDocumentId());
                         addCustomerFragment.setArguments(bundle1);
                         SwitchFragment(addCustomerFragment, true);
+                         */
+
                         break;
                 }
                 return true;
             }
         });
-        menu.inflate(R.menu.menu_dept_row);
+
+        if (role.equals(Constant.ROLE_STAFF)) {
+            menu.inflate(R.menu.menu_dept_row_for_staff);
+        }
+
+        if (role.equals(Constant.ROLE_ADMIN)) {
+            menu.inflate(R.menu.menu_dept_row);
+        }
+
         menu.show();
     }
 
@@ -507,9 +518,9 @@ public class DeptFragment extends BaseFragment {
         int dayPass = songayvay - dayLeft;
         double percentage = (dayPass / songayvay) * 100;
 
-        Log.wtf(TAG, "============================> percentage: " + percentage + "%");
-        Log.wtf(TAG, "============================> dayLeft: " + dayLeft + " -- ");
-        Log.wtf(TAG, "============================> dayPass: " + dayPass + " -- ");
+        //   Log.wtf(TAG, "============================> percentage: " + percentage + "%");
+        //  Log.wtf(TAG, "============================> dayLeft: " + dayLeft + " -- ");
+        // Log.wtf(TAG, "============================> dayPass: " + dayPass + " -- ");
 
         if (dayLeft < 0) {
             status = 3;

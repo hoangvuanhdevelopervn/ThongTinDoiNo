@@ -44,6 +44,7 @@ public class LoginFragment extends BaseFragment {
     protected void OnBindView() {
         checkInternet = CheckInternet.getInstance(getContext());
         databaseUser = DatabaseUser.newInstance(getContext());
+        databaseUser.deleteAllData();
         edtAccount = (EditText) findViewById(R.id.edt_acc);
         edtPass = (EditText) findViewById(R.id.edt_pass);
         btnLogin = findViewById(R.id.btn_login);

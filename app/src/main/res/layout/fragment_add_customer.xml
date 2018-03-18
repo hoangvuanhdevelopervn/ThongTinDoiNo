@@ -113,27 +113,27 @@
                 android:textColor="@color/objective_label"
                 android:textSize="@dimen/text_size_normal" />
 
-            <EditText
-                android:id="@+id/edt_take_date"
+            <TextView
+                android:id="@+id/tvNgayVay"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/label_take_date"
-                android:layout_marginLeft="15dp"
+                android:layout_marginStart="15dp"
                 android:layout_marginTop="10dp"
                 android:layout_toEndOf="@id/ic_take_date"
                 android:background="@null"
                 android:gravity="left|bottom"
-                android:inputType="date"
                 android:minHeight="32dp"
                 android:scrollHorizontally="true"
                 android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/text_size_normal" />
+                android:textSize="@dimen/text_size_normal"
+                android:textStyle="bold" />
 
             <View
                 android:id="@+id/line2"
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:layout_below="@id/edt_take_date"
+                android:layout_below="@id/tvNgayVay"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="@dimen/margin_normal"
                 android:layout_marginTop="2dp"
@@ -180,31 +180,32 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
                 android:layout_toRightOf="@id/ic_day_pay"
-                android:text="@string/pay_date"
+                android:text="@string/out_date"
                 android:textColor="@color/objective_label"
                 android:textSize="@dimen/text_size_normal" />
 
-            <EditText
-                android:id="@+id/edt_pay_day"
+            <TextView
+                android:id="@+id/tvNgayHetHan"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/label_day_pay"
-                android:layout_marginLeft="15dp"
+                android:layout_marginStart="15dp"
                 android:layout_marginTop="10dp"
                 android:layout_toEndOf="@id/ic_day_pay"
                 android:background="@null"
                 android:gravity="left|bottom"
-                android:inputType="date"
                 android:minHeight="32dp"
                 android:scrollHorizontally="true"
+                android:text="Ấn vào đây để chọn ngày hết hạn"
                 android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/text_size_normal" />
+                android:textSize="@dimen/text_size_normal"
+                android:textStyle="bold" />
 
             <View
                 android:id="@+id/line3"
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:layout_below="@id/edt_pay_day"
+                android:layout_below="@id/tvNgayHetHan"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="@dimen/margin_normal"
                 android:layout_marginTop="2dp"
@@ -288,20 +289,6 @@
 
         </RelativeLayout>
 
-        <TextView
-            android:id="@+id/tvCount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="10dip"
-            android:background="@drawable/login_btn"
-            android:clickable="true"
-            android:focusable="true"
-            android:padding="8dip"
-            android:text="@string/count_day"
-            android:textAlignment="center"
-            android:textColor="@android:color/white"
-            android:textSize="16sp" />
 
         <RelativeLayout
             android:id="@+id/wrap_money"
@@ -374,77 +361,6 @@
                 android:visibility="gone" />
         </RelativeLayout>
 
-
-        <RelativeLayout
-            android:id="@+id/wrap_out"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginTop="30dp">
-
-            <View
-                android:id="@+id/above_img_out"
-                android:layout_width="1dp"
-                android:layout_height="1dp" />
-
-            <ImageView
-                android:id="@+id/ic_out"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/above_img_out"
-                android:src="@drawable/ic_desire_outcome" />
-
-            <TextView
-                android:id="@+id/label_out"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_toEndOf="@id/ic_out"
-                android:text="@string/out_date"
-                android:textColor="@color/objective_label"
-                android:textSize="@dimen/text_size_normal" />
-
-            <EditText
-                android:id="@+id/edt_out"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/label_out"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="10dp"
-                android:layout_toEndOf="@id/ic_out"
-                android:background="@null"
-                android:gravity="left|bottom"
-                android:inputType="date"
-                android:minHeight="32dp"
-                android:scrollHorizontally="true"
-                android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/text_size_normal"
-                android:textStyle="bold" />
-
-            <View
-                android:id="@+id/line_out"
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:layout_below="@id/edt_out"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="@dimen/margin_normal"
-                android:layout_marginTop="2dp"
-                android:layout_toRightOf="@id/ic_out"
-                android:background="@color/grey" />
-
-            <TextView
-                android:id="@+id/warning_out"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/line_out"
-                android:layout_marginLeft="15dp"
-                android:layout_toRightOf="@id/ic_out"
-                android:text="Please input full name"
-                android:textColor="@android:color/holo_red_dark"
-                android:textSize="@dimen/recog_text_size_small"
-                android:visibility="gone" />
-        </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/wrap_note"
@@ -770,7 +686,7 @@
                 android:gravity="left|bottom"
                 android:minHeight="32dp"
                 android:scrollHorizontally="true"
-                android:text="Ấn vào đây để chọn nhân viên thu"
+                android:text="@string/click_to_choose_staff"
                 android:textColor="@color/colorPrimary"
                 android:textSize="@dimen/text_size_normal"
                 android:textStyle="bold"
@@ -786,7 +702,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="4dip"
-            android:layout_marginTop="16dip"
+            android:layout_marginTop="36dip"
             android:indeterminate="true"
             android:indeterminateTint="@color/colorAccent"
             tools:targetApi="lollipop" />

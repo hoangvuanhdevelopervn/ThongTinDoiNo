@@ -33,6 +33,20 @@ public class DateTimeUtils {
         return date;
     }
 
+    public static String getDateTodayOneMonthLater() {
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        Date dt = new Date();
+        Calendar c = Calendar.getInstance();
+        c.setTime(dt);
+        c.add(Calendar.DATE, 0);
+        c.add(Calendar.MONTH, 1);
+        c.add(Calendar.YEAR, 0);
+        dt = c.getTime();
+        String date = df.format(dt);
+        return date;
+    }
+
+
     public static String formatDatetime(Context mContext, Date date) {
         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         String date1 = df.format(date);

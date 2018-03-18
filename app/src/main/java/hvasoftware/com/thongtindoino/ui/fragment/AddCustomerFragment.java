@@ -21,25 +21,19 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.WriteBatch;
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import hvasoftware.com.thongtindoino.R;
 import hvasoftware.com.thongtindoino.base.BaseFragment;
-import hvasoftware.com.thongtindoino.model.Customer;
 import hvasoftware.com.thongtindoino.model.User;
 import hvasoftware.com.thongtindoino.ui.adapter.AdapterAssign;
 import hvasoftware.com.thongtindoino.utils.Constant;
@@ -53,15 +47,14 @@ import hvasoftware.com.thongtindoino.utils.Utils;
 
 @SuppressWarnings("SpellCheckingInspection")
 @SuppressLint("ValidFragment")
-public class AddCustomerFragment extends BaseFragment {
+public class AddCustomerFragment extends BaseFragment implements com.wdullaer.materialdatetimepicker.date.DatePickerDialog.OnDateSetListener {
     private static final String TAG = "AddCustomerFragment";
     private ScreenType screenType;
     private EditText edt_CustomerName;
-    private EditText edt_NgayVay;
-    private EditText edt_NgayTra;
+    private TextView tvNgayVay;
+    private TextView tvNgayHetHan;
     private TextView tvSoNgayVay;
     private EditText edt_SoTienVay;
-    private EditText edt_HetHan;
     private EditText edt_Note;
     private EditText edt_Address;
     private EditText edt_Phone;
@@ -72,11 +65,10 @@ public class AddCustomerFragment extends BaseFragment {
     private String staffName = null;
     private String staffDocumentId = null;
     private FirebaseFirestore firebaseFirestore;
-    private String customerDocumentId;
-    private int soNgayVay = 0;
-    private TextView tvCount;
     private String ngayVay = null;
-    private String ngayTra = null;
+    private String ngayHetHan = null;
+    private DatePickerDialog datePickerDialog;
+    private int soNgayVay = 0;
 
 
     @SuppressLint("ValidFragment")
@@ -87,10 +79,6 @@ public class AddCustomerFragment extends BaseFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        savedInstanceState = this.getArguments();
-        if (savedInstanceState != null) {
-            customerDocumentId = savedInstanceState.getString(Constant.KEY);
-        }
     }
 
     @Override
@@ -99,15 +87,14 @@ public class AddCustomerFragment extends BaseFragment {
 
     @Override
     protected void OnBindView() {
+        Calendar calendar = Calendar.getInstance();
+        datePickerDialog = DatePickerDialog.newInstance(this, calendar);
         firebaseFirestore = FirebaseFirestore.getInstance();
         edt_CustomerName = (EditText) findViewById(R.id.edt_obj_name);
-        edt_NgayVay = (EditText) findViewById(R.id.edt_take_date);
-        edt_NgayTra = (EditText) findViewById(R.id.edt_pay_day);
+        tvNgayVay = (TextView) findViewById(R.id.tvNgayVay);
+        tvNgayHetHan = (TextView) findViewById(R.id.tvNgayHetHan);
         tvSoNgayVay = (TextView) findViewById(R.id.edt_day);
-        tvSoNgayVay.setText("" + soNgayVay);
-        tvCount = (TextView) findViewById(R.id.tvCount);
         edt_SoTienVay = (EditText) findViewById(R.id.edt_money);
-        edt_HetHan = (EditText) findViewById(R.id.edt_out);
         edt_Note = (EditText) findViewById(R.id.edt_note);
         edt_Address = (EditText) findViewById(R.id.edt_address);
         edt_Phone = (EditText) findViewById(R.id.edt_phone);
@@ -122,14 +109,11 @@ public class AddCustomerFragment extends BaseFragment {
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         Utils.setUpProgressBar(progressBar, true);
         tvUpload = (TextView) findViewById(R.id.tvUpload);
-
-        if (!TextUtils.isEmpty(customerDocumentId)) {
-            bindData();
-            tvUpload.setText(R.string.update);
-        } else {
-            tvUpload.setText(getActivity().getString(R.string.add_customer));
-            edt_NgayVay.setText(DateTimeUtils.getDateToday());
-        }
+        ngayVay = DateTimeUtils.getDateToday();
+        ngayHetHan = DateTimeUtils.getDateTodayOneMonthLater();
+        tvUpload.setText(getActivity().getString(R.string.add_customer));
+        tvNgayVay.setText(ngayVay);
+        tvNgayHetHan.setText(ngayHetHan);
 
         tvUpload.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -138,46 +122,17 @@ public class AddCustomerFragment extends BaseFragment {
             }
         });
 
-        tvCount.setOnClickListener(new View.OnClickListener() {
+        tvNgayHetHan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                countSoNgayVay();
+                datePickerDialog.show(getActivity().getFragmentManager(), TAG);
             }
         });
 
-    }
+        soNgayVay = Utils.get_count_of_days(ngayVay, ngayHetHan);
+        tvSoNgayVay.setText("" + soNgayVay);
 
-    private void bindData() {
-        firebaseFirestore.collection(Constant.COLLECTION_CUSTOMER)
-                .document(customerDocumentId)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @SuppressLint("SetTextI18n")
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot document = task.getResult();
-                            if (document != null && document.exists()) {
-                                Customer customer = document.toObject(Customer.class);
-                                staffName = customer.getNhanvienthu();
-                                staffDocumentId = customer.getNhanvienthuDocumentId();
-                                edt_CustomerName.setText(customer.getTen());
-                                edt_NgayVay.setText(customer.getNgayVay());
-                                edt_NgayTra.setText(customer.getNgayPhaiTra());
-                                edt_SoTienVay.setText("" + customer.getSotien());
-                                tvSoNgayVay.setText("" + customer.getSongayvay());
-                                edt_HetHan.setText(customer.getHethan());
-                                edt_Note.setText(customer.getGhichu());
-                                edt_Address.setText(customer.getDiachi());
-                                edt_Phone.setText(customer.getSodienthoai());
-                                edt_CMND.setText(customer.getCmnd());
-                                tvChooseStaff.setText(staffName);
-                            }
-                        }
-                    }
-                });
     }
-
 
     private void setUpNhanVienThu() {
         final Dialog dialog = new Dialog(getActivity());
@@ -228,46 +183,10 @@ public class AddCustomerFragment extends BaseFragment {
         dialog.show();
     }
 
-
-    @SuppressLint("SetTextI18n")
-    private void countSoNgayVay() {
-        ngayVay = edt_NgayVay.getText().toString().trim();
-        ngayTra = edt_NgayTra.getText().toString().trim();
-
-        if (TextUtils.isEmpty(ngayVay)) {
-            Toast.makeText(getContext(), "Bạn chưa nhập ngày vay", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        if (TextUtils.isEmpty(ngayTra)) {
-            Toast.makeText(getContext(), "Bạn chưa nhập ngày trả", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        try {
-            soNgayVay = get_count_of_days(ngayVay, ngayTra);
-
-            Log.wtf(TAG, "=========================> NgayVay: " + ngayVay);
-            Log.wtf(TAG, "=========================> NgayVay: " + ngayTra);
-
-            Log.wtf(TAG, "=========================> soNgayVay: " + soNgayVay);
-            tvSoNgayVay.setText("" + soNgayVay);
-            if (soNgayVay < 0) {
-                Toast.makeText(getActivity(), "Số ngày vay không thể nhỏ hơn 0", Toast.LENGTH_SHORT).show();
-            }
-        } catch (Exception e) {
-            Toast.makeText(getContext(), "Bạn nhập sai định dạng. Vui lòng nhập lại", Toast.LENGTH_SHORT).show();
-            e.printStackTrace();
-        }
-    }
-
-
     @SuppressLint({"ClickableViewAccessibility", "SetTextI18n"})
     private void uploadCustomer() {
         long customerSoTienVay;
         String customerName = edt_CustomerName.getText().toString().trim();
-        ngayVay = edt_NgayVay.getText().toString().trim();
-        ngayTra = edt_NgayTra.getText().toString().trim();
-        String hetHan = edt_HetHan.getText().toString().trim();
 
         String customerGhiChu = edt_Note.getText().toString().trim();
         String customerDiaChi = edt_Address.getText().toString().trim();
@@ -280,28 +199,10 @@ public class AddCustomerFragment extends BaseFragment {
             return;
         }
 
-        if (TextUtils.isEmpty(ngayVay)) {
-            Toast.makeText(getContext(), "Bạn chưa nhập ngày vay", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        if (TextUtils.isEmpty(ngayTra)) {
-            Toast.makeText(getContext(), "Bạn chưa nhập ngày trả", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        try {
-            soNgayVay = Utils.get_count_of_days(ngayVay, ngayTra);
-        } catch (Exception e) {
-            Toast.makeText(getContext(), "Bạn nhập sai định dạng. Vui lòng nhập lại", Toast.LENGTH_SHORT).show();
-            e.printStackTrace();
-        }
-
-        tvSoNgayVay.setText("" + soNgayVay);
         if (soNgayVay < 0) {
-            Toast.makeText(getActivity(), "Số ngày vay không thể nhỏ hơn 0", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Số tiền vay không thể nhỏ hơn 0", Toast.LENGTH_SHORT).show();
+            return;
         }
-
 
         if (TextUtils.isEmpty(edt_SoTienVay.getText().toString().trim())) {
             Toast.makeText(getContext(), "Bạn chưa nhập số tiền vay", Toast.LENGTH_SHORT).show();
@@ -310,10 +211,6 @@ public class AddCustomerFragment extends BaseFragment {
             customerSoTienVay = Long.valueOf(edt_SoTienVay.getText().toString().trim());
         }
 
-        if (TextUtils.isEmpty(hetHan)) {
-            Toast.makeText(getContext(), "Bạn chưa nhập ngày hết hạn", Toast.LENGTH_SHORT).show();
-            return;
-        }
 
         if (TextUtils.isEmpty(customerGhiChu)) {
             Toast.makeText(getContext(), "Bạn chưa nhập ghi chú", Toast.LENGTH_SHORT).show();
@@ -337,79 +234,62 @@ public class AddCustomerFragment extends BaseFragment {
             return;
         }
 
+        //noinspection EqualsBetweenInconvertibleTypes
+        if (TextUtils.isEmpty(staffName)) {
+            Toast.makeText(getContext(), "Bạn chưa chọn nhân viên thu", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        /*
+          if (staffName.equals(R.string.click_to_choose_staff)) {
+
+        }
+         */
+
+
         progressBar.setVisibility(View.VISIBLE);
 
-        if (TextUtils.isEmpty(customerDocumentId)) {
-            CollectionReference collectionReference = firebaseFirestore.collection(Constant.COLLECTION_CUSTOMER);
-            String objectId = Utils.getRandomUUID();
-            Map<String, Object> objectMap = new HashMap<>();
-            objectMap.put("objectID", objectId);
-            objectMap.put("documentId", objectId);
-            objectMap.put("ten", customerName);
-            objectMap.put("ngayVay", ngayVay);
-            objectMap.put("ngayPhaiTra", ngayTra);
-            objectMap.put("hethan", hetHan);
-            objectMap.put("sotien", customerSoTienVay);
-            objectMap.put("songayvay", soNgayVay);
-            objectMap.put("ghichu", customerGhiChu);
-            objectMap.put("diachi", customerDiaChi);
-            objectMap.put("sodienthoai", customerSoDienThoai);
-            objectMap.put("cmnd", customerCMND);
-            objectMap.put("nhanvienthu", staffName);
-            objectMap.put("nhanvienthuDocumentId", staffDocumentId);
-            objectMap.put("createAt", Utils.getCurrentDateTime());
-            objectMap.put("updateAt", Utils.getCurrentDateTime());
-            objectMap.put("trangthai", Constant.STATE_ONE);
-            collectionReference.document(objectId).set(objectMap)
-                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            progressBar.setVisibility(View.GONE);
-                            Toast.makeText(getContext(), "Thêm khách hàng thành công", Toast.LENGTH_SHORT).show();
-                            getActivity().onBackPressed();
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    progressBar.setVisibility(View.GONE);
-                    Toast.makeText(getContext(), "Thêm khách hàng thất bại! Vui lòng thử lại sau", Toast.LENGTH_SHORT).show();
-                    Log.wtf(TAG, "==============================>" + e.getMessage());
-                    getActivity().onBackPressed();
-                }
-            });
-        } else {
-            WriteBatch writeBatch = firebaseFirestore.batch();
-            DocumentReference updateCustomer = firebaseFirestore.collection(Constant.COLLECTION_CUSTOMER).document(customerDocumentId);
-            writeBatch.update(updateCustomer, "ten", customerName);
-            writeBatch.update(updateCustomer, "ngayVay", ngayVay);
-            writeBatch.update(updateCustomer, "ngayPhaiTra", ngayTra);
-            writeBatch.update(updateCustomer, "hethan", hetHan);
-            writeBatch.update(updateCustomer, "sotien", customerSoTienVay);
-            writeBatch.update(updateCustomer, "songayvay", soNgayVay);
-            writeBatch.update(updateCustomer, "ghichu", customerGhiChu);
-            writeBatch.update(updateCustomer, "diachi", customerDiaChi);
-            writeBatch.update(updateCustomer, "sodienthoai", customerSoDienThoai);
-            writeBatch.update(updateCustomer, "cmnd", customerCMND);
-            writeBatch.update(updateCustomer, "nhanvienthu", staffName);
-            writeBatch.update(updateCustomer, "nhanvienthuDocumentId", staffDocumentId);
-            writeBatch.update(updateCustomer, "updateAt", Utils.getCurrentDateTime());
-            writeBatch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    progressBar.setVisibility(View.GONE);
-                    Toast.makeText(getContext(), getActivity().getString(R.string.updapte_success), Toast.LENGTH_SHORT).show();
-                    getActivity().onBackPressed();
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    progressBar.setVisibility(View.GONE);
-                    Toast.makeText(getContext(), getActivity().getString(R.string.updapte_failed), Toast.LENGTH_SHORT).show();
-                    getActivity().onBackPressed();
-                    // Log.wtf(TAG, "==============================>" + e.getMessage());
-                }
-            });
-        }
+        CollectionReference collectionReference = firebaseFirestore.collection(Constant.COLLECTION_CUSTOMER);
+        String objectId = Utils.getRandomUUID();
+        Map<String, Object> objectMap = new HashMap<>();
+        objectMap.put("objectID", objectId);
+        objectMap.put("documentId", objectId);
+        objectMap.put("ten", customerName);
+        objectMap.put("ngayVay", ngayVay);
+        objectMap.put("ngayHetHan", ngayHetHan);
+
+        objectMap.put("dayleft", soNgayVay);
+        objectMap.put("songayvay", soNgayVay);
+        objectMap.put("sotien", customerSoTienVay);
+        objectMap.put("trangthai", Constant.STATE_ONE);
+
+
+        objectMap.put("ghichu", customerGhiChu);
+        objectMap.put("diachi", customerDiaChi);
+        objectMap.put("sodienthoai", customerSoDienThoai);
+        objectMap.put("cmnd", customerCMND);
+        objectMap.put("nhanvienthu", staffName);
+        objectMap.put("nhanvienthuDocumentId", staffDocumentId);
+        objectMap.put("createAt", Utils.getCurrentDateTime());
+        objectMap.put("updateAt", Utils.getCurrentDateTime());
+
+        collectionReference.document(objectId).set(objectMap)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        progressBar.setVisibility(View.GONE);
+                        Toast.makeText(getContext(), "Thêm khách hàng thành công", Toast.LENGTH_SHORT).show();
+                        getActivity().onBackPressed();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                progressBar.setVisibility(View.GONE);
+                Toast.makeText(getContext(), "Thêm khách hàng thất bại! Vui lòng thử lại sau", Toast.LENGTH_SHORT).show();
+                Log.wtf(TAG, "==============================>" + e.getMessage());
+                getActivity().onBackPressed();
+            }
+        });
     }
 
     @Override
@@ -433,56 +313,12 @@ public class AddCustomerFragment extends BaseFragment {
         return false;
     }
 
-    private int get_count_of_days(String Created_date_String, String Expire_date_String) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-        Date Created_convertedDate = null, Expire_CovertedDate = null, todayWithZeroTime = null;
-        try {
-            Created_convertedDate = dateFormat.parse(Created_date_String);
-            Expire_CovertedDate = dateFormat.parse(Expire_date_String);
-
-            Date today = new Date();
-
-            todayWithZeroTime = dateFormat.parse(dateFormat.format(today));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        int c_year = 0, c_month = 0, c_day = 0;
-
-        if (Created_convertedDate.after(todayWithZeroTime)) {
-            Calendar c_cal = Calendar.getInstance();
-            c_cal.setTime(Created_convertedDate);
-            c_year = c_cal.get(Calendar.YEAR);
-            c_month = c_cal.get(Calendar.MONTH);
-            c_day = c_cal.get(Calendar.DAY_OF_MONTH);
-
-        } else {
-            Calendar c_cal = Calendar.getInstance();
-            c_cal.setTime(todayWithZeroTime);
-            c_year = c_cal.get(Calendar.YEAR);
-            c_month = c_cal.get(Calendar.MONTH);
-            c_day = c_cal.get(Calendar.DAY_OF_MONTH);
-        }
-
-
-        Calendar e_cal = Calendar.getInstance();
-        e_cal.setTime(Expire_CovertedDate);
-
-        int e_year = e_cal.get(Calendar.YEAR);
-        int e_month = e_cal.get(Calendar.MONTH);
-        int e_day = e_cal.get(Calendar.DAY_OF_MONTH);
-
-        Calendar date1 = Calendar.getInstance();
-        Calendar date2 = Calendar.getInstance();
-
-        date1.clear();
-        date1.set(c_year, c_month, c_day);
-        date2.clear();
-        date2.set(e_year, e_month, e_day);
-
-        long diff = date2.getTimeInMillis() - date1.getTimeInMillis();
-        float dayCount = (float) diff / (24 * 60 * 60 * 1000);
-        return (int) dayCount;
+    @Override
+    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+        ngayHetHan = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year;
+        tvNgayHetHan.setText(ngayHetHan);
+        soNgayVay = Utils.get_count_of_days(ngayVay, ngayHetHan);
+        tvSoNgayVay.setText("" + soNgayVay);
     }
 
     public enum ScreenType {
