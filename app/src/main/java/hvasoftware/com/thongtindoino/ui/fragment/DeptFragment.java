@@ -71,8 +71,6 @@ public class DeptFragment extends BaseFragment {
         if (bundle != null) {
             objectId = bundle.getString(Constant.KEY);
             type = bundle.getString(Constant.TYPE);
-            Log.wtf(TAG, "=============================> KEY: " + objectId);
-            Log.wtf(TAG, "=============================> TYPE: " + type);
             if (type.equals(Constant.STAFF)) {
                 bindDataToTableByStaff(objectId);
             }
@@ -135,7 +133,11 @@ public class DeptFragment extends BaseFragment {
                                 final TextView tvCustomerGhiChu = dataRow[0].findViewById(R.id.tvCustomerGhiChu);
                                 final TextView tvCustomerNhanVienThu = dataRow[0].findViewById(R.id.tvCustomerNhanVienThu);
 
-                                tvCustomerId.setText(customer[0].getObjectID().substring(0, 10) + "...");
+                                int status = customer[0].getTrangthai();
+                                tvCustomerId.setText("" + status);
+
+                                setUpStatus(status, tvCustomerId);
+
                                 tvCustomerName.setText(customer[0].getTen());
                                 tvCustomerNgayVay.setText(customer[0].getNgayVay());
                                 tvCustomerSoTien.setText("" + Utils.formatCurrency(customer[0].getSotien()));
@@ -145,6 +147,7 @@ public class DeptFragment extends BaseFragment {
                                 tvCustomerNhanVienThu.setText(customer[0].getNhanvienthu());
 
                                 countStatusOfCustomer(customer[0].getNgayPhaiTra(), customer[0].getSongayvay(), customer[0].getDocumentId());
+
 
                                 horizontalView.setVisibility(View.VISIBLE);
                                 deptTable.addView(dataRow[0]);
@@ -200,7 +203,10 @@ public class DeptFragment extends BaseFragment {
                                 final TextView tvCustomerGhiChu = dataRow[0].findViewById(R.id.tvCustomerGhiChu);
                                 final TextView tvCustomerNhanVienThu = dataRow[0].findViewById(R.id.tvCustomerNhanVienThu);
 
-                                tvCustomerId.setText(customer[0].getObjectID().substring(0, 10) + "...");
+                                int status = customer[0].getTrangthai();
+                                tvCustomerId.setText("" + status);
+
+                                setUpStatus(status, tvCustomerId);
                                 tvCustomerName.setText(customer[0].getTen());
                                 tvCustomerNgayVay.setText(customer[0].getNgayVay());
                                 tvCustomerSoTien.setText("" + Utils.formatCurrency(customer[0].getSotien()));
@@ -208,6 +214,9 @@ public class DeptFragment extends BaseFragment {
                                 tvCustomerHetHan.setText(customer[0].getHethan());
                                 tvCustomerGhiChu.setText(customer[0].getGhichu());
                                 tvCustomerNhanVienThu.setText(customer[0].getNhanvienthu());
+
+                                countStatusOfCustomer(customer[0].getNgayPhaiTra(), customer[0].getSongayvay(), customer[0].getDocumentId());
+
                                 horizontalView.setVisibility(View.VISIBLE);
                                 deptTable.addView(dataRow[0]);
                                 dataRow[0].setOnClickListener(new View.OnClickListener() {
@@ -262,7 +271,10 @@ public class DeptFragment extends BaseFragment {
                                 final TextView tvCustomerGhiChu = dataRow[0].findViewById(R.id.tvCustomerGhiChu);
                                 final TextView tvCustomerNhanVienThu = dataRow[0].findViewById(R.id.tvCustomerNhanVienThu);
 
-                                tvCustomerId.setText(customer[0].getObjectID().substring(0, 10) + "...");
+                                int status = customer[0].getTrangthai();
+                                tvCustomerId.setText("" + status);
+
+                                setUpStatus(status, tvCustomerId);
                                 tvCustomerName.setText(customer[0].getTen());
                                 tvCustomerNgayVay.setText(customer[0].getNgayVay());
                                 tvCustomerSoTien.setText("" + Utils.formatCurrency(customer[0].getSotien()));
@@ -270,6 +282,9 @@ public class DeptFragment extends BaseFragment {
                                 tvCustomerHetHan.setText(customer[0].getHethan());
                                 tvCustomerGhiChu.setText(customer[0].getGhichu());
                                 tvCustomerNhanVienThu.setText(customer[0].getNhanvienthu());
+
+                                countStatusOfCustomer(customer[0].getNgayPhaiTra(), customer[0].getSongayvay(), customer[0].getDocumentId());
+
                                 horizontalView.setVisibility(View.VISIBLE);
                                 deptTable.addView(dataRow[0]);
                                 dataRow[0].setOnClickListener(new View.OnClickListener() {
@@ -324,7 +339,11 @@ public class DeptFragment extends BaseFragment {
                                 final TextView tvCustomerGhiChu = dataRow[0].findViewById(R.id.tvCustomerGhiChu);
                                 final TextView tvCustomerNhanVienThu = dataRow[0].findViewById(R.id.tvCustomerNhanVienThu);
 
-                                tvCustomerId.setText(customer[0].getObjectID().substring(0, 10) + "...");
+                                int status = customer[0].getTrangthai();
+                                tvCustomerId.setText("" + status);
+
+                                setUpStatus(status, tvCustomerId);
+
                                 tvCustomerName.setText(customer[0].getTen());
                                 tvCustomerNgayVay.setText(customer[0].getNgayVay());
                                 tvCustomerSoTien.setText("" + Utils.formatCurrency(customer[0].getSotien()));
@@ -332,6 +351,9 @@ public class DeptFragment extends BaseFragment {
                                 tvCustomerHetHan.setText(customer[0].getHethan());
                                 tvCustomerGhiChu.setText(customer[0].getGhichu());
                                 tvCustomerNhanVienThu.setText(customer[0].getNhanvienthu());
+
+                                countStatusOfCustomer(customer[0].getNgayPhaiTra(), customer[0].getSongayvay(), customer[0].getDocumentId());
+
                                 horizontalView.setVisibility(View.VISIBLE);
                                 deptTable.addView(dataRow[0]);
                                 dataRow[0].setOnClickListener(new View.OnClickListener() {
@@ -476,11 +498,14 @@ public class DeptFragment extends BaseFragment {
     }
 
     private void countStatusOfCustomer(String end, int songayvay, String documentId) {
+        // 3 mau do
+        // 2 mau cam
+        // 1 mau xanh
         int status = 1;
         String today = DateTimeUtils.getDateToday();
         int dayLeft = Utils.get_count_of_days(today, end);
         int dayPass = songayvay - dayLeft;
-        int percentage = (dayPass / songayvay) * 100;
+        double percentage = (dayPass / songayvay) * 100;
 
         Log.wtf(TAG, "============================> percentage: " + percentage + "%");
         Log.wtf(TAG, "============================> dayLeft: " + dayLeft + " -- ");
@@ -490,20 +515,35 @@ public class DeptFragment extends BaseFragment {
             status = 3;
         }
 
-        if (dayLeft <= 5) {
-            status = 1;
+        if (dayLeft > 0 && dayLeft <= 5) {
+            status = 2;
         }
 
-        if (dayLeft >= 5 && dayLeft <= 15) {
-            status = 2;
+        if (dayLeft > 5 && dayLeft <= 15) {
+            status = 1;
         }
 
         WriteBatch writeBatch = firebaseFirestore.batch();
         DocumentReference updateQuoteShareAmount = firebaseFirestore.collection(Constant.COLLECTION_CUSTOMER).document(documentId);
         writeBatch.update(updateQuoteShareAmount, "trangthai", status);
         writeBatch.update(updateQuoteShareAmount, "updateAt", DateTimeUtils.getDateTime());
+        writeBatch.commit();
 
 
+    }
+
+    private void setUpStatus(int status, TextView textView) {
+        if (status == 3) {
+            textView.setTextColor(getResources().getColor(R.color.status_3));
+        }
+
+        if (status == 2) {
+            textView.setTextColor(getResources().getColor(R.color.status_2));
+        }
+
+        if (status == 1) {
+            textView.setTextColor(getResources().getColor(R.color.status_1));
+        }
     }
 
     @Override

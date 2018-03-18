@@ -11,4 +11,9 @@
     <color name="statusGreen">#39B54A</color>
     <color name="background">#f0f1f3</color>
     <color name="black_semi_transparent">#B2000000</color>
+    <color name="status_1">#b206d15e</color>
+    <color name="status_2">#b2ff8000</color>
+    <color name="status_3">#b2ff0000</color>
+
+
 </resources>

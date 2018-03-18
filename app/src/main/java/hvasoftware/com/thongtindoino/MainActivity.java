@@ -225,28 +225,13 @@ public class MainActivity extends BaseActivity {
                 tvChoose.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
-
-                        /**
-                         *  final Dialog dialog = new Dialog(MainActivity.this);
-                         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                         LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                         assert layoutInflater != null;
-                         @SuppressLint("InflateParams") View dialogView = layoutInflater.inflate(R.layout.view_pick_date, null);
-                         dialog.setContentView(dialogView);
-                         dialog.show();
-                         */
-
-                        /*
-                          DeptFragment deptFragment = new DeptFragment();
+                        DeptFragment deptFragment = new DeptFragment();
                         Bundle bundle = new Bundle();
                         bundle.putString(Constant.KEY, status[0]);
                         bundle.putString(Constant.TYPE, Constant.STATUS);
                         deptFragment.setArguments(bundle);
                         SwitchFragment(deptFragment, false);
                         dialog.dismiss();
-                         */
-
                     }
                 });
                 dialog.show();

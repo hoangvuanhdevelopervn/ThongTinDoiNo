@@ -37,7 +37,7 @@
                         android:background="@drawable/cell_shape"
                         android:gravity="center"
                         android:padding="5dp"
-                        android:text="ID"
+                        android:text="@string/status"
                         android:textColor="@android:color/white"
                         android:textSize="@dimen/text_size_normal" />
 
