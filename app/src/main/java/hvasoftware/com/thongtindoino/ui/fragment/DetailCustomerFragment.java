@@ -276,7 +276,7 @@ public class DetailCustomerFragment extends BaseFragment implements com.wdullaer
 
         writeBatch.update(updateCustomer, "sotien", customerSoTienVay);
         writeBatch.update(updateCustomer, "songayvay", soNgayVay);
-        writeBatch.update(updateCustomer, "dayleft", Utils.get_count_of_days(DateTimeUtils.getDateToday(), ngayHetHan));
+        writeBatch.update(updateCustomer, "dayleft", Utils.daysBetween(DateTimeUtils.getDateTime(), Utils.parseStringToDate(ngayHetHan)));
 
         writeBatch.update(updateCustomer, "ghichu", customerGhiChu);
         writeBatch.update(updateCustomer, "diachi", customerDiaChi);
@@ -307,10 +307,9 @@ public class DetailCustomerFragment extends BaseFragment implements com.wdullaer
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
         ngayHetHan = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year;
         tvNgayHetHan.setText(ngayHetHan);
-        soNgayVay = Utils.get_count_of_days(ngayVay, ngayHetHan);
+        //soNgayVay = Utils.get_count_of_days(ngayVay, ngayHetHan);
+        soNgayVay = Utils.daysBetween(Utils.parseStringToDate(ngayVay), Utils.parseStringToDate(ngayHetHan));
         tvSoNgayVay.setText("" + soNgayVay);
-
-
     }
 
     @Override

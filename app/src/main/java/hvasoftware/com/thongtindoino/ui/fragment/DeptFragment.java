@@ -73,21 +73,6 @@ public class DeptFragment extends BaseFragment {
             String object = bundle.getString(Constant.KEY);
             String type = bundle.getString(Constant.TYPE);
             bindDataToTable(type, object);
-
-            /*
-            if (type.equals(Constant.STAFF)) {
-                bindDataToTableByStaff(objectId);
-            }
-
-            if (type.equals(Constant.STATUS)) {
-                bindDataToTableByStatus(Integer.parseInt(objectId));
-            }
-
-            if (type.equals(Constant.DATETIME)) {
-                bindDataToTableByDate(objectId);
-            }
-             */
-
         } else {
             bindDataToTable(null, null);
         }
@@ -124,15 +109,22 @@ public class DeptFragment extends BaseFragment {
             if (type.equals(Constant.STATUS)) {
                 int status = Integer.valueOf(object);
                 query = firebaseFirestore.collection(Constant.COLLECTION_CUSTOMER)
-                        .whereEqualTo("trangthai", status);
+                        .whereEqualTo("trangthai", status)
+                        .whereEqualTo("nhanvienthu", userName);
             }
 
             if (type.equals(Constant.DATETIME)) {
                 query = firebaseFirestore.collection(Constant.COLLECTION_CUSTOMER)
-                        .whereGreaterThanOrEqualTo("ngayVay", object);
+                        .whereGreaterThanOrEqualTo("ngayVay", object)
+                        .whereEqualTo("nhanvienthu", userName);
             }
         } else {
-            query = firebaseFirestore.collection(Constant.COLLECTION_CUSTOMER);
+            if (role.equals(Constant.ROLE_ADMIN)) {
+                query = firebaseFirestore.collection(Constant.COLLECTION_CUSTOMER);
+            } else if (role.equals(Constant.ROLE_STAFF)) {
+                query = firebaseFirestore.collection(Constant.COLLECTION_CUSTOMER)
+                        .whereEqualTo("nhanvienthu", userName);
+            }
         }
 
 
@@ -375,22 +367,13 @@ public class DeptFragment extends BaseFragment {
         // 2 mau cam -  20% / tren tong so ngay vay
         // 1 mau xanh - 80%
         int status = 1;
-        String today = DateTimeUtils.getDateToday();
         String ngayHetHan = customer.getNgayHetHan();
         int soNgayVay = customer.getSongayvay();
 
-        int dayLeft = Utils.get_count_of_days(today, ngayHetHan);
-        // int dayLeft = customer.getDayleft();
+        int dayLeft = Utils.daysBetween(DateTimeUtils.getDateTime(), Utils.parseStringToDate(ngayHetHan));
         long soTienVay = customer.getSotien();
         int dayPass = soNgayVay - dayLeft;
         int percentage = (dayPass * 100) / soNgayVay;
-
-
-        Log.wtf(TAG, "============================> soNgayVay: " + soNgayVay);
-        Log.wtf(TAG, "============================> dayLeft: " + dayLeft + " -- ");
-        Log.wtf(TAG, "============================> dayPass: " + dayPass + " -- ");
-        Log.wtf(TAG, "\n============================> percentage: " + percentage + " %\n");
-
 
         if (dayLeft <= 0 && soTienVay == 0) {
             status = 4;
@@ -414,14 +397,13 @@ public class DeptFragment extends BaseFragment {
         writeBatch.update(updateQuoteShareAmount, "dayleft", dayLeft);
         writeBatch.update(updateQuoteShareAmount, "updateAt", DateTimeUtils.getDateTime());
         writeBatch.commit();
-        // bindDataToTable(null, null);
-
     }
 
     private void setUpStatus(int status, TextView textView) {
-        textView.setText("");
+        textView.setVisibility(View.GONE);
+
         if (status == 4) {
-            textView.setBackgroundColor(getResources().getColor(R.color.status_4));
+            textView.setBackgroundResource(R.drawable.cell_shape_row);
         }
 
         if (status == 3) {

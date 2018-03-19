@@ -129,7 +129,7 @@ public class AddCustomerFragment extends BaseFragment implements com.wdullaer.ma
             }
         });
 
-        soNgayVay = Utils.get_count_of_days(ngayVay, ngayHetHan);
+        soNgayVay = Utils.daysBetween(Utils.parseStringToDate(ngayVay), Utils.parseStringToDate(ngayHetHan));
         tvSoNgayVay.setText("" + soNgayVay);
 
     }
@@ -311,7 +311,8 @@ public class AddCustomerFragment extends BaseFragment implements com.wdullaer.ma
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
         ngayHetHan = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year;
         tvNgayHetHan.setText(ngayHetHan);
-        soNgayVay = Utils.get_count_of_days(ngayVay, ngayHetHan);
+        //soNgayVay = Utils.get_count_of_days(ngayVay, ngayHetHan);
+        soNgayVay = Utils.daysBetween(Utils.parseStringToDate(ngayVay), Utils.parseStringToDate(ngayHetHan));
         tvSoNgayVay.setText("" + soNgayVay);
     }
 

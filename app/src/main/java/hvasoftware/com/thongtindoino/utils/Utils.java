@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ProgressBar;
 
+import org.joda.time.Days;
+
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
@@ -64,7 +66,7 @@ public class Utils {
     }
 
     public static Date parseStringToDate(String stringDate) {
-        @SuppressLint("SimpleDateFormat") DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+        @SuppressLint("SimpleDateFormat") DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         Date date = null;
         try {
             date = dateFormat.parse(stringDate);
@@ -81,55 +83,68 @@ public class Utils {
         return stringDate;
     }
 
-    public static int get_count_of_days(String Created_date_String, String Expire_date_String) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-        Date Created_convertedDate = null, Expire_CovertedDate = null, todayWithZeroTime = null;
-        try {
-            Created_convertedDate = dateFormat.parse(Created_date_String);
-            Expire_CovertedDate = dateFormat.parse(Expire_date_String);
-
-            Date today = new Date();
-
-            todayWithZeroTime = dateFormat.parse(dateFormat.format(today));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        int c_year = 0, c_month = 0, c_day = 0;
-        // 3550
-        if (Created_convertedDate.after(todayWithZeroTime)) {
-            Calendar c_cal = Calendar.getInstance();
-            c_cal.setTime(Created_convertedDate);
-            c_year = c_cal.get(Calendar.YEAR);
-            c_month = c_cal.get(Calendar.MONTH);
-            c_day = c_cal.get(Calendar.DAY_OF_MONTH);
-
-        } else {
-            Calendar c_cal = Calendar.getInstance();
-            c_cal.setTime(todayWithZeroTime);
-            c_year = c_cal.get(Calendar.YEAR);
-            c_month = c_cal.get(Calendar.MONTH);
-            c_day = c_cal.get(Calendar.DAY_OF_MONTH);
-        }
-
-
-        Calendar e_cal = Calendar.getInstance();
-        e_cal.setTime(Expire_CovertedDate);
-
-        int e_year = e_cal.get(Calendar.YEAR);
-        int e_month = e_cal.get(Calendar.MONTH);
-        int e_day = e_cal.get(Calendar.DAY_OF_MONTH);
-
-        Calendar date1 = Calendar.getInstance();
-        Calendar date2 = Calendar.getInstance();
-
-        date1.clear();
-        date1.set(c_year, c_month, c_day);
-        date2.clear();
-        date2.set(e_year, e_month, e_day);
-
-        long diff = date2.getTimeInMillis() - date1.getTimeInMillis();
-        float dayCount = (float) diff / (24 * 60 * 60 * 1000);
-        return (int) dayCount;
+    public static int daysBetween(Date d1, Date d2) {
+        return (int) ((d2.getTime() - d1.getTime()) / (1000 * 60 * 60 * 24));
     }
+
+    /**
+     *
+     * @param Created_date_String
+     * @param Expire_date_String
+     * @return
+     * public static int get_count_of_days(String Created_date_String, String Expire_date_String) {
+    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+    Date Created_convertedDate = null;
+    Date Expire_CovertedDate = null;
+    Date todayWithZeroTime = null;
+    try {
+    Created_convertedDate = dateFormat.parse(Created_date_String);
+    Expire_CovertedDate = dateFormat.parse(Expire_date_String);
+
+    Date today = new Date();
+
+    todayWithZeroTime = dateFormat.parse(dateFormat.format(today));
+    } catch (ParseException e) {
+    e.printStackTrace();
+    }
+
+    int c_year = 0, c_month = 0, c_day = 0;
+    // 3550
+    if (Created_convertedDate.after(todayWithZeroTime)) {
+    Calendar c_cal = Calendar.getInstance();
+    c_cal.setTime(Created_convertedDate);
+    c_year = c_cal.get(Calendar.YEAR);
+    c_month = c_cal.get(Calendar.MONTH);
+    c_day = c_cal.get(Calendar.DAY_OF_MONTH);
+
+    } else {
+    Calendar c_cal = Calendar.getInstance();
+    c_cal.setTime(todayWithZeroTime);
+    c_year = c_cal.get(Calendar.YEAR);
+    c_month = c_cal.get(Calendar.MONTH);
+    c_day = c_cal.get(Calendar.DAY_OF_MONTH);
+    }
+
+
+    Calendar e_cal = Calendar.getInstance();
+    e_cal.setTime(Expire_CovertedDate);
+
+    int e_year = e_cal.get(Calendar.YEAR);
+    int e_month = e_cal.get(Calendar.MONTH);
+    int e_day = e_cal.get(Calendar.DAY_OF_MONTH);
+
+    Calendar date1 = Calendar.getInstance();
+    Calendar date2 = Calendar.getInstance();
+
+    date1.clear();
+    date1.set(c_year, c_month, c_day);
+    date2.clear();
+    date2.set(e_year, e_month, e_day);
+
+    long diff = date2.getTimeInMillis() - date1.getTimeInMillis();
+    float dayCount = (float) diff / (24 * 60 * 60 * 1000);
+    return (int) dayCount;
+    }
+     */
+
 }

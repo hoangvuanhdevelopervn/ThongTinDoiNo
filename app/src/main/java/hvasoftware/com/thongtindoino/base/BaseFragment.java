@@ -30,6 +30,7 @@ public abstract class BaseFragment extends Fragment implements View.OnTouchListe
     public FirebaseFirestore firebaseFirestore;
     public String role = null;
     private DatabaseUser databaseUser;
+    public String userName;
 
     protected abstract void OnViewCreated();
 
@@ -44,6 +45,7 @@ public abstract class BaseFragment extends Fragment implements View.OnTouchListe
             databaseUser = DatabaseUser.newInstance(getContext());
             if (databaseUser.getAllUsers().size() > 0) {
                 role = databaseUser.getAllUsers().get(0).getRole();
+                userName = databaseUser.getAllUsers().get(0).getDisplayName();
             } else {
                 role = Constant.ROLE_STAFF;
             }
