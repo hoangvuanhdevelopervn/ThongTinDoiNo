@@ -20,7 +20,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -61,10 +60,10 @@ public class MainActivity extends BaseActivity {
     TextView tvTitle;
     android.support.v7.widget.Toolbar MainToolbar;
     boolean isMenuVisible;
-    FloatingActionButton fab, fab1, fab2, fab3;
+    FloatingActionButton fab, fab1, fab2, fab3, fab4;
     //Animations
     Animation show_fab_1, hide_fab_1, show_fab_2, hide_fab_2, show_fab_3, hide_fab_3;
-    View wrapFab1, wrapFab2, wrapFab3;
+    View wrapFabUser, wrapFabStatus, wrapFabDate, wrapFabReset;
     private FirebaseFirestore firebaseFirestore;
     private boolean FAB_Status = false;
 
@@ -80,9 +79,10 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void OnBindView() {
         firebaseFirestore = FirebaseFirestore.getInstance();
-        wrapFab1 = findViewById(R.id.wrap_fab1);
-        wrapFab2 = findViewById(R.id.wrap_fab2);
-        wrapFab3 = findViewById(R.id.wrap_fab3);
+        wrapFabUser = findViewById(R.id.wrap_fab1);
+        wrapFabStatus = findViewById(R.id.wrap_fab2);
+        wrapFabDate = findViewById(R.id.wrap_fab3);
+        wrapFabReset = findViewById(R.id.wrap_fab4);
         ChangeStatusBar();
         MainToolbar = findViewById(R.id.mainToolbar);
         imvBack = findViewById(R.id.imvBack);
@@ -111,9 +111,7 @@ public class MainActivity extends BaseActivity {
         fab1 = findViewById(R.id.fab_1);
         fab2 = findViewById(R.id.fab_2);
         fab3 = findViewById(R.id.fab_3);
-        if (role.equals(Constant.ROLE_STAFF)) {
-            wrapFab1.setVisibility(View.GONE);
-        }
+        fab4 = findViewById(R.id.fab_4);
         //Animations
         show_fab_1 = AnimationUtils.loadAnimation(getApplication(), R.anim.fab1_show);
         hide_fab_1 = AnimationUtils.loadAnimation(getApplication(), R.anim.fab1_hide);
@@ -141,6 +139,8 @@ public class MainActivity extends BaseActivity {
         fab1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                hideFAB();
+                FAB_Status = false;
                 // STAFF
                 final List<User> userList = new ArrayList<>();
                 final Dialog dialog = new Dialog(MainActivity.this);
@@ -175,7 +175,6 @@ public class MainActivity extends BaseActivity {
                                     bundle.putString(Constant.TYPE, Constant.STAFF);
                                     deptFragment.setArguments(bundle);
                                     SwitchFragment(deptFragment, false);
-                                    hideFAB();
                                 }
                             });
                         }
@@ -184,7 +183,6 @@ public class MainActivity extends BaseActivity {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         progressBar.setVisibility(View.GONE);
-                        hideFAB();
                     }
                 });
                 dialog.show();
@@ -195,6 +193,8 @@ public class MainActivity extends BaseActivity {
         fab2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                hideFAB();
+                FAB_Status = false;
                 // STATUS
                 final Dialog dialog = new Dialog(MainActivity.this);
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -213,7 +213,6 @@ public class MainActivity extends BaseActivity {
                     @Override
                     public void onClick(View view) {
                         dialog.dismiss();
-                        hideFAB();
                     }
                 });
 
@@ -227,7 +226,6 @@ public class MainActivity extends BaseActivity {
                         deptFragment.setArguments(bundle);
                         SwitchFragment(deptFragment, false);
                         dialog.dismiss();
-                        hideFAB();
                     }
                 });
 
@@ -241,7 +239,6 @@ public class MainActivity extends BaseActivity {
                         deptFragment.setArguments(bundle);
                         SwitchFragment(deptFragment, false);
                         dialog.dismiss();
-                        hideFAB();
                     }
                 });
 
@@ -255,7 +252,6 @@ public class MainActivity extends BaseActivity {
                         deptFragment.setArguments(bundle);
                         SwitchFragment(deptFragment, false);
                         dialog.dismiss();
-                        hideFAB();
                     }
                 });
 
@@ -269,7 +265,6 @@ public class MainActivity extends BaseActivity {
                         deptFragment.setArguments(bundle);
                         SwitchFragment(deptFragment, false);
                         dialog.dismiss();
-                        hideFAB();
                     }
                 });
                 dialog.show();
@@ -279,6 +274,8 @@ public class MainActivity extends BaseActivity {
         fab3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                hideFAB();
+                FAB_Status = false;
                 // DATE TIME
                 DateSortDialog dateSortDialog = new DateSortDialog(MainActivity.this);
                 dateSortDialog.show(getFragmentManager(), "");
@@ -291,9 +288,17 @@ public class MainActivity extends BaseActivity {
                         bundle.putString(Constant.TYPE, Constant.DATETIME);
                         deptFragment.setArguments(bundle);
                         SwitchFragment(deptFragment, false);
-                        hideFAB();
                     }
                 });
+            }
+        });
+
+        fab4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                hideFAB();
+                FAB_Status = false;
+                SwitchFragment(new DeptFragment(), false);
             }
         });
         SwitchFragment(new LoginFragment(), false);
@@ -343,7 +348,7 @@ public class MainActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_log_out) {
-            SwitchFragment(new LoginFragment(), false);
+            StartFragmentClearTop(new LoginFragment(), false);
             return true;
         }
         if (id == R.id.add_customer) {
@@ -389,13 +394,13 @@ public class MainActivity extends BaseActivity {
     public void setFloatButtonVisible(boolean visible) {
         fab.setVisibility(visible ? View.VISIBLE : View.GONE);
         if (!visible) {
-            wrapFab1.setAlpha(0);
-            wrapFab2.setAlpha(0);
-            wrapFab3.setAlpha(0);
+            wrapFabUser.setAlpha(0);
+            wrapFabStatus.setAlpha(0);
+            wrapFabDate.setAlpha(0);
         } else {
-            wrapFab1.setAlpha(1);
-            wrapFab2.setAlpha(1);
-            wrapFab3.setAlpha(1);
+            wrapFabUser.setAlpha(1);
+            wrapFabStatus.setAlpha(1);
+            wrapFabDate.setAlpha(1);
         }
     }
 
@@ -431,37 +436,52 @@ public class MainActivity extends BaseActivity {
     private void expandFAB() {
 
         //Floating Action Button 1
-        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) wrapFab1.getLayoutParams();
-        layoutParams.rightMargin = (int) (wrapFab1.getWidth() * 1.5);
-        wrapFab1.setLayoutParams(layoutParams);
-        wrapFab1.startAnimation(show_fab_1);
-        wrapFab1.setClickable(true);
+        wrapFabUser.startAnimation(show_fab_1);
+        wrapFabUser.setClickable(true);
+        wrapFabUser.bringToFront();
 
         //Floating Action Button 2
-        FrameLayout.LayoutParams layoutParams2 = (FrameLayout.LayoutParams) wrapFab2.getLayoutParams();
-        layoutParams2.rightMargin = (int) (wrapFab2.getWidth() * 1.3);
-        layoutParams2.bottomMargin = (int) (wrapFab2.getHeight() * 1.3);
-        wrapFab2.setLayoutParams(layoutParams2);
-        wrapFab2.startAnimation(show_fab_2);
-        wrapFab2.setClickable(true);
+        wrapFabStatus.startAnimation(show_fab_2);
+        wrapFabStatus.setClickable(true);
+        wrapFabStatus.bringToFront();
 
         //Floating Action Button 3
-        FrameLayout.LayoutParams layoutParams3 = (FrameLayout.LayoutParams) wrapFab3.getLayoutParams();
-        layoutParams3.bottomMargin = (int) (wrapFab3.getHeight() * 1.5);
-        wrapFab3.setLayoutParams(layoutParams3);
-        wrapFab3.startAnimation(show_fab_3);
-        wrapFab3.setClickable(true);
+        wrapFabDate.startAnimation(show_fab_3);
+        wrapFabDate.setClickable(true);
+        wrapFabDate.bringToFront();
+
+        //Floating Action Button 4
+        wrapFabReset.startAnimation(show_fab_3);
+        wrapFabReset.setClickable(true);
+        wrapFabReset.bringToFront();
     }
 
     private void hideFAB() {
         //Floating Action Button 1
-        wrapFab1.startAnimation(hide_fab_1);
-        wrapFab1.setClickable(false);
+        wrapFabUser.startAnimation(hide_fab_1);
+        wrapFabUser.setClickable(false);
+        wrapFabUser.setFocusableInTouchMode(false);
+        wrapFabUser.setFocusable(false);
         //Floating Action Button 2
-        wrapFab2.startAnimation(hide_fab_2);
-        wrapFab2.setClickable(false);
+        wrapFabStatus.startAnimation(hide_fab_2);
+        wrapFabStatus.setFocusable(false);
+        wrapFabStatus.setClickable(false);
+        wrapFabStatus.setFocusableInTouchMode(false);
         //Floating Action Button 3
-        wrapFab3.startAnimation(hide_fab_3);
-        wrapFab3.setClickable(false);
+        wrapFabDate.startAnimation(hide_fab_3);
+        wrapFabDate.setClickable(false);
+        wrapFabDate.setFocusable(false);
+        wrapFabDate.setFocusableInTouchMode(false);
+        //Floating Action Button 3
+        wrapFabReset.startAnimation(hide_fab_3);
+        wrapFabReset.setClickable(false);
+        wrapFabReset.setFocusable(false);
+        wrapFabReset.setFocusableInTouchMode(false);
+    }
+
+    public void showHideFloatButtonByRole() {
+        if (role.equals(Constant.ROLE_STAFF)) {
+            wrapFabUser.setVisibility(View.GONE);
+        }
     }
 }

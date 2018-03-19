@@ -106,6 +106,8 @@ public class DeptFragment extends BaseFragment {
     }
 
     public void bindDataToTable(String type, String object) {
+        getMainAcitivity().showHideFloatButtonByRole();
+        getMainAcitivity().invalidateOptionsMenu();
         Query query = null;
         final ProgressDialog progressDialog = new ProgressDialog(getActivity());
         progressDialog.setTitle("Loading");

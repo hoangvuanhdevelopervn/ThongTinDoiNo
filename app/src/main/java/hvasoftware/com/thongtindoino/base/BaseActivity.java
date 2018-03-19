@@ -16,7 +16,7 @@ import hvasoftware.com.thongtindoino.utils.FragmentHelper;
 
 public abstract class BaseActivity extends AppCompatActivity {
     private static final String TAG = "BaseActivity";
-    public String role;
+    public static String role;
     private boolean isVisible;
 
     protected String GetScreenTitle() {
@@ -93,6 +93,10 @@ public abstract class BaseActivity extends AppCompatActivity {
                 }
 
         );
+    }
+
+    public void StartFragmentClearTop(Fragment fragment,boolean IsAddToBackStack){
+        FragmentHelper.StartFragmentClearTop(getSupportFragmentManager(),fragment,IsAddToBackStack);
     }
 
 

@@ -16,6 +16,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import hvasoftware.com.thongtindoino.R;
+import hvasoftware.com.thongtindoino.base.BaseActivity;
 import hvasoftware.com.thongtindoino.base.BaseFragment;
 import hvasoftware.com.thongtindoino.model.User;
 import hvasoftware.com.thongtindoino.utils.CheckInternet;
@@ -91,6 +92,7 @@ public class LoginFragment extends BaseFragment {
                                 if (account.equals(user.getAccount()) && password.equals(user.getPassword())) {
                                     Toast.makeText(getContext(), R.string.login_success, Toast.LENGTH_SHORT).show();
                                     SwitchFragment(new DeptFragment(), false);
+                                    BaseActivity.role = user.getRole();
                                     databaseUser.insertUser(user);
                                 } else {
                                     Toast.makeText(getContext(), R.string.wrong_account_pass_check_again, Toast.LENGTH_SHORT).show();

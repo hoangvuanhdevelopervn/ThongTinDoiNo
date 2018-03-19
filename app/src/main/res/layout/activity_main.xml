@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
-    android:fitsSystemWindows="true"
     android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
@@ -70,36 +69,69 @@
         android:id="@+id/root"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/mainToolbar">
+        android:layout_below="@+id/mainToolbar"></FrameLayout>
 
-    </FrameLayout>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_margin="@dimen/fab_margin"
-        android:src="@android:drawable/ic_menu_sort_by_size" />
-
-    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true">
+        android:gravity="bottom"
+        android:orientation="vertical">
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="5dp"
+            android:layout_marginRight="5dp"
+            android:src="@android:drawable/ic_menu_sort_by_size"
+            app:fabSize="normal"
+            app:useCompatPadding="false"/>
+        <LinearLayout
+            android:id="@+id/wrap_fab4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_alignParentBottom="true"
+            android:layout_toLeftOf="@id/wrap_fab1"
+            android:visibility="invisible">
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fab_4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:src="@android:drawable/ic_menu_revert"
+                app:backgroundTint="@color/colorPrimary"
+                app:fabSize="mini" app:useCompatPadding="false"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:gravity="center_horizontal"
+                android:paddingTop="1dp"
+                android:paddingBottom="1dp"
+                android:text="Mặc định"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@android:color/black"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+
+
+
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/wrap_fab1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_toLeftOf="@id/wrap_fab2"
             android:layout_gravity="bottom|end"
-            android:layout_marginBottom="5dp"
-            android:layout_marginRight="@dimen/fab_margin"
             android:orientation="vertical"
+            android:layout_alignParentBottom="true"
             android:visibility="invisible">
-
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/fab_1"
                 android:layout_width="wrap_content"
@@ -107,21 +139,22 @@
                 android:layout_gravity="center_horizontal"
                 android:src="@android:drawable/ic_menu_compass"
                 app:backgroundTint="@color/colorPrimary"
-                app:fabSize="mini" />
-
+                app:fabSize="mini" app:useCompatPadding="false"/>
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:background="@color/black_semi_transparent"
-                android:gravity="center"
-                android:paddingLeft="1dp"
-                android:paddingRight="1dp"
+                android:gravity="center_horizontal"
+                android:paddingTop="1dp"
+                android:paddingBottom="1dp"
                 android:text="Nhân viên"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@android:color/white"
+                android:textColor="@android:color/black"
                 android:textSize="12sp"
                 android:textStyle="bold" />
+
+
+
 
         </LinearLayout>
 
@@ -129,13 +162,10 @@
             android:id="@+id/wrap_fab2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_marginBottom="11dp"
-            android:layout_marginRight="11dp"
+            android:layout_toLeftOf="@id/wrap_fab3"
             android:orientation="vertical"
+            android:layout_alignParentBottom="true"
             android:visibility="invisible">
-
-
 
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/fab_2"
@@ -144,34 +174,32 @@
                 android:layout_gravity="center_horizontal"
                 android:src="@drawable/ic_action_status"
                 app:backgroundTint="@color/colorPrimary"
-                app:fabSize="mini" />
-
-
+                app:fabSize="mini" app:useCompatPadding="false"/>
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:background="@color/black_semi_transparent"
-                android:gravity="center"
-                android:paddingLeft="1dp"
-                android:paddingRight="1dp"
-                android:paddingTop="2dp"
+                android:gravity="center_horizontal"
+                android:paddingTop="1dp"
+                android:paddingBottom="1dp"
                 android:text="@string/status"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@android:color/white"
+                android:textColor="@android:color/black"
                 android:textSize="12sp"
                 android:textStyle="bold" />
+
+
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/wrap_fab3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_marginBottom="@dimen/fab_margin"
-            android:layout_marginRight="5dp"
+            android:layout_toLeftOf="@+id/fab"
             android:orientation="vertical"
+            android:layout_alignParentBottom="true"
             android:visibility="invisible">
+
 
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/fab_3"
@@ -180,22 +208,23 @@
                 android:layout_gravity="center_horizontal"
                 android:src="@android:drawable/ic_menu_day"
                 app:backgroundTint="@color/colorPrimary"
-                app:fabSize="mini" />
-
-
+                app:fabSize="mini"
+                app:useCompatPadding="false"/>
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:background="@color/black_semi_transparent"
-                android:gravity="center"
-                android:paddingLeft="1dp"
-                android:paddingRight="1dp"
+                android:gravity="center_horizontal"
+                android:paddingTop="1dp"
+                android:paddingBottom="1dp"
                 android:text="Ngày/tháng"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@android:color/white"
+                android:textColor="@android:color/black"
                 android:textSize="12sp"
                 android:textStyle="bold" />
+
+
         </LinearLayout>
-    </FrameLayout>
+
+
+    </RelativeLayout>
 </RelativeLayout>
