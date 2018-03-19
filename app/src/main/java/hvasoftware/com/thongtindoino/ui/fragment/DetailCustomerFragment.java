@@ -31,6 +31,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import hvasoftware.com.thongtindoino.R;
+import hvasoftware.com.thongtindoino.base.BaseActivity;
 import hvasoftware.com.thongtindoino.base.BaseFragment;
 import hvasoftware.com.thongtindoino.model.Customer;
 import hvasoftware.com.thongtindoino.model.User;
@@ -116,6 +117,7 @@ public class DetailCustomerFragment extends BaseFragment implements com.wdullaer
             }
         });
 
+        tvUpload.setVisibility(BaseActivity.role.equals(Constant.ROLE_STAFF)? View.GONE : View.VISIBLE);
         tvNgayHetHan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
