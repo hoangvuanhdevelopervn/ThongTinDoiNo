@@ -139,9 +139,11 @@ public class DeptFragment extends BaseFragment {
                 }
 
                 if (type.equals(Constant.DATETIME)) {
+                    Log.wtf(TAG, "======================> DATETIME: " + object);
                     query = firebaseFirestore.collection(Constant.COLLECTION_CUSTOMER)
-                            .whereGreaterThanOrEqualTo("ngayVay", object)
+                            .whereEqualTo("ngayVay", object)
                             .whereEqualTo("nhanvienthu", userName);
+                    // .whereGreaterThanOrEqualTo("ngayVay", object);
                 }
             } else {
                 query = firebaseFirestore.collection(Constant.COLLECTION_CUSTOMER)
@@ -381,7 +383,6 @@ public class DeptFragment extends BaseFragment {
 
         dialog.show();
     }
-
 
     private void countStatusOfCustomer(Customer customer) {
         // 4 mau xam  - DA TRA HET

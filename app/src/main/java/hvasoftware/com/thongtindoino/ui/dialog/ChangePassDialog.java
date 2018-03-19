@@ -26,7 +26,6 @@ import java.util.List;
 
 import hvasoftware.com.thongtindoino.MainActivity;
 import hvasoftware.com.thongtindoino.R;
-import hvasoftware.com.thongtindoino.bussiness.UserBusiness;
 import hvasoftware.com.thongtindoino.model.User;
 import hvasoftware.com.thongtindoino.ui.fragment.LoginFragment;
 import hvasoftware.com.thongtindoino.utils.Constant;
@@ -48,10 +47,10 @@ public class ChangePassDialog extends DialogFragment {
     private DatabaseUser databaseUser;
     private List<User> userList = null;
     private ProgressBar progressBar;
-    private UserBusiness userBusiness;
     private User user;
     private FirebaseFirestore firebaseFirestore;
     private MainActivity mainActivity;
+    private String userPass = null;
 
     public ChangePassDialog(MainActivity mainActivity) {
         this.mainActivity = mainActivity;
@@ -73,10 +72,8 @@ public class ChangePassDialog extends DialogFragment {
         databaseUser = DatabaseUser.newInstance(getActivity());
         userList = databaseUser.getAllUsers();
         user = userList.get(0);
-        String userPass = user.getPassword();
-        if (!TextUtils.isEmpty(userPass)) {
-            edt_pass.setText(userPass);
-        }
+        userPass = user.getPassword();
+
 
         changePass(user.getDocumentId());
 
@@ -91,15 +88,16 @@ public class ChangePassDialog extends DialogFragment {
                 String newPass = edt_new_pass.getText().toString().trim();
                 String newPass2 = edt_new_pass2.getText().toString().trim();
 
-                if (!oldPass.equals(user.getPassword())) {
-                    Toast.makeText(getActivity(), "Mật khẩu cũ không chính xác", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
                 if (TextUtils.isEmpty(oldPass)) {
                     Toast.makeText(getActivity(), "Bạn chưa nhập mật khẩu cũ", Toast.LENGTH_SHORT).show();
                     return;
                 }
+
+                if (!oldPass.equals(userPass)) {
+                    Toast.makeText(getActivity(), "Mật khẩu cũ không chính xác", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
 
                 if (TextUtils.isEmpty(newPass)) {
                     Toast.makeText(getActivity(), "Bạn chưa nhập mật khẩu mới", Toast.LENGTH_SHORT).show();

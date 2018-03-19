@@ -25,6 +25,7 @@ import hvasoftware.com.thongtindoino.utils.IOnCompleteListener;
 
 @SuppressLint("ValidFragment")
 public class DateSortDialog extends DialogFragment implements com.wdullaer.materialdatetimepicker.date.DatePickerDialog.OnDateSetListener {
+    private static final String TAG = "DateSortDialog";
     public static DateSortDialog dateSortDialog;
     View wrapFrom, wrapTo;
     DatePickerDialog fromDateDialog;
@@ -99,10 +100,20 @@ public class DateSortDialog extends DialogFragment implements com.wdullaer.mater
     @Override
     public void onDateSet(com.wdullaer.materialdatetimepicker.date.DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
         if (view == fromDateDialog) {
-            startDate = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year;
+            int month = monthOfYear + 1;
+            if (month < 10) {
+                startDate = dayOfMonth + "/0" + (monthOfYear + 1) + "/" + year;
+            } else {
+                startDate = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year;
+            }
             tvFrom.setText(startDate);
         } else {
-            endDate = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year;
+            int month = monthOfYear + 1;
+            if (month < 10) {
+                endDate = dayOfMonth + "/0" + (monthOfYear + 1) + "/" + year;
+            } else {
+                endDate = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year;
+            }
             tvTo.setText(endDate);
         }
     }
