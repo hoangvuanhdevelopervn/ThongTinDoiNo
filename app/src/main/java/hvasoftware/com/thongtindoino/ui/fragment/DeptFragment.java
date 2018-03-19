@@ -390,13 +390,23 @@ public class DeptFragment extends BaseFragment {
         // 2 mau cam -  20% / tren tong so ngay vay
         // 1 mau xanh - 80%
         int status = 1;
+        int dayLeft = 0;
+        long soTienVay;
+        int dayPass;
+        int percentage;
         String ngayHetHan = customer.getNgayHetHan();
         int soNgayVay = customer.getSongayvay();
+        dayLeft = Utils.daysBetween(DateTimeUtils.getDateTime(), Utils.parseStringToDate(ngayHetHan));
+        soTienVay = customer.getSotien();
+        dayPass = soNgayVay - dayLeft;
 
-        int dayLeft = Utils.daysBetween(DateTimeUtils.getDateTime(), Utils.parseStringToDate(ngayHetHan));
-        long soTienVay = customer.getSotien();
-        int dayPass = soNgayVay - dayLeft;
-        int percentage = (dayPass * 100) / soNgayVay;
+        if (soNgayVay == 0 && soTienVay == 0) {
+            status = 4;
+        }
+
+        if (soNgayVay == 0 && soTienVay > 0) {
+            status = 3;
+        }
 
         if (dayLeft <= 0 && soTienVay == 0) {
             status = 4;
@@ -406,13 +416,19 @@ public class DeptFragment extends BaseFragment {
             status = 3;
         }
 
-        if (percentage >= 80) {
-            status = 2;
+        if (soNgayVay > 0) {
+
+            percentage = (dayPass * 100) / soNgayVay;
+
+            if (percentage >= 80) {
+                status = 2;
+            }
+
+            if (percentage <= 20) {
+                status = 1;
+            }
         }
 
-        if (percentage <= 20) {
-            status = 1;
-        }
 
         WriteBatch writeBatch = firebaseFirestore.batch();
         DocumentReference updateQuoteShareAmount = firebaseFirestore.collection(Constant.COLLECTION_CUSTOMER).document(customer.getDocumentId());
