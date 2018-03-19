@@ -67,6 +67,7 @@ public class MainActivity extends BaseActivity {
     private FirebaseFirestore firebaseFirestore;
     private boolean FAB_Status = false;
 
+
     @Override
     protected String GetScreenTitle() {
         return super.GetScreenTitle();
@@ -78,6 +79,7 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void OnBindView() {
+
         firebaseFirestore = FirebaseFirestore.getInstance();
         wrapFabUser = findViewById(R.id.wrap_fab1);
         wrapFabStatus = findViewById(R.id.wrap_fab2);
@@ -484,4 +486,6 @@ public class MainActivity extends BaseActivity {
             wrapFabUser.setVisibility(View.GONE);
         }
     }
+
+
 }

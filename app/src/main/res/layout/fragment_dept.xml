@@ -11,8 +11,7 @@
         android:clickable="true"
         android:fillViewport="true"
         android:scrollbars="horizontal|vertical"
-        android:visibility="visible"
-        android:fillViewport="true">
+        android:visibility="visible">
 
         <LinearLayout
             android:layout_width="wrap_content"

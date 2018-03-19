@@ -102,28 +102,48 @@ public class DeptFragment extends BaseFragment {
         deptTable.addView(table_header);
         horizontalView.setVisibility(View.GONE);
 
-        if (!TextUtils.isEmpty(type) && !TextUtils.isEmpty(object)) {
-            if (type.equals(Constant.STAFF)) {
-                query = firebaseFirestore.collection(Constant.COLLECTION_CUSTOMER)
-                        .whereEqualTo("nhanvienthu", object);
-            }
+        if (role.equals(Constant.ROLE_ADMIN)) {
+            if (!TextUtils.isEmpty(type) && !TextUtils.isEmpty(object)) {
+                if (type.equals(Constant.STAFF)) {
+                    query = firebaseFirestore.collection(Constant.COLLECTION_CUSTOMER)
+                            .whereEqualTo("nhanvienthu", object);
+                }
 
-            if (type.equals(Constant.STATUS)) {
-                int status = Integer.valueOf(object);
-                query = firebaseFirestore.collection(Constant.COLLECTION_CUSTOMER)
-                        .whereEqualTo("trangthai", status)
-                        .whereEqualTo("nhanvienthu", userName);
-            }
+                if (type.equals(Constant.STATUS)) {
+                    int status = Integer.valueOf(object);
+                    query = firebaseFirestore.collection(Constant.COLLECTION_CUSTOMER)
+                            .whereEqualTo("trangthai", status);
+                }
 
-            if (type.equals(Constant.DATETIME)) {
-                query = firebaseFirestore.collection(Constant.COLLECTION_CUSTOMER)
-                        .whereGreaterThanOrEqualTo("ngayVay", object)
-                        .whereEqualTo("nhanvienthu", userName);
-            }
-        } else {
-            if (role.equals(Constant.ROLE_ADMIN)) {
+                if (type.equals(Constant.DATETIME)) {
+                    query = firebaseFirestore.collection(Constant.COLLECTION_CUSTOMER)
+                            .whereGreaterThanOrEqualTo("ngayVay", object);
+                }
+            } else {
                 query = firebaseFirestore.collection(Constant.COLLECTION_CUSTOMER);
-            } else if (role.equals(Constant.ROLE_STAFF)) {
+            }
+        }
+
+
+        if (role.equals(Constant.STAFF)) {
+            if (!TextUtils.isEmpty(type) && !TextUtils.isEmpty(object)) {
+                if (type.equals(Constant.STAFF)) {
+                    query = firebaseFirestore.collection(Constant.COLLECTION_CUSTOMER)
+                            .whereEqualTo("nhanvienthu", userName);
+                }
+                if (type.equals(Constant.STATUS)) {
+                    int status = Integer.valueOf(object);
+                    query = firebaseFirestore.collection(Constant.COLLECTION_CUSTOMER)
+                            .whereEqualTo("trangthai", status)
+                            .whereEqualTo("nhanvienthu", userName);
+                }
+
+                if (type.equals(Constant.DATETIME)) {
+                    query = firebaseFirestore.collection(Constant.COLLECTION_CUSTOMER)
+                            .whereGreaterThanOrEqualTo("ngayVay", object)
+                            .whereEqualTo("nhanvienthu", userName);
+                }
+            } else {
                 query = firebaseFirestore.collection(Constant.COLLECTION_CUSTOMER)
                         .whereEqualTo("nhanvienthu", userName);
             }
@@ -402,7 +422,7 @@ public class DeptFragment extends BaseFragment {
     }
 
     private void setUpStatus(int status, TextView textView) {
-        textView.setVisibility(View.GONE);
+        textView.setText("");
 
         if (status == 4) {
             textView.setBackgroundResource(R.drawable.cell_shape_row);
