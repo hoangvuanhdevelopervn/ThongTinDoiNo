@@ -482,8 +482,12 @@ public class MainActivity extends BaseActivity {
     }
 
     public void showHideFloatButtonByRole() {
+        hideFAB();
+        FAB_Status = false;
         if (role.equals(Constant.ROLE_STAFF)) {
             wrapFabUser.setVisibility(View.GONE);
+        } else {
+            wrapFabUser.setVisibility(View.INVISIBLE);
         }
     }
 
