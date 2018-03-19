@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -67,6 +66,7 @@ public class DetailCustomerFragment extends BaseFragment implements com.wdullaer
     private DatePickerDialog datePickerDialog;
     private int soNgayVay = 0;
     private String customerDocumentID;
+    private int status;
 
     public DetailCustomerFragment() {
     }
@@ -77,7 +77,6 @@ public class DetailCustomerFragment extends BaseFragment implements com.wdullaer
         super.onCreate(savedInstanceState);
         savedInstanceState = this.getArguments();
         customerDocumentID = savedInstanceState.getString(Constant.KEY);
-        Log.wtf(TAG, "==========================> customerDocumentID: " + customerDocumentID);
     }
 
     @Override
@@ -232,7 +231,7 @@ public class DetailCustomerFragment extends BaseFragment implements com.wdullaer
         }
 
         if (soNgayVay < 0) {
-            Toast.makeText(getContext(), "Số tiền vay không thể nhỏ hơn 0", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Số ngày vay không thể nhỏ hơn 0", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -242,7 +241,6 @@ public class DetailCustomerFragment extends BaseFragment implements com.wdullaer
         } else {
             customerSoTienVay = Long.valueOf(edt_SoTienVay.getText().toString().trim());
         }
-
 
         if (TextUtils.isEmpty(customerGhiChu)) {
             Toast.makeText(getContext(), "Bạn chưa nhập ghi chú", Toast.LENGTH_SHORT).show();
@@ -279,8 +277,6 @@ public class DetailCustomerFragment extends BaseFragment implements com.wdullaer
         writeBatch.update(updateCustomer, "sotien", customerSoTienVay);
         writeBatch.update(updateCustomer, "songayvay", soNgayVay);
         writeBatch.update(updateCustomer, "dayleft", Utils.get_count_of_days(DateTimeUtils.getDateToday(), ngayHetHan));
-        //  writeBatch.update("trangthai", Constant.STATE_ONE);
-
 
         writeBatch.update(updateCustomer, "ghichu", customerGhiChu);
         writeBatch.update(updateCustomer, "diachi", customerDiaChi);
@@ -313,6 +309,8 @@ public class DetailCustomerFragment extends BaseFragment implements com.wdullaer
         tvNgayHetHan.setText(ngayHetHan);
         soNgayVay = Utils.get_count_of_days(ngayVay, ngayHetHan);
         tvSoNgayVay.setText("" + soNgayVay);
+
+
     }
 
     @Override

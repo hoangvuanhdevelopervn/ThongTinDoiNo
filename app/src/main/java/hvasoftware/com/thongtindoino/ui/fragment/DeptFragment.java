@@ -138,56 +138,56 @@ public class DeptFragment extends BaseFragment {
 
         assert query != null;
         query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @SuppressLint("SetTextI18n")
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            progressDialog.dismiss();
-                            if (task.getResult().size() == 0) {
-                                Toast.makeText(getContext(), R.string.no_customer, Toast.LENGTH_SHORT).show();
-                                return;
-                            }
-                            for (DocumentSnapshot documentSnapshot : task.getResult()) {
-
-                                final Customer customer = documentSnapshot.toObject(Customer.class);
-                                final View dataRow = LayoutInflater.from(getContext()).inflate(R.layout.view_dept_row, null);
-                                final TextView tvCustomerId = dataRow.findViewById(R.id.tvCustomerId);
-                                final TextView tvCustomerName = dataRow.findViewById(R.id.tvCustomerName);
-                                final TextView tvCustomerNgayVay = dataRow.findViewById(R.id.tvCustomerNgayVay);
-                                final TextView tvCustomerSoTien = dataRow.findViewById(R.id.tvCustomerSoTien);
-                                final TextView tvCustomerSoNgayVay = dataRow.findViewById(R.id.tvCustomerSoNgayVay);
-                                final TextView tvCustomerHetHan = dataRow.findViewById(R.id.tvCustomerHetHan);
-                                final TextView tvCustomerGhiChu = dataRow.findViewById(R.id.tvCustomerGhiChu);
-                                final TextView tvCustomerNhanVienThu = dataRow.findViewById(R.id.tvCustomerNhanVienThu);
-
-                                int status = customer.getTrangthai();
-
-                                setUpStatus(status, tvCustomerId);
-
-                                tvCustomerName.setText(customer.getTen());
-                                tvCustomerNgayVay.setText(customer.getNgayVay());
-                                tvCustomerSoTien.setText("" + Utils.formatCurrency(customer.getSotien()));
-                                tvCustomerSoNgayVay.setText("" + customer.getSongayvay());
-                                tvCustomerHetHan.setText(customer.getNgayHetHan());
-                                tvCustomerGhiChu.setText(customer.getGhichu());
-                                tvCustomerNhanVienThu.setText(customer.getNhanvienthu());
-
-                                countStatusOfCustomer(customer.getNgayHetHan(), customer.getSongayvay(), customer.getDocumentId());
-
-
-                                horizontalView.setVisibility(View.VISIBLE);
-
-                                deptTable.addView(dataRow);
-                                dataRow.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        showMenu(dataRow, customer);
-                                    }
-                                });
-                            }
-                        }
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    progressDialog.dismiss();
+                    if (task.getResult().size() == 0) {
+                        Toast.makeText(getContext(), R.string.no_customer, Toast.LENGTH_SHORT).show();
+                        return;
                     }
-                }).addOnFailureListener(new OnFailureListener() {
+                    for (DocumentSnapshot documentSnapshot : task.getResult()) {
+
+                        final Customer customer = documentSnapshot.toObject(Customer.class);
+                        final View dataRow = LayoutInflater.from(getContext()).inflate(R.layout.view_dept_row, null);
+                        final TextView tvCustomerId = dataRow.findViewById(R.id.tvCustomerId);
+                        final TextView tvCustomerName = dataRow.findViewById(R.id.tvCustomerName);
+                        final TextView tvCustomerNgayVay = dataRow.findViewById(R.id.tvCustomerNgayVay);
+                        final TextView tvCustomerSoTien = dataRow.findViewById(R.id.tvCustomerSoTien);
+                        final TextView tvCustomerSoNgayVay = dataRow.findViewById(R.id.tvCustomerSoNgayVay);
+                        final TextView tvCustomerHetHan = dataRow.findViewById(R.id.tvCustomerHetHan);
+                        final TextView tvCustomerGhiChu = dataRow.findViewById(R.id.tvCustomerGhiChu);
+                        final TextView tvCustomerNhanVienThu = dataRow.findViewById(R.id.tvCustomerNhanVienThu);
+
+                        int status = customer.getTrangthai();
+
+                        setUpStatus(status, tvCustomerId);
+
+                        tvCustomerName.setText(customer.getTen());
+                        tvCustomerNgayVay.setText(customer.getNgayVay());
+                        tvCustomerSoTien.setText("" + Utils.formatCurrency(customer.getSotien()));
+                        tvCustomerSoNgayVay.setText("" + customer.getSongayvay());
+                        tvCustomerHetHan.setText(customer.getNgayHetHan());
+                        tvCustomerGhiChu.setText(customer.getGhichu());
+                        tvCustomerNhanVienThu.setText(customer.getNhanvienthu());
+
+                        countStatusOfCustomer(customer);
+
+
+                        horizontalView.setVisibility(View.VISIBLE);
+
+                        deptTable.addView(dataRow);
+                        dataRow.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                showMenu(dataRow, customer);
+                            }
+                        });
+                    }
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
                 Log.wtf(TAG, "=================================> " + e.getMessage());
@@ -368,40 +368,55 @@ public class DeptFragment extends BaseFragment {
         dialog.show();
     }
 
-    private void countStatusOfCustomer(String end, int songayvay, String documentId) {
-        /*
-         // 3 mau do
-        // 2 mau cam
-        // 1 mau xanh
+
+    private void countStatusOfCustomer(Customer customer) {
+        // 4 mau xam  - DA TRA HET
+        // 3 mau do  - DA QUA HAN
+        // 2 mau cam -  20% / tren tong so ngay vay
+        // 1 mau xanh - 80%
         int status = 1;
         String today = DateTimeUtils.getDateToday();
-        int dayLeft = Utils.get_count_of_days(today, end);
-        int dayPass = songayvay - dayLeft;
-        double percentage = (dayPass / songayvay) * 100;
+        String ngayHetHan = customer.getNgayHetHan();
+        int soNgayVay = customer.getSongayvay();
 
-        //   Log.wtf(TAG, "============================> percentage: " + percentage + "%");
-        //  Log.wtf(TAG, "============================> dayLeft: " + dayLeft + " -- ");
-        // Log.wtf(TAG, "============================> dayPass: " + dayPass + " -- ");
+        //   int dayLeft = Utils.get_count_of_days(today, ngayHetHan);
+        int dayLeft = customer.getDayleft();
+        long soTienVay = customer.getSotien();
+        int dayPass = soNgayVay - dayLeft;
+        int percentage = (dayPass * 100) / soNgayVay;
 
-        if (dayLeft < 0) {
+
+        Log.wtf(TAG, "============================> soNgayVay: " + soNgayVay);
+        Log.wtf(TAG, "============================> dayLeft: " + dayLeft + " -- ");
+        Log.wtf(TAG, "============================> dayPass: " + dayPass + " -- ");
+        Log.wtf(TAG, "\n============================> percentage: " + percentage + " %\n");
+
+
+        if (dayLeft <= 0 && soTienVay == 0) {
+            status = 4;
+        }
+
+        if (dayLeft <= 0 && soTienVay > 0) {
             status = 3;
         }
 
-        if (dayLeft > 0 && dayLeft <= 5) {
+        if (percentage <= 20) {
             status = 2;
         }
 
-        if (dayLeft > 5 && dayLeft <= 15) {
+        if (percentage > 20) {
             status = 1;
         }
 
-        WriteBatch writeBatch = firebaseFirestore.batch();
-        DocumentReference updateQuoteShareAmount = firebaseFirestore.collection(Constant.COLLECTION_CUSTOMER).document(documentId);
-        writeBatch.update(updateQuoteShareAmount, "trangthai", status);
-        writeBatch.update(updateQuoteShareAmount, "updateAt", DateTimeUtils.getDateTime());
-        writeBatch.commit();
-         */
 
+        WriteBatch writeBatch = firebaseFirestore.batch();
+        DocumentReference updateQuoteShareAmount = firebaseFirestore.collection(Constant.COLLECTION_CUSTOMER).document(customer.getDocumentId());
+        writeBatch.update(updateQuoteShareAmount, "trangthai", status);
+        writeBatch.update(updateQuoteShareAmount, "dayleft", dayLeft);
+        writeBatch.update(updateQuoteShareAmount, "updateAt", DateTimeUtils.getDateTime());
+
+        //writeBatch.commit();
+        // bindDataToTable(null, null);
 
     }
 

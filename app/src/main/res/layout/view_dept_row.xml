@@ -45,6 +45,19 @@
         android:textColor="@android:color/black" />
 
     <TextView
+        android:id="@+id/tvCustomerHetHan"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="@drawable/cell_shape_row"
+        android:padding="5dp"
+        android:paddingBottom="@dimen/pading_smallest"
+        android:paddingRight="@dimen/pading_smallest"
+        android:paddingTop="@dimen/pading_smallest"
+        android:text="12/12/2012"
+        android:textColor="@android:color/black" />
+
+    <TextView
         android:id="@+id/tvCustomerSoTien"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -70,18 +83,6 @@
         android:text="300"
         android:textColor="@android:color/black" />
 
-    <TextView
-        android:id="@+id/tvCustomerHetHan"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:background="@drawable/cell_shape_row"
-        android:padding="5dp"
-        android:paddingBottom="@dimen/pading_smallest"
-        android:paddingRight="@dimen/pading_smallest"
-        android:paddingTop="@dimen/pading_smallest"
-        android:text="12/12/2012"
-        android:textColor="@android:color/black" />
 
     <TextView
         android:id="@+id/tvCustomerGhiChu"

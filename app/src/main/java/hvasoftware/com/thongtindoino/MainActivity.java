@@ -68,7 +68,6 @@ public class MainActivity extends BaseActivity {
     private FirebaseFirestore firebaseFirestore;
     private boolean FAB_Status = false;
 
-
     @Override
     protected String GetScreenTitle() {
         return super.GetScreenTitle();
