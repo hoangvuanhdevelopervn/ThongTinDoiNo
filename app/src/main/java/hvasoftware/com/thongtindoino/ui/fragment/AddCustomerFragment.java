@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -84,6 +83,7 @@ public class AddCustomerFragment extends BaseFragment implements com.wdullaer.ma
     @Override
     protected void OnViewCreated() {
     }
+
 
     @Override
     protected void OnBindView() {
@@ -200,7 +200,7 @@ public class AddCustomerFragment extends BaseFragment implements com.wdullaer.ma
         }
 
         if (soNgayVay < 0) {
-            Toast.makeText(getContext(), "Số tiền vay không thể nhỏ hơn 0", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Số ngày vay không thể nhỏ hơn 0", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -240,12 +240,6 @@ public class AddCustomerFragment extends BaseFragment implements com.wdullaer.ma
             return;
         }
 
-        /*
-          if (staffName.equals(R.string.click_to_choose_staff)) {
-
-        }
-         */
-
 
         progressBar.setVisibility(View.VISIBLE);
 
@@ -279,15 +273,15 @@ public class AddCustomerFragment extends BaseFragment implements com.wdullaer.ma
                     public void onComplete(@NonNull Task<Void> task) {
                         progressBar.setVisibility(View.GONE);
                         Toast.makeText(getContext(), "Thêm khách hàng thành công", Toast.LENGTH_SHORT).show();
-                        getActivity().onBackPressed();
+                        SwitchFragment(new DeptFragment(), false);
                     }
                 }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
                 progressBar.setVisibility(View.GONE);
                 Toast.makeText(getContext(), "Thêm khách hàng thất bại! Vui lòng thử lại sau", Toast.LENGTH_SHORT).show();
-                Log.wtf(TAG, "==============================>" + e.getMessage());
-                getActivity().onBackPressed();
+                //Log.wtf(TAG, "==============================>" + e.getMessage());
+                SwitchFragment(new DeptFragment(), false);
             }
         });
     }

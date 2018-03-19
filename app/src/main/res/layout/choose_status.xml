@@ -1,91 +1,162 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:paddingTop="20dip">
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dip"
         android:layout_marginStart="16dip"
+        android:layout_marginTop="20dip"
+        android:maxLines="1"
         android:text="Chọn trạng thái muốn lọc:"
         android:textColor="@color/colorPrimary"
         android:textSize="16sp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dip"
-        android:layout_marginStart="16dip"
-        android:layout_marginTop="8dip"
-        android:text="1: Thời gian vay còn lại chiếm 20% trên tổng số ngày vay"
-        android:textColor="@color/objective_label"
-        android:textSize="14sp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dip"
-        android:layout_marginStart="16dip"
-        android:layout_marginTop="8dip"
-        android:text="2: Thời gian vay còn lại chiếm 80% trên tổng số ngày vay"
-        android:textColor="@color/objective_label"
-        android:textSize="14sp" />
-
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dip"
-        android:layout_marginStart="16dip"
-        android:layout_marginTop="8dip"
-        android:text="3: Thời gian vay còn lại vượt quá ngày hết hạn"
-        android:textColor="@color/objective_label"
-        android:textSize="14sp" />
-
-
-    <Spinner
-        android:id="@+id/spinnerStatus"
-        android:layout_width="match_parent"
-        android:layout_height="50dip"
-        android:layout_marginEnd="16dip"
-        android:layout_marginStart="16dip"
-        android:layout_marginTop="8dip" />
-
     <LinearLayout
-        android:layout_width="match_parent"
+        android:id="@+id/linearLayout_Status1"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:layout_marginTop="8dip"
+        android:background="@drawable/ripple"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="top|left"
+        android:orientation="horizontal"
+        android:paddingBottom="4dip"
+        android:paddingEnd="16dip"
+        android:paddingStart="16dip">
+
+        <View
+            android:layout_width="50dip"
+            android:layout_height="20dip"
+            android:background="@color/status_1" />
 
         <TextView
-            android:id="@+id/tvCancel"
-            android:layout_width="60dip"
-            android:layout_height="30dp"
-            android:layout_margin="10dp"
-            android:layout_weight="1"
-            android:background="@drawable/login_btn"
-            android:clickable="true"
-            android:gravity="center"
-            android:text="Hủy"
-            android:textColor="@android:color/white" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dip"
+            android:layout_marginStart="8dip"
+            android:maxLines="2"
+            android:text="Thời gian vay còn lại chiếm 20% trên tổng số ngày vay"
+            android:textColor="@color/objective_label"
+            android:textSize="14sp" />
 
-        <TextView
-            android:id="@+id/tvChoose"
-            android:layout_width="60dip"
-            android:layout_height="30dp"
-            android:layout_margin="10dp"
-            android:layout_weight="1"
-            android:background="@drawable/login_btn"
-            android:clickable="true"
-            android:gravity="center"
-            android:text="Chọn"
-            android:textColor="@android:color/white" />
 
     </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/linearLayout_Status2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dip"
+        android:background="@drawable/ripple"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="top|left"
+        android:orientation="horizontal"
+        android:paddingBottom="4dip"
+        android:paddingEnd="16dip"
+        android:paddingStart="16dip">
+
+        <View
+            android:layout_width="50dip"
+            android:layout_height="20dip"
+            android:background="@color/status_2" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dip"
+            android:layout_marginStart="8dip"
+            android:text="Thời gian vay còn lại chiếm 80% trên tổng số ngày vay"
+            android:textColor="@color/objective_label"
+            android:textSize="14sp" />
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/linearLayout_Status3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dip"
+        android:background="@drawable/ripple"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="top|left"
+        android:orientation="horizontal"
+        android:paddingBottom="4dip"
+        android:paddingEnd="16dip"
+        android:paddingStart="16dip">
+
+        <View
+            android:layout_width="50dip"
+            android:layout_height="20dip"
+            android:background="@color/status_3" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dip"
+            android:layout_marginStart="8dip"
+            android:text="Thời gian vay còn lại vượt quá ngày hết hạn"
+            android:textColor="@color/objective_label"
+            android:textSize="14sp" />
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/linearLayout_Status4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dip"
+        android:background="@drawable/ripple"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="top|left"
+        android:orientation="horizontal"
+        android:paddingBottom="30dip"
+        android:paddingEnd="16dip"
+        android:paddingStart="16dip">
+
+        <View
+            android:layout_width="50dip"
+            android:layout_height="20dip"
+            android:background="@color/status_4" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dip"
+            android:layout_marginStart="8dip"
+            android:text="Đã thanh toán xong"
+            android:textColor="@color/objective_label"
+            android:textSize="14sp" />
+
+
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/tvCancel"
+        android:layout_width="100dip"
+        android:layout_height="30dip"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="10dp"
+        android:background="@drawable/login_btn"
+        android:clickable="true"
+        android:gravity="center"
+        android:text="Hủy"
+        android:textColor="@android:color/white" />
 
 
 </LinearLayout>

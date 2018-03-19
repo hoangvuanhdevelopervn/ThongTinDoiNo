@@ -12,6 +12,7 @@ public class Constant {
     public static final int STATE_ONE = 1;
     public static final int STATE_TWO = 2;
     public static final int STATE_THREE = 3;
+    public static final int STATE_FOUR = 4;
 
 
     public static final String KEY = "KEY";

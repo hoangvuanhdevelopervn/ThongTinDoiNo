@@ -77,6 +77,7 @@ public class DatabaseUser extends SQLiteOpenHelper {
         SQLiteDatabase database = getWritableDatabase();
         assert false;
         database.execSQL("delete from " + DB_TABLE);
+        Log.wtf(TAG, "=============================> REMOVE DATA SUCCESS");
         return true;
     }
 

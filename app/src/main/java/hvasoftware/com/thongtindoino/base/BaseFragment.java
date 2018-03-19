@@ -15,6 +15,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import hvasoftware.com.thongtindoino.MainActivity;
 import hvasoftware.com.thongtindoino.R;
+import hvasoftware.com.thongtindoino.utils.Constant;
 import hvasoftware.com.thongtindoino.utils.DatabaseUser;
 import hvasoftware.com.thongtindoino.utils.FragmentHelper;
 import hvasoftware.com.thongtindoino.utils.Utils;
@@ -41,7 +42,11 @@ public abstract class BaseFragment extends Fragment implements View.OnTouchListe
             rootView = inflater.inflate(GetLayoutId(), container, false);
             firebaseFirestore = FirebaseFirestore.getInstance();
             databaseUser = DatabaseUser.newInstance(getContext());
-            role = databaseUser.getAllUsers().get(0).getRole();
+            if (databaseUser.getAllUsers().size() > 0) {
+                role = databaseUser.getAllUsers().get(0).getRole();
+            } else {
+                role = Constant.ROLE_STAFF;
+            }
             OnBindView();
             OnViewCreated();
         }

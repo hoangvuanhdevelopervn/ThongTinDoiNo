@@ -1,8 +1,12 @@
 package hvasoftware.com.thongtindoino.base;
+
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
+import hvasoftware.com.thongtindoino.utils.Constant;
+import hvasoftware.com.thongtindoino.utils.DatabaseUser;
 import hvasoftware.com.thongtindoino.utils.FragmentHelper;
 
 
@@ -11,6 +15,8 @@ import hvasoftware.com.thongtindoino.utils.FragmentHelper;
  */
 
 public abstract class BaseActivity extends AppCompatActivity {
+    private static final String TAG = "BaseActivity";
+    public String role;
     private boolean isVisible;
 
     protected String GetScreenTitle() {
@@ -33,7 +39,13 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     private void SetUpBaseView() {
-
+        DatabaseUser databaseUser = DatabaseUser.newInstance(BaseActivity.this);
+        if (databaseUser.getAllUsers().size() > 0) {
+            role = databaseUser.getAllUsers().get(0).getRole();
+            Log.wtf(TAG, "============================>: " + role);
+        } else {
+            role = Constant.ROLE_STAFF;
+        }
     }
 
     @Override
@@ -82,4 +94,6 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         );
     }
+
+
 }

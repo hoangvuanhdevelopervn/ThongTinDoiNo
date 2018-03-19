@@ -36,4 +36,12 @@
     <string name="count_day">Tính số ngày</string>
     <string name="status">Trạng thái</string>
     <string name="click_to_choose_staff">Ấn vào đây để chọn nhân viên thu</string>
+    <string name="press_back_exit">Vui lòng ấn một lần nữa để thoát ứng dụng</string>
+    <string name="cancel">Huỷ</string>
+    <string name="remove">Xoá</string>
+    <string name="remove_success">Xoá khách hàng thành công</string>
+    <string name="remove_failed">Xoá thất bại</string>
+    <string name="account_exists">Tài khoản đã tồn tại vui lòng chọn tài khoản khác</string>
+    <string name="add_success">Thêm nhân viên thành công</string>
+    <string name="add_failed">Thêm nhân viên thất bại! Vui lòng thử lại</string>
 </resources>

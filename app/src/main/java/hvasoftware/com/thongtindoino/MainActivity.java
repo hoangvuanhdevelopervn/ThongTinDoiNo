@@ -12,7 +12,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,12 +20,10 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -52,7 +49,6 @@ import hvasoftware.com.thongtindoino.ui.fragment.DeptFragment;
 import hvasoftware.com.thongtindoino.ui.fragment.EmployeeManageFragment;
 import hvasoftware.com.thongtindoino.ui.fragment.LoginFragment;
 import hvasoftware.com.thongtindoino.utils.Constant;
-import hvasoftware.com.thongtindoino.utils.DatabaseUser;
 import hvasoftware.com.thongtindoino.utils.FragmentHelper;
 import hvasoftware.com.thongtindoino.utils.IOnCompleteListener;
 import hvasoftware.com.thongtindoino.utils.Utils;
@@ -71,7 +67,7 @@ public class MainActivity extends BaseActivity {
     View wrapFab1, wrapFab2, wrapFab3;
     private FirebaseFirestore firebaseFirestore;
     private boolean FAB_Status = false;
-    private String role = null;
+
 
     @Override
     protected String GetScreenTitle() {
@@ -84,9 +80,6 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void OnBindView() {
-        DatabaseUser databaseUser = DatabaseUser.newInstance(MainActivity.this);
-        role = databaseUser.getAllUsers().get(0).getRole();
-        Log.wtf(TAG, "============================>: " + role);
         firebaseFirestore = FirebaseFirestore.getInstance();
         wrapFab1 = findViewById(R.id.wrap_fab1);
         wrapFab2 = findViewById(R.id.wrap_fab2);
@@ -108,6 +101,7 @@ public class MainActivity extends BaseActivity {
                 onBackPressed();
             }
         });
+
         setSupportActionBar(MainToolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -182,6 +176,7 @@ public class MainActivity extends BaseActivity {
                                     bundle.putString(Constant.TYPE, Constant.STAFF);
                                     deptFragment.setArguments(bundle);
                                     SwitchFragment(deptFragment, false);
+                                    hideFAB();
                                 }
                             });
                         }
@@ -190,6 +185,7 @@ public class MainActivity extends BaseActivity {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         progressBar.setVisibility(View.GONE);
+                        hideFAB();
                     }
                 });
                 dialog.show();
@@ -201,46 +197,80 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 // STATUS
-                final String[] status = {"1"};
                 final Dialog dialog = new Dialog(MainActivity.this);
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 assert layoutInflater != null;
                 @SuppressLint("InflateParams") View dialogView = layoutInflater.inflate(R.layout.choose_status, null);
                 dialog.setContentView(dialogView);
-                Spinner spinner = dialog.findViewById(R.id.spinnerStatus);
                 TextView tvCancel = dialog.findViewById(R.id.tvCancel);
-                TextView tvChoose = dialog.findViewById(R.id.tvChoose);
+                LinearLayout linearLayout_Status1 = dialog.findViewById(R.id.linearLayout_Status1);
+                LinearLayout linearLayout_Status2 = dialog.findViewById(R.id.linearLayout_Status2);
+                LinearLayout linearLayout_Status3 = dialog.findViewById(R.id.linearLayout_Status3);
+                LinearLayout linearLayout_Status4 = dialog.findViewById(R.id.linearLayout_Status4);
+
+
                 tvCancel.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         dialog.dismiss();
+                        hideFAB();
                     }
                 });
-                final String[] strings = {"1", "2", "3"};
-                ArrayAdapter<String> stringArrayAdapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, strings);
-                spinner.setAdapter(stringArrayAdapter);
-                spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                        status[0] = strings[i];
-                    }
 
-                    @Override
-                    public void onNothingSelected(AdapterView<?> adapterView) {
-
-                    }
-                });
-                tvChoose.setOnClickListener(new View.OnClickListener() {
+                linearLayout_Status1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         DeptFragment deptFragment = new DeptFragment();
                         Bundle bundle = new Bundle();
-                        bundle.putString(Constant.KEY, status[0]);
+                        bundle.putString(Constant.KEY, "1");
                         bundle.putString(Constant.TYPE, Constant.STATUS);
                         deptFragment.setArguments(bundle);
                         SwitchFragment(deptFragment, false);
                         dialog.dismiss();
+                        hideFAB();
+                    }
+                });
+
+                linearLayout_Status2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        DeptFragment deptFragment = new DeptFragment();
+                        Bundle bundle = new Bundle();
+                        bundle.putString(Constant.KEY, "2");
+                        bundle.putString(Constant.TYPE, Constant.STATUS);
+                        deptFragment.setArguments(bundle);
+                        SwitchFragment(deptFragment, false);
+                        dialog.dismiss();
+                        hideFAB();
+                    }
+                });
+
+                linearLayout_Status3.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        DeptFragment deptFragment = new DeptFragment();
+                        Bundle bundle = new Bundle();
+                        bundle.putString(Constant.KEY, "3");
+                        bundle.putString(Constant.TYPE, Constant.STATUS);
+                        deptFragment.setArguments(bundle);
+                        SwitchFragment(deptFragment, false);
+                        dialog.dismiss();
+                        hideFAB();
+                    }
+                });
+
+                linearLayout_Status4.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        DeptFragment deptFragment = new DeptFragment();
+                        Bundle bundle = new Bundle();
+                        bundle.putString(Constant.KEY, "4");
+                        bundle.putString(Constant.TYPE, Constant.STATUS);
+                        deptFragment.setArguments(bundle);
+                        SwitchFragment(deptFragment, false);
+                        dialog.dismiss();
+                        hideFAB();
                     }
                 });
                 dialog.show();
@@ -262,13 +292,9 @@ public class MainActivity extends BaseActivity {
                         bundle.putString(Constant.TYPE, Constant.DATETIME);
                         deptFragment.setArguments(bundle);
                         SwitchFragment(deptFragment, false);
+                        hideFAB();
                     }
                 });
-
-                /*
-
-                 */
-
             }
         });
         SwitchFragment(new LoginFragment(), false);
@@ -439,5 +465,4 @@ public class MainActivity extends BaseActivity {
         wrapFab3.startAnimation(hide_fab_3);
         wrapFab3.setClickable(false);
     }
-
 }

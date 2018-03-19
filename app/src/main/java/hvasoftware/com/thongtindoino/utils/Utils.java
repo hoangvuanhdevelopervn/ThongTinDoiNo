@@ -45,7 +45,7 @@ public class Utils {
     public static String formatCurrency(long number) {
         NumberFormat format = NumberFormat.getCurrencyInstance(Locale.getDefault());
         String currency = format.format(number);
-        System.out.println("Currency in VietNam : " + currency);
+        //  System.out.println("Currency in VietNam : " + currency);
         return currency;
     }
 

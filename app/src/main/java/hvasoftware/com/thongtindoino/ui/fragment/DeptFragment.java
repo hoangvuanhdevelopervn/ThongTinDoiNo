@@ -1,9 +1,11 @@
 package hvasoftware.com.thongtindoino.ui.fragment;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -29,6 +31,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.WriteBatch;
 
@@ -57,8 +60,6 @@ public class DeptFragment extends BaseFragment {
     private CheckInternet checkInternet;
     private HorizontalScrollView horizontalView;
     private TableRow table_header;
-    private String objectId = null;
-    private String type = null;
     private Bundle bundle;
 
 
@@ -69,8 +70,11 @@ public class DeptFragment extends BaseFragment {
         horizontalView = (HorizontalScrollView) findViewById(R.id.horizontalView);
         checkInternet = CheckInternet.getInstance(getContext());
         if (bundle != null) {
-            objectId = bundle.getString(Constant.KEY);
-            type = bundle.getString(Constant.TYPE);
+            String object = bundle.getString(Constant.KEY);
+            String type = bundle.getString(Constant.TYPE);
+            bindDataToTable(type, object);
+
+            /*
             if (type.equals(Constant.STAFF)) {
                 bindDataToTableByStaff(objectId);
             }
@@ -82,8 +86,10 @@ public class DeptFragment extends BaseFragment {
             if (type.equals(Constant.DATETIME)) {
                 bindDataToTableByDate(objectId);
             }
+             */
+
         } else {
-            bindDataToTable();
+            bindDataToTable(null, null);
         }
     }
 
@@ -99,19 +105,39 @@ public class DeptFragment extends BaseFragment {
 
     }
 
-    public void bindDataToTable() {
+    public void bindDataToTable(String type, String object) {
+        Query query = null;
         final ProgressDialog progressDialog = new ProgressDialog(getActivity());
         progressDialog.setTitle("Loading");
         progressDialog.setMessage("Đang load dữ liệu, đợi xíu");
         progressDialog.show();
-        final Customer[] customer = {null};
-        final View[] dataRow = new View[1];
         deptTable.removeAllViews();
         deptTable.addView(table_header);
         horizontalView.setVisibility(View.GONE);
-        firebaseFirestore.collection(Constant.COLLECTION_CUSTOMER)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+
+        if (!TextUtils.isEmpty(type) && !TextUtils.isEmpty(object)) {
+            if (type.equals(Constant.STAFF)) {
+                query = firebaseFirestore.collection(Constant.COLLECTION_CUSTOMER)
+                        .whereEqualTo("nhanvienthu", object);
+            }
+
+            if (type.equals(Constant.STATUS)) {
+                int status = Integer.valueOf(object);
+                query = firebaseFirestore.collection(Constant.COLLECTION_CUSTOMER)
+                        .whereEqualTo("trangthai", status);
+            }
+
+            if (type.equals(Constant.DATETIME)) {
+                query = firebaseFirestore.collection(Constant.COLLECTION_CUSTOMER)
+                        .whereGreaterThanOrEqualTo("ngayVay", object);
+            }
+        } else {
+            query = firebaseFirestore.collection(Constant.COLLECTION_CUSTOMER);
+        }
+
+
+        assert query != null;
+        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @SuppressLint("SetTextI18n")
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -122,39 +148,40 @@ public class DeptFragment extends BaseFragment {
                                 return;
                             }
                             for (DocumentSnapshot documentSnapshot : task.getResult()) {
-                                customer[0] = documentSnapshot.toObject(Customer.class);
-                                dataRow[0] = LayoutInflater.from(getContext()).inflate(R.layout.view_dept_row, null);
-                                final TextView tvCustomerId = dataRow[0].findViewById(R.id.tvCustomerId);
-                                final TextView tvCustomerName = dataRow[0].findViewById(R.id.tvCustomerName);
-                                final TextView tvCustomerNgayVay = dataRow[0].findViewById(R.id.tvCustomerNgayVay);
-                                final TextView tvCustomerSoTien = dataRow[0].findViewById(R.id.tvCustomerSoTien);
-                                final TextView tvCustomerSoNgayVay = dataRow[0].findViewById(R.id.tvCustomerSoNgayVay);
-                                final TextView tvCustomerHetHan = dataRow[0].findViewById(R.id.tvCustomerHetHan);
-                                final TextView tvCustomerGhiChu = dataRow[0].findViewById(R.id.tvCustomerGhiChu);
-                                final TextView tvCustomerNhanVienThu = dataRow[0].findViewById(R.id.tvCustomerNhanVienThu);
 
-                                int status = customer[0].getTrangthai();
-                                tvCustomerId.setText("" + status);
+                                final Customer customer = documentSnapshot.toObject(Customer.class);
+                                final View dataRow = LayoutInflater.from(getContext()).inflate(R.layout.view_dept_row, null);
+                                final TextView tvCustomerId = dataRow.findViewById(R.id.tvCustomerId);
+                                final TextView tvCustomerName = dataRow.findViewById(R.id.tvCustomerName);
+                                final TextView tvCustomerNgayVay = dataRow.findViewById(R.id.tvCustomerNgayVay);
+                                final TextView tvCustomerSoTien = dataRow.findViewById(R.id.tvCustomerSoTien);
+                                final TextView tvCustomerSoNgayVay = dataRow.findViewById(R.id.tvCustomerSoNgayVay);
+                                final TextView tvCustomerHetHan = dataRow.findViewById(R.id.tvCustomerHetHan);
+                                final TextView tvCustomerGhiChu = dataRow.findViewById(R.id.tvCustomerGhiChu);
+                                final TextView tvCustomerNhanVienThu = dataRow.findViewById(R.id.tvCustomerNhanVienThu);
+
+                                int status = customer.getTrangthai();
 
                                 setUpStatus(status, tvCustomerId);
 
-                                tvCustomerName.setText(customer[0].getTen());
-                                tvCustomerNgayVay.setText(customer[0].getNgayVay());
-                                tvCustomerSoTien.setText("" + Utils.formatCurrency(customer[0].getSotien()));
-                                tvCustomerSoNgayVay.setText("" + customer[0].getSongayvay());
-                                tvCustomerHetHan.setText(customer[0].getNgayHetHan());
-                                tvCustomerGhiChu.setText(customer[0].getGhichu());
-                                tvCustomerNhanVienThu.setText(customer[0].getNhanvienthu());
+                                tvCustomerName.setText(customer.getTen());
+                                tvCustomerNgayVay.setText(customer.getNgayVay());
+                                tvCustomerSoTien.setText("" + Utils.formatCurrency(customer.getSotien()));
+                                tvCustomerSoNgayVay.setText("" + customer.getSongayvay());
+                                tvCustomerHetHan.setText(customer.getNgayHetHan());
+                                tvCustomerGhiChu.setText(customer.getGhichu());
+                                tvCustomerNhanVienThu.setText(customer.getNhanvienthu());
 
-                                countStatusOfCustomer(customer[0].getNgayHetHan(), customer[0].getSongayvay(), customer[0].getDocumentId());
+                                countStatusOfCustomer(customer.getNgayHetHan(), customer.getSongayvay(), customer.getDocumentId());
 
 
                                 horizontalView.setVisibility(View.VISIBLE);
-                                deptTable.addView(dataRow[0]);
-                                dataRow[0].setOnClickListener(new View.OnClickListener() {
+
+                                deptTable.addView(dataRow);
+                                dataRow.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
-                                        showMenu(dataRow[0], customer[0]);
+                                        showMenu(dataRow, customer);
                                     }
                                 });
                             }
@@ -168,210 +195,6 @@ public class DeptFragment extends BaseFragment {
         });
     }
 
-    public void bindDataToTableByStaff(String staffName) {
-        final ProgressDialog progressDialog = new ProgressDialog(getActivity());
-        progressDialog.setTitle("Loading");
-        progressDialog.setMessage("Đang load dữ liệu, đợi xíu");
-        progressDialog.show();
-        final Customer[] customer = {null};
-        final View[] dataRow = new View[1];
-        deptTable.removeAllViews();
-        deptTable.addView(table_header);
-        horizontalView.setVisibility(View.GONE);
-        firebaseFirestore.collection(Constant.COLLECTION_CUSTOMER)
-                .whereEqualTo("nhanvienthu", staffName)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @SuppressLint("SetTextI18n")
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            progressDialog.dismiss();
-                            if (task.getResult().size() == 0) {
-                                Toast.makeText(getContext(), R.string.no_customer, Toast.LENGTH_SHORT).show();
-                                return;
-                            }
-                            for (DocumentSnapshot documentSnapshot : task.getResult()) {
-                                customer[0] = documentSnapshot.toObject(Customer.class);
-                                dataRow[0] = LayoutInflater.from(getContext()).inflate(R.layout.view_dept_row, null);
-                                final TextView tvCustomerId = dataRow[0].findViewById(R.id.tvCustomerId);
-                                final TextView tvCustomerName = dataRow[0].findViewById(R.id.tvCustomerName);
-                                final TextView tvCustomerNgayVay = dataRow[0].findViewById(R.id.tvCustomerNgayVay);
-                                final TextView tvCustomerSoTien = dataRow[0].findViewById(R.id.tvCustomerSoTien);
-                                final TextView tvCustomerSoNgayVay = dataRow[0].findViewById(R.id.tvCustomerSoNgayVay);
-                                final TextView tvCustomerHetHan = dataRow[0].findViewById(R.id.tvCustomerHetHan);
-                                final TextView tvCustomerGhiChu = dataRow[0].findViewById(R.id.tvCustomerGhiChu);
-                                final TextView tvCustomerNhanVienThu = dataRow[0].findViewById(R.id.tvCustomerNhanVienThu);
-
-                                int status = customer[0].getTrangthai();
-                                tvCustomerId.setText("" + status);
-
-                                setUpStatus(status, tvCustomerId);
-                                tvCustomerName.setText(customer[0].getTen());
-                                tvCustomerNgayVay.setText(customer[0].getNgayVay());
-                                tvCustomerSoTien.setText("" + Utils.formatCurrency(customer[0].getSotien()));
-                                tvCustomerSoNgayVay.setText("" + customer[0].getSongayvay());
-                                tvCustomerHetHan.setText(customer[0].getNgayHetHan());
-                                tvCustomerGhiChu.setText(customer[0].getGhichu());
-                                tvCustomerNhanVienThu.setText(customer[0].getNhanvienthu());
-
-                                countStatusOfCustomer(customer[0].getNgayHetHan(), customer[0].getSongayvay(), customer[0].getDocumentId());
-
-                                horizontalView.setVisibility(View.VISIBLE);
-                                deptTable.addView(dataRow[0]);
-                                dataRow[0].setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        showMenu(dataRow[0], customer[0]);
-                                    }
-                                });
-                            }
-                        }
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.wtf(TAG, "=================================> " + e.getMessage());
-            }
-        });
-    }
-
-    public void bindDataToTableByStatus(int trangthai) {
-        final ProgressDialog progressDialog = new ProgressDialog(getActivity());
-        progressDialog.setTitle("Loading");
-        progressDialog.setMessage("Đang load dữ liệu, đợi xíu");
-        progressDialog.show();
-        final Customer[] customer = {null};
-        final View[] dataRow = new View[1];
-        deptTable.removeAllViews();
-        deptTable.addView(table_header);
-        horizontalView.setVisibility(View.GONE);
-        firebaseFirestore.collection(Constant.COLLECTION_CUSTOMER)
-                .whereEqualTo("trangthai", trangthai)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @SuppressLint("SetTextI18n")
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            progressDialog.dismiss();
-                            if (task.getResult().size() == 0) {
-                                Toast.makeText(getContext(), R.string.no_customer, Toast.LENGTH_SHORT).show();
-                                return;
-                            }
-                            for (DocumentSnapshot documentSnapshot : task.getResult()) {
-                                customer[0] = documentSnapshot.toObject(Customer.class);
-                                dataRow[0] = LayoutInflater.from(getContext()).inflate(R.layout.view_dept_row, null);
-                                final TextView tvCustomerId = dataRow[0].findViewById(R.id.tvCustomerId);
-                                final TextView tvCustomerName = dataRow[0].findViewById(R.id.tvCustomerName);
-                                final TextView tvCustomerNgayVay = dataRow[0].findViewById(R.id.tvCustomerNgayVay);
-                                final TextView tvCustomerSoTien = dataRow[0].findViewById(R.id.tvCustomerSoTien);
-                                final TextView tvCustomerSoNgayVay = dataRow[0].findViewById(R.id.tvCustomerSoNgayVay);
-                                final TextView tvCustomerHetHan = dataRow[0].findViewById(R.id.tvCustomerHetHan);
-                                final TextView tvCustomerGhiChu = dataRow[0].findViewById(R.id.tvCustomerGhiChu);
-                                final TextView tvCustomerNhanVienThu = dataRow[0].findViewById(R.id.tvCustomerNhanVienThu);
-
-                                int status = customer[0].getTrangthai();
-                                tvCustomerId.setText("" + status);
-
-                                setUpStatus(status, tvCustomerId);
-                                tvCustomerName.setText(customer[0].getTen());
-                                tvCustomerNgayVay.setText(customer[0].getNgayVay());
-                                tvCustomerSoTien.setText("" + Utils.formatCurrency(customer[0].getSotien()));
-                                tvCustomerSoNgayVay.setText("" + customer[0].getSongayvay());
-                                tvCustomerHetHan.setText(customer[0].getNgayHetHan());
-                                tvCustomerGhiChu.setText(customer[0].getGhichu());
-                                tvCustomerNhanVienThu.setText(customer[0].getNhanvienthu());
-
-                                countStatusOfCustomer(customer[0].getNgayHetHan(), customer[0].getSongayvay(), customer[0].getDocumentId());
-
-                                horizontalView.setVisibility(View.VISIBLE);
-                                deptTable.addView(dataRow[0]);
-                                dataRow[0].setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        showMenu(dataRow[0], customer[0]);
-                                    }
-                                });
-                            }
-                        }
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.wtf(TAG, "=================================> " + e.getMessage());
-            }
-        });
-    }
-
-    public void bindDataToTableByDate(String ngayVay) {
-        final ProgressDialog progressDialog = new ProgressDialog(getActivity());
-        progressDialog.setTitle("Loading");
-        progressDialog.setMessage("Đang load dữ liệu, đợi xíu");
-        progressDialog.show();
-        final Customer[] customer = {null};
-        final View[] dataRow = new View[1];
-        deptTable.removeAllViews();
-        deptTable.addView(table_header);
-        horizontalView.setVisibility(View.GONE);
-        firebaseFirestore.collection(Constant.COLLECTION_CUSTOMER)
-                .whereGreaterThanOrEqualTo("ngayVay", ngayVay)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @SuppressLint("SetTextI18n")
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            progressDialog.dismiss();
-                            if (task.getResult().size() == 0) {
-                                Toast.makeText(getContext(), R.string.no_customer, Toast.LENGTH_SHORT).show();
-                                return;
-                            }
-                            for (DocumentSnapshot documentSnapshot : task.getResult()) {
-                                customer[0] = documentSnapshot.toObject(Customer.class);
-                                dataRow[0] = LayoutInflater.from(getContext()).inflate(R.layout.view_dept_row, null);
-                                final TextView tvCustomerId = dataRow[0].findViewById(R.id.tvCustomerId);
-                                final TextView tvCustomerName = dataRow[0].findViewById(R.id.tvCustomerName);
-                                final TextView tvCustomerNgayVay = dataRow[0].findViewById(R.id.tvCustomerNgayVay);
-                                final TextView tvCustomerSoTien = dataRow[0].findViewById(R.id.tvCustomerSoTien);
-                                final TextView tvCustomerSoNgayVay = dataRow[0].findViewById(R.id.tvCustomerSoNgayVay);
-                                final TextView tvCustomerHetHan = dataRow[0].findViewById(R.id.tvCustomerHetHan);
-                                final TextView tvCustomerGhiChu = dataRow[0].findViewById(R.id.tvCustomerGhiChu);
-                                final TextView tvCustomerNhanVienThu = dataRow[0].findViewById(R.id.tvCustomerNhanVienThu);
-
-                                int status = customer[0].getTrangthai();
-                                tvCustomerId.setText("" + status);
-
-                                setUpStatus(status, tvCustomerId);
-
-                                tvCustomerName.setText(customer[0].getTen());
-                                tvCustomerNgayVay.setText(customer[0].getNgayVay());
-                                tvCustomerSoTien.setText("" + Utils.formatCurrency(customer[0].getSotien()));
-                                tvCustomerSoNgayVay.setText("" + customer[0].getSongayvay());
-                                tvCustomerHetHan.setText(customer[0].getNgayHetHan());
-                                tvCustomerGhiChu.setText(customer[0].getGhichu());
-                                tvCustomerNhanVienThu.setText(customer[0].getNhanvienthu());
-
-                                countStatusOfCustomer(customer[0].getNgayHetHan(), customer[0].getSongayvay(), customer[0].getDocumentId());
-
-                                horizontalView.setVisibility(View.VISIBLE);
-                                deptTable.addView(dataRow[0]);
-                                dataRow[0].setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        showMenu(dataRow[0], customer[0]);
-                                    }
-                                });
-                            }
-                        }
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.wtf(TAG, "=================================> " + e.getMessage());
-            }
-        });
-    }
 
     public void showMenu(View view, final Customer customer) {
         PopupMenu menu = new PopupMenu(getContext(), view, Gravity.END);
@@ -387,14 +210,18 @@ public class DeptFragment extends BaseFragment {
                         showDialogInputmoney(customer.getDocumentId(), customer.getSotien());
                         break;
                     case R.id.detail:
-                        /*
-                        DetailCustomerFragment addCustomerFragment = new DetailCustomerFragment(AddCustomerFragment.ScreenType.View);
+                        DetailCustomerFragment detailCustomerFragment = new DetailCustomerFragment();
                         Bundle bundle1 = new Bundle();
                         bundle1.putString(Constant.KEY, customer.getDocumentId());
-                        addCustomerFragment.setArguments(bundle1);
-                        SwitchFragment(addCustomerFragment, true);
-                         */
-
+                        detailCustomerFragment.setArguments(bundle1);
+                        SwitchFragment(detailCustomerFragment, true);
+                        break;
+                    case R.id.remove:
+                        if (customer.getSongayvay() > 0 && customer.getSotien() > 0) {
+                            Toast.makeText(getActivity(), "Khách hàng chưa đủ điều kiện để xoá", Toast.LENGTH_SHORT).show();
+                        } else {
+                            showDialogRemoveCustomer(customer.getDocumentId());
+                        }
                         break;
                 }
                 return true;
@@ -410,6 +237,39 @@ public class DeptFragment extends BaseFragment {
         }
 
         menu.show();
+    }
+
+    private void showDialogRemoveCustomer(final String customerDocumentId) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Xoá khách hàng")
+                .setMessage("Bạn có thật sự muốn xoá khách hàng này không?")
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                }).setPositiveButton(R.string.remove, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(final DialogInterface dialogInterface, int i) {
+                firebaseFirestore.collection(Constant.COLLECTION_CUSTOMER)
+                        .document(customerDocumentId).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        Toast.makeText(getActivity(), R.string.remove_success, Toast.LENGTH_SHORT).show();
+                        dialogInterface.dismiss();
+                        bindDataToTable(null, null);
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getActivity(), R.string.remove_failed, Toast.LENGTH_SHORT).show();
+                        dialogInterface.dismiss();
+                        bindDataToTable(null, null);
+                    }
+                });
+            }
+        }).create().show();
+
     }
 
     private void showDialogAssignToStaff(final String customerDocumentId) {
@@ -440,7 +300,7 @@ public class DeptFragment extends BaseFragment {
                         @Override
                         public void onComplete(String staffName, String staffDocumentId) {
                             dialog.dismiss();
-                            bindDataToTable();
+                            bindDataToTable(null, null);
                         }
                     });
                 }
@@ -498,7 +358,7 @@ public class DeptFragment extends BaseFragment {
                     public void onComplete(@NonNull Task<Void> task) {
                         Toast.makeText(getActivity(), getString(R.string.updapte_success), Toast.LENGTH_SHORT).show();
                         dialog.dismiss();
-                        bindDataToTable();
+                        bindDataToTable(null, null);
                     }
                 });
             }
@@ -509,7 +369,8 @@ public class DeptFragment extends BaseFragment {
     }
 
     private void countStatusOfCustomer(String end, int songayvay, String documentId) {
-        // 3 mau do
+        /*
+         // 3 mau do
         // 2 mau cam
         // 1 mau xanh
         int status = 1;
@@ -539,22 +400,29 @@ public class DeptFragment extends BaseFragment {
         writeBatch.update(updateQuoteShareAmount, "trangthai", status);
         writeBatch.update(updateQuoteShareAmount, "updateAt", DateTimeUtils.getDateTime());
         writeBatch.commit();
+         */
 
 
     }
 
     private void setUpStatus(int status, TextView textView) {
+        textView.setText("");
+        if (status == 4) {
+            textView.setBackgroundColor(getResources().getColor(R.color.status_4));
+        }
+
         if (status == 3) {
-            textView.setTextColor(getResources().getColor(R.color.status_3));
+            textView.setBackgroundColor(getResources().getColor(R.color.status_3));
         }
 
         if (status == 2) {
-            textView.setTextColor(getResources().getColor(R.color.status_2));
+            textView.setBackgroundColor(getResources().getColor(R.color.status_2));
         }
 
         if (status == 1) {
-            textView.setTextColor(getResources().getColor(R.color.status_1));
+            textView.setBackgroundColor(getResources().getColor(R.color.status_1));
         }
+
     }
 
     @Override
