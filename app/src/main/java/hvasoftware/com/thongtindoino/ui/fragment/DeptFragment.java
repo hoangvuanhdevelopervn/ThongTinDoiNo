@@ -139,10 +139,11 @@ public class DeptFragment extends BaseFragment {
                 }
 
                 if (type.equals(Constant.DATETIME)) {
-                    Log.wtf(TAG, "======================> DATETIME: " + object);
+                    //  Log.wtf(TAG, "======================> DATETIME: " + object);
                     query = firebaseFirestore.collection(Constant.COLLECTION_CUSTOMER)
-                            .whereEqualTo("ngayVay", object)
-                            .whereEqualTo("nhanvienthu", userName);
+                            .whereEqualTo("nhanvienthu", userName)
+                            //    .whereLessThanOrEqualTo("ngayVay", object)
+                            .whereEqualTo("ngayVay", object);
                     // .whereGreaterThanOrEqualTo("ngayVay", object);
                 }
             } else {
