@@ -1,5 +1,6 @@
 package hvasoftware.com.thongtindoino.base;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -35,6 +36,11 @@ public abstract class BaseFragment extends Fragment implements View.OnTouchListe
     protected abstract void OnViewCreated();
 
     protected abstract void OnBindView();
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+    }
 
     @Nullable
     @Override

@@ -439,46 +439,35 @@ public class MainActivity extends BaseActivity {
 
         //Floating Action Button 1
         wrapFabUser.startAnimation(show_fab_1);
-        wrapFabUser.setClickable(true);
-        wrapFabUser.bringToFront();
+        fab1.setClickable(true);
 
         //Floating Action Button 2
         wrapFabStatus.startAnimation(show_fab_2);
-        wrapFabStatus.setClickable(true);
-        wrapFabStatus.bringToFront();
+        fab2.setClickable(true);
 
         //Floating Action Button 3
         wrapFabDate.startAnimation(show_fab_3);
-        wrapFabDate.setClickable(true);
-        wrapFabDate.bringToFront();
+        fab3.setClickable(true);
 
         //Floating Action Button 4
         wrapFabReset.startAnimation(show_fab_3);
-        wrapFabReset.setClickable(true);
-        wrapFabReset.bringToFront();
+        fab4.setClickable(true);
     }
 
     private void hideFAB() {
+
         //Floating Action Button 1
         wrapFabUser.startAnimation(hide_fab_1);
-        wrapFabUser.setClickable(false);
-        wrapFabUser.setFocusableInTouchMode(false);
-        wrapFabUser.setFocusable(false);
+        fab1.setClickable(false);
         //Floating Action Button 2
         wrapFabStatus.startAnimation(hide_fab_2);
-        wrapFabStatus.setFocusable(false);
-        wrapFabStatus.setClickable(false);
-        wrapFabStatus.setFocusableInTouchMode(false);
+        fab2.setClickable(false);
         //Floating Action Button 3
         wrapFabDate.startAnimation(hide_fab_3);
-        wrapFabDate.setClickable(false);
-        wrapFabDate.setFocusable(false);
-        wrapFabDate.setFocusableInTouchMode(false);
+        fab3.setClickable(false);
         //Floating Action Button 3
         wrapFabReset.startAnimation(hide_fab_3);
-        wrapFabReset.setClickable(false);
-        wrapFabReset.setFocusable(false);
-        wrapFabReset.setFocusableInTouchMode(false);
+        fab4.setClickable(false);
     }
 
     public void showHideFloatButtonByRole() {

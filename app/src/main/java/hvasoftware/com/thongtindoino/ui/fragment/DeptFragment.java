@@ -177,9 +177,7 @@ public class DeptFragment extends BaseFragment {
                         final TextView tvCustomerGhiChu = dataRow.findViewById(R.id.tvCustomerGhiChu);
                         final TextView tvCustomerNhanVienThu = dataRow.findViewById(R.id.tvCustomerNhanVienThu);
 
-                        int status = customer.getTrangthai();
 
-                        setUpStatus(status, tvCustomerId);
 
                         tvCustomerName.setText(customer.getTen());
                         tvCustomerNgayVay.setText(customer.getNgayVay());
@@ -190,7 +188,8 @@ public class DeptFragment extends BaseFragment {
                         tvCustomerNhanVienThu.setText(customer.getNhanvienthu());
 
                         countStatusOfCustomer(customer);
-
+                        int status = customer.getTrangthai();
+                        setUpStatus(status, tvCustomerId);
 
                         horizontalView.setVisibility(View.VISIBLE);
 
@@ -401,7 +400,12 @@ public class DeptFragment extends BaseFragment {
         soTienVay = customer.getSotien();
         dayPass = soNgayVay - dayLeft;
 
-        if (soNgayVay == 0 && soTienVay == 0) {
+
+        if (soTienVay == 0 && soNgayVay == 0) {
+            status = 4;
+        }
+
+        if (soTienVay == 0) {
             status = 4;
         }
 
@@ -417,7 +421,8 @@ public class DeptFragment extends BaseFragment {
             status = 3;
         }
 
-        if (soNgayVay > 0) {
+
+        if (soNgayVay > 0 && soTienVay > 0) {
 
             percentage = (dayPass * 100) / soNgayVay;
 
@@ -428,11 +433,15 @@ public class DeptFragment extends BaseFragment {
             if (percentage <= 20) {
                 status = 1;
             }
+
         }
 
 
         WriteBatch writeBatch = firebaseFirestore.batch();
         DocumentReference updateQuoteShareAmount = firebaseFirestore.collection(Constant.COLLECTION_CUSTOMER).document(customer.getDocumentId());
+        customer.setTrangthai(status);
+        customer.setDayleft(dayLeft);
+        customer.setUpdateAt(DateTimeUtils.getDateTime());
         writeBatch.update(updateQuoteShareAmount, "trangthai", status);
         writeBatch.update(updateQuoteShareAmount, "dayleft", dayLeft);
         writeBatch.update(updateQuoteShareAmount, "updateAt", DateTimeUtils.getDateTime());

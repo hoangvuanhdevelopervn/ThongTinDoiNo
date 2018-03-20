@@ -2,6 +2,7 @@ package hvasoftware.com.thongtindoino.ui.fragment;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -117,7 +118,7 @@ public class DetailCustomerFragment extends BaseFragment implements com.wdullaer
             }
         });
 
-        tvUpload.setVisibility(BaseActivity.role.equals(Constant.ROLE_STAFF)? View.GONE : View.VISIBLE);
+        tvUpload.setVisibility(BaseActivity.role.equals(Constant.ROLE_STAFF) ? View.GONE : View.VISIBLE);
         tvNgayHetHan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -292,14 +293,14 @@ public class DetailCustomerFragment extends BaseFragment implements com.wdullaer
             public void onComplete(@NonNull Task<Void> task) {
                 progressBar.setVisibility(View.GONE);
                 Toast.makeText(getContext(), getActivity().getString(R.string.updapte_success), Toast.LENGTH_SHORT).show();
-                SwitchFragment(new DeptFragment(), false);
+                getMainAcitivity().StartFragmentClearTop(new DeptFragment(),false);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
                 progressBar.setVisibility(View.GONE);
                 Toast.makeText(getContext(), getActivity().getString(R.string.updapte_failed), Toast.LENGTH_SHORT).show();
-                SwitchFragment(new DeptFragment(), false);
+                getMainAcitivity().StartFragmentClearTop(new DeptFragment(),false);
                 // Log.wtf(TAG, "==============================>" + e.getMessage());
             }
         });
