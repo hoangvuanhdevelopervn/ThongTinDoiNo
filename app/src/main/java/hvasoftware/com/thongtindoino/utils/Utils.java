@@ -5,6 +5,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.text.TextUtils;
+import android.util.Patterns;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ProgressBar;
@@ -87,7 +89,9 @@ public class Utils {
     public static int daysBetween(Date d1, Date d2) {
         return (int) ((d2.getTime() - d1.getTime()) / (1000 * 60 * 60 * 24));
     }
-
+    public final static boolean isValidEmail(CharSequence target) {
+        return (!TextUtils.isEmpty(target) && Patterns.EMAIL_ADDRESS.matcher(target).matches());
+    }
     /**
      *
      * @param Created_date_String

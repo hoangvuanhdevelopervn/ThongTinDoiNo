@@ -12,6 +12,9 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 
@@ -47,7 +50,6 @@ public class AddUserFragment extends BaseFragment {
 
     @Override
     protected void OnBindView() {
-
         edt_userName = (EditText) findViewById(R.id.edt_obj_name);
         edt_userAccount = (EditText) findViewById(R.id.edt_take_date);
         edt_userPassword = (EditText) findViewById(R.id.edt_money);
@@ -77,9 +79,18 @@ public class AddUserFragment extends BaseFragment {
                     return;
                 }
 
+                if(!Utils.isValidEmail(userAccount)){
+                    Toast.makeText(getContext(), "Email chưa đúng định dạng", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
-                if (TextUtils.isEmpty(userPassword)) {
+                if (TextUtils.isEmpty(userPassword) ) {
                     Toast.makeText(getContext(), "Bạn chưa nhập mật khẩu", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if(userPassword.length() < 6){
+                    Toast.makeText(getContext(), "Mật khẩu phải ít nhất 6 kí tự", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -113,51 +124,62 @@ public class AddUserFragment extends BaseFragment {
 
 
                 progressBar.setVisibility(View.VISIBLE);
-
-                firebaseFirestore.collection(Constant.COLLECTION_USER).document(userAccount)
-                        .get()
-                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                mAuth.createUserWithEmailAndPassword(userAccount, userPassword).addOnCompleteListener(getMainAcitivity(),
+                        new OnCompleteListener<AuthResult>() {
                             @Override
-                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
-                                    if (task.getResult().exists()) {
-                                        Toast.makeText(getActivity(), R.string.account_exists, Toast.LENGTH_SHORT).show();
-                                        progressBar.setVisibility(View.GONE);
-                                    } else {
-                                        CollectionReference collectionReference = firebaseFirestore.collection(Constant.COLLECTION_USER);
-                                        Map<String, Object> objectMap = new HashMap<>();
-                                        objectMap.put("objectID", Utils.getRandomUUID());
-                                        objectMap.put("documentId", userAccount);
-                                        objectMap.put("displayName", userName);
-                                        objectMap.put("account", userAccount);
-                                        objectMap.put("password", userPassword);
-                                        objectMap.put("address", userAddress);
-                                        objectMap.put("phone", userPhone);
-                                        objectMap.put("createAt", Utils.getCurrentDateTime());
-                                        objectMap.put("updateAt", Utils.getCurrentDateTime());
-                                        objectMap.put("role", Constant.ROLE_STAFF);
-                                        collectionReference.document(userAccount).set(objectMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<Void> task) {
-                                                progressBar.setVisibility(View.GONE);
-                                                Toast.makeText(getContext(), R.string.add_success, Toast.LENGTH_SHORT).show();
-                                                getActivity().onBackPressed();
-                                            }
-                                        }).addOnFailureListener(new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull Exception e) {
-                                                progressBar.setVisibility(View.GONE);
-                                                Toast.makeText(getContext(), R.string.add_failed, Toast.LENGTH_SHORT).show();
-                                                Log.wtf("TAG", "========================> UPLOAD FAILED: " + e.getMessage());
-                                            }
-                                        });
-                                    }
+                                    firebaseFirestore.collection(Constant.COLLECTION_USER).document(userAccount)
+                                            .get()
+                                            .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                    if (task.isSuccessful()) {
+                                                        if (task.getResult().exists()) {
+                                                            Toast.makeText(getActivity(), R.string.account_exists, Toast.LENGTH_SHORT).show();
+                                                            progressBar.setVisibility(View.GONE);
+                                                        } else {
+                                                            CollectionReference collectionReference = firebaseFirestore.collection(Constant.COLLECTION_USER);
+                                                            Map<String, Object> objectMap = new HashMap<>();
+                                                            objectMap.put("objectID", mAuth.getCurrentUser().getUid());
+                                                            objectMap.put("documentId", userAccount);
+                                                            objectMap.put("displayName", userName);
+                                                            objectMap.put("account", userAccount);
+                                                            objectMap.put("password", userPassword);
+                                                            objectMap.put("address", userAddress);
+                                                            objectMap.put("phone", userPhone);
+                                                            objectMap.put("createAt", Utils.getCurrentDateTime());
+                                                            objectMap.put("updateAt", Utils.getCurrentDateTime());
+                                                            objectMap.put("role", Constant.ROLE_STAFF);
+                                                            collectionReference.document(userAccount).set(objectMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                @Override
+                                                                public void onComplete(@NonNull Task<Void> task) {
+                                                                    progressBar.setVisibility(View.GONE);
+                                                                    Toast.makeText(getContext(), R.string.add_success, Toast.LENGTH_SHORT).show();
+                                                                    getActivity().onBackPressed();
+                                                                }
+                                                            }).addOnFailureListener(new OnFailureListener() {
+                                                                @Override
+                                                                public void onFailure(@NonNull Exception e) {
+                                                                    progressBar.setVisibility(View.GONE);
+                                                                    Toast.makeText(getContext(), R.string.add_failed, Toast.LENGTH_SHORT).show();
+                                                                    Log.wtf("TAG", "========================> UPLOAD FAILED: " + e.getMessage());
+                                                                }
+                                                            });
+                                                        }
+                                                    }
+                                                }
+                                            });
+                                } else {
+                                    progressBar.setVisibility(View.GONE);
+                                    Toast.makeText(getContext(), R.string.add_failed, Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
             }
         });
     }
+
 
     @Override
     public int GetLayoutId() {

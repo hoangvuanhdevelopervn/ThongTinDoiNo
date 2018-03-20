@@ -12,6 +12,7 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.EditText;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import hvasoftware.com.thongtindoino.MainActivity;
@@ -32,6 +33,7 @@ public abstract class BaseFragment extends Fragment implements View.OnTouchListe
     public String role = null;
     private DatabaseUser databaseUser;
     public String userName;
+    public FirebaseAuth mAuth;
 
     protected abstract void OnViewCreated();
 
@@ -48,6 +50,7 @@ public abstract class BaseFragment extends Fragment implements View.OnTouchListe
         if (rootView == null) {
             rootView = inflater.inflate(GetLayoutId(), container, false);
             firebaseFirestore = FirebaseFirestore.getInstance();
+            mAuth = FirebaseAuth.getInstance();
             databaseUser = DatabaseUser.newInstance(getContext());
             if (databaseUser.getAllUsers().size() > 0) {
                 role = databaseUser.getAllUsers().get(0).getRole();
@@ -140,10 +143,15 @@ public abstract class BaseFragment extends Fragment implements View.OnTouchListe
             getMainAcitivity().setFloatButtonVisible(isFloatButtonVisible());
             getMainAcitivity().setToolbarVisible(isToolbarVisible());
             getMainAcitivity().setImvAddUserVisible(isImvAddUserVisible());
+            getMainAcitivity().setTvTotalVisibile(isTotalNumberVisible());
 
         } catch (Exception e) {
 
         }
+    }
+
+    public boolean isTotalNumberVisible() {
+        return false;
     }
 
     public boolean isImvAddUserVisible() {

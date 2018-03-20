@@ -24,11 +24,15 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -66,7 +70,8 @@ public class MainActivity extends BaseActivity {
     View wrapFabUser, wrapFabStatus, wrapFabDate, wrapFabReset;
     private FirebaseFirestore firebaseFirestore;
     private boolean FAB_Status = false;
-
+    public FirebaseAuth mAuth;
+    TextView tvTotal;
 
     @Override
     protected String GetScreenTitle() {
@@ -81,6 +86,8 @@ public class MainActivity extends BaseActivity {
     protected void OnBindView() {
 
         firebaseFirestore = FirebaseFirestore.getInstance();
+        mAuth = FirebaseAuth.getInstance();
+        tvTotal = findViewById(R.id.tv_total);
         wrapFabUser = findViewById(R.id.wrap_fab1);
         wrapFabStatus = findViewById(R.id.wrap_fab2);
         wrapFabDate = findViewById(R.id.wrap_fab3);
@@ -350,6 +357,7 @@ public class MainActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_log_out) {
+            mAuth.signOut();
             StartFragmentClearTop(new LoginFragment(), false);
             return true;
         }
@@ -480,5 +488,11 @@ public class MainActivity extends BaseActivity {
         }
     }
 
+    public void setTvTotal(String text) {
+        tvTotal.setText(text);
+    }
 
+    public void setTvTotalVisibile(boolean isVisible) {
+        tvTotal.setVisibility(!isVisible ? View.GONE : View.VISIBLE);
+    }
 }

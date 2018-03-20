@@ -39,6 +39,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import hvasoftware.com.thongtindoino.R;
+import hvasoftware.com.thongtindoino.base.BaseActivity;
 import hvasoftware.com.thongtindoino.base.BaseFragment;
 import hvasoftware.com.thongtindoino.model.Customer;
 import hvasoftware.com.thongtindoino.model.User;
@@ -61,6 +62,7 @@ public class DeptFragment extends BaseFragment {
     private HorizontalScrollView horizontalView;
     private TableRow table_header;
     private Bundle bundle;
+    long totalMoney = 0;
 
 
     @Override
@@ -91,6 +93,7 @@ public class DeptFragment extends BaseFragment {
     }
 
     public void bindDataToTable(String type, String object) {
+        totalMoney = 0;
         getMainAcitivity().showHideFloatButtonByRole();
         getMainAcitivity().invalidateOptionsMenu();
         Query query = null;
@@ -178,7 +181,6 @@ public class DeptFragment extends BaseFragment {
                         final TextView tvCustomerNhanVienThu = dataRow.findViewById(R.id.tvCustomerNhanVienThu);
 
 
-
                         tvCustomerName.setText(customer.getTen());
                         tvCustomerNgayVay.setText(customer.getNgayVay());
                         tvCustomerSoTien.setText("" + Utils.formatCurrency(customer.getSotien()));
@@ -187,6 +189,12 @@ public class DeptFragment extends BaseFragment {
                         tvCustomerGhiChu.setText(customer.getGhichu());
                         tvCustomerNhanVienThu.setText(customer.getNhanvienthu());
 
+                        totalMoney += customer.getSotien();
+                        if (BaseActivity.role.equals(Constant.ROLE_ADMIN)) {
+                            getMainAcitivity().setTvTotal("Tổng số tiền: " + Utils.formatCurrency(totalMoney));
+                        } else {
+                            getMainAcitivity().setTvTotal("");
+                        }
                         countStatusOfCustomer(customer);
                         int status = customer.getTrangthai();
                         setUpStatus(status, tvCustomerId);
@@ -493,5 +501,10 @@ public class DeptFragment extends BaseFragment {
     @Override
     public boolean isBackButtonVisible() {
         return false;
+    }
+
+    @Override
+    public boolean isTotalNumberVisible() {
+        return BaseActivity.role.equals(Constant.ROLE_ADMIN);
     }
 }

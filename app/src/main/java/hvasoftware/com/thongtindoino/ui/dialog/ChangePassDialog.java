@@ -104,6 +104,11 @@ public class ChangePassDialog extends DialogFragment {
                     return;
                 }
 
+                if (newPass.length() < 6) {
+                    Toast.makeText(getActivity(), "Mật khẩu phải ít nhất 6 kí tự", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 if (TextUtils.isEmpty(newPass2)) {
                     Toast.makeText(getActivity(), "Bạn chưa nhập mật khẩu mới", Toast.LENGTH_SHORT).show();
                     return;

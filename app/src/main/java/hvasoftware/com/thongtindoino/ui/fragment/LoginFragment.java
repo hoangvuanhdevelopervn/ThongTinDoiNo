@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import hvasoftware.com.thongtindoino.R;
@@ -74,41 +75,53 @@ public class LoginFragment extends BaseFragment {
                     return;
                 }
 
+                if (!Utils.isValidEmail(account)) {
+                    Toast.makeText(getContext(), "Email chưa đúng định dạng", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 if (TextUtils.isEmpty(password)) {
                     Toast.makeText(getContext(), R.string.not_input_password, Toast.LENGTH_SHORT).show();
                     return;
                 }
 
                 progressBar.setVisibility(View.VISIBLE);
-                firebaseFirestore.collection(Constant.COLLECTION_USER)
-                        .document(account).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                mAuth.signInWithEmailAndPassword(account, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        progressBar.setVisibility(View.GONE);
+                    public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            DocumentSnapshot document = task.getResult();
-                            if (document != null && document.exists()) {
-                                User user = document.toObject(User.class);
-                                if (account.equals(user.getAccount()) && password.equals(user.getPassword())) {
-                                    Toast.makeText(getContext(), R.string.login_success, Toast.LENGTH_SHORT).show();
-                                    SwitchFragment(new DeptFragment(), false);
-                                    BaseActivity.role = user.getRole();
-                                    databaseUser.insertUser(user);
-                                } else {
-                                    Toast.makeText(getContext(), R.string.wrong_account_pass_check_again, Toast.LENGTH_SHORT).show();
+                            firebaseFirestore.collection(Constant.COLLECTION_USER)
+                                    .document(account).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                    progressBar.setVisibility(View.GONE);
+                                    if (task.isSuccessful()) {
+                                        DocumentSnapshot document = task.getResult();
+                                        if (document != null && document.exists()) {
+                                            User user = document.toObject(User.class);
+                                            if (account.equals(user.getAccount()) && password.equals(user.getPassword())) {
+                                                Toast.makeText(getContext(), R.string.login_success, Toast.LENGTH_SHORT).show();
+                                                SwitchFragment(new DeptFragment(), false);
+                                                BaseActivity.role = user.getRole();
+                                                databaseUser.insertUser(user);
+                                            } else {
+                                                Toast.makeText(getContext(), R.string.wrong_account_pass_check_again, Toast.LENGTH_SHORT).show();
+                                            }
+                                        } else {
+                                            Toast.makeText(getContext(), R.string.account_not_exitsts, Toast.LENGTH_SHORT).show();
+                                        }
+                                    } else {
+                                        Toast.makeText(getContext(), R.string.error_check_connected, Toast.LENGTH_SHORT).show();
+                                    }
                                 }
-                            } else {
-                                Toast.makeText(getContext(), R.string.account_not_exitsts, Toast.LENGTH_SHORT).show();
-                            }
-                        } else {
-                            Toast.makeText(getContext(), R.string.error_check_connected, Toast.LENGTH_SHORT).show();
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    progressBar.setVisibility(View.GONE);
+                                    Toast.makeText(getContext(), R.string.error_check_connected, Toast.LENGTH_SHORT).show();
+                                }
+                            });
                         }
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        progressBar.setVisibility(View.GONE);
-                        Toast.makeText(getContext(), R.string.error_check_connected, Toast.LENGTH_SHORT).show();
                     }
                 });
             }

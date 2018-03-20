@@ -15,7 +15,7 @@
     <string name="add_customer">Thêm khách hàng</string>
     <string name="manage_user">Quản lý nhân viên</string>
     <string name="user_name">Tên nhân viên</string>
-    <string name="user_acc">Tài khoản</string>
+    <string name="user_acc">Email</string>
     <string name="user_pass">Mật khẩu</string>
     <string name="user_pass_repeat">Nhập lại mật khẩu</string>
     <string name="user_role">Quyền</string>
