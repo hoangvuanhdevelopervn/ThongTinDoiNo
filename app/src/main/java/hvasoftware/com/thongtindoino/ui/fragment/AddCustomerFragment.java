@@ -25,8 +25,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -68,8 +70,8 @@ public class AddCustomerFragment extends BaseFragment implements com.wdullaer.ma
     private String ngayHetHan = null;
     private DatePickerDialog datePickerDialog;
     private int soNgayVay = 0;
-
-
+    private Timestamp ngayVayDate;
+    Calendar cal = Calendar.getInstance();
     @SuppressLint("ValidFragment")
     public AddCustomerFragment(ScreenType screenType) {
         this.screenType = screenType;
@@ -78,6 +80,10 @@ public class AddCustomerFragment extends BaseFragment implements com.wdullaer.ma
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        cal.set(Calendar.HOUR, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND,0);
     }
 
     @Override
@@ -110,6 +116,7 @@ public class AddCustomerFragment extends BaseFragment implements com.wdullaer.ma
         Utils.setUpProgressBar(progressBar, true);
         tvUpload = (TextView) findViewById(R.id.tvUpload);
         ngayVay = DateTimeUtils.getDateToday();
+        ngayVayDate = new Timestamp(cal.getTime().getTime());
         ngayHetHan = DateTimeUtils.getDateTodayOneMonthLater();
         tvUpload.setText(getActivity().getString(R.string.add_customer));
         tvNgayVay.setText(ngayVay);
@@ -252,6 +259,7 @@ public class AddCustomerFragment extends BaseFragment implements com.wdullaer.ma
         objectMap.put("ngayVay", ngayVay);
         objectMap.put("ngayHetHan", ngayHetHan);
 
+        objectMap.put("ngayVayDate",ngayVayDate);
         objectMap.put("dayleft", soNgayVay);
         objectMap.put("songayvay", soNgayVay);
         objectMap.put("sotien", customerSoTienVay);

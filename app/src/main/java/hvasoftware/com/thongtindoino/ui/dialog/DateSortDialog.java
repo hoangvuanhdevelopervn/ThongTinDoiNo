@@ -12,7 +12,9 @@ import android.widget.TextView;
 
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
+import java.sql.Timestamp;
 import java.util.Calendar;
+import java.util.Date;
 
 import hvasoftware.com.thongtindoino.MainActivity;
 import hvasoftware.com.thongtindoino.R;
@@ -25,6 +27,10 @@ import hvasoftware.com.thongtindoino.utils.IOnCompleteListener;
 
 @SuppressLint("ValidFragment")
 public class DateSortDialog extends DialogFragment implements com.wdullaer.materialdatetimepicker.date.DatePickerDialog.OnDateSetListener {
+    public interface IOnCompleteListener {
+        void onComplete(Date start, Date end);
+    }
+
     private static final String TAG = "DateSortDialog";
     public static DateSortDialog dateSortDialog;
     View wrapFrom, wrapTo;
@@ -36,9 +42,15 @@ public class DateSortDialog extends DialogFragment implements com.wdullaer.mater
     private TextView tvLoc;
     private IOnCompleteListener iOnCompleteListener;
     private MainActivity mainActivity;
+    Timestamp dateStart, dateEnd;
+    Calendar cal = Calendar.getInstance();
 
     public DateSortDialog(MainActivity mainActivity) {
         this.mainActivity = mainActivity;
+        cal.set(Calendar.HOUR, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND,0);
     }
 
     public static DateSortDialog newInstance(MainActivity mainActivity) {
@@ -63,6 +75,8 @@ public class DateSortDialog extends DialogFragment implements com.wdullaer.mater
         wrapFrom = view.findViewById(R.id.wrap_from);
         tvFrom = view.findViewById(R.id.tv_from);
         startDate = DateTimeUtils.getDateToday();
+        dateStart = new Timestamp(cal.getTime().getTime());
+        dateEnd = new Timestamp(cal.getTime().getTime());
         tvFrom.setText(startDate);
         tvTo = view.findViewById(R.id.tv_to);
         endDate = DateTimeUtils.getDateToday();
@@ -85,7 +99,7 @@ public class DateSortDialog extends DialogFragment implements com.wdullaer.mater
         tvLoc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                iOnCompleteListener.onComplete(startDate, endDate);
+                iOnCompleteListener.onComplete(dateStart, dateEnd);
                 getDialog().dismiss();
             }
         });
@@ -99,7 +113,15 @@ public class DateSortDialog extends DialogFragment implements com.wdullaer.mater
     @SuppressLint("SetTextI18n")
     @Override
     public void onDateSet(com.wdullaer.materialdatetimepicker.date.DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+        cal.set(Calendar.YEAR, year);
+        cal.set(Calendar.MONTH, monthOfYear);
+        cal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+        cal.set(Calendar.HOUR, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND,0);
         if (view == fromDateDialog) {
+            dateStart = new Timestamp(cal.getTime().getTime());
             int month = monthOfYear + 1;
             if (month < 10) {
                 startDate = dayOfMonth + "/0" + (monthOfYear + 1) + "/" + year;
@@ -108,6 +130,7 @@ public class DateSortDialog extends DialogFragment implements com.wdullaer.mater
             }
             tvFrom.setText(startDate);
         } else {
+            dateEnd = new Timestamp(cal.getTime().getTime());
             int month = monthOfYear + 1;
             if (month < 10) {
                 endDate = dayOfMonth + "/0" + (monthOfYear + 1) + "/" + year;

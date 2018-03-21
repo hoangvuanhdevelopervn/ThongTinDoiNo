@@ -36,6 +36,7 @@ public class LoginFragment extends BaseFragment {
     private ProgressBar progressBar;
     private DatabaseUser databaseUser;
     private CheckInternet checkInternet;
+    private View wrapProgressBar;
 
     @Override
     protected void OnViewCreated() {
@@ -47,6 +48,14 @@ public class LoginFragment extends BaseFragment {
         checkInternet = CheckInternet.getInstance(getContext());
         databaseUser = DatabaseUser.newInstance(getContext());
         databaseUser.deleteAllData();
+        wrapProgressBar = findViewById(R.id.wrap_progressbar);
+        wrapProgressBar.bringToFront();
+        wrapProgressBar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
         edtAccount = (EditText) findViewById(R.id.edt_acc);
         edtPass = (EditText) findViewById(R.id.edt_pass);
         btnLogin = findViewById(R.id.btn_login);
@@ -85,6 +94,7 @@ public class LoginFragment extends BaseFragment {
                     return;
                 }
 
+                wrapProgressBar.setVisibility(View.VISIBLE);
                 progressBar.setVisibility(View.VISIBLE);
                 mAuth.signInWithEmailAndPassword(account, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
@@ -94,7 +104,7 @@ public class LoginFragment extends BaseFragment {
                                     .document(account).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                 @Override
                                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                    progressBar.setVisibility(View.GONE);
+                                    wrapProgressBar.setVisibility(View.GONE);
                                     if (task.isSuccessful()) {
                                         DocumentSnapshot document = task.getResult();
                                         if (document != null && document.exists()) {
@@ -117,10 +127,13 @@ public class LoginFragment extends BaseFragment {
                             }).addOnFailureListener(new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
-                                    progressBar.setVisibility(View.GONE);
+                                    wrapProgressBar.setVisibility(View.GONE);
                                     Toast.makeText(getContext(), R.string.error_check_connected, Toast.LENGTH_SHORT).show();
                                 }
                             });
+                        } else {
+                            wrapProgressBar.setVisibility(View.GONE);
+                            Toast.makeText(getContext(), R.string.wrong_account_pass_check_again, Toast.LENGTH_SHORT).show();
                         }
                     }
                 });

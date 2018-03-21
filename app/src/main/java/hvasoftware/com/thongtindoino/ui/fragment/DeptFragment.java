@@ -34,8 +34,11 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.WriteBatch;
+import com.squareup.okhttp.internal.Util;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import hvasoftware.com.thongtindoino.R;
@@ -63,7 +66,16 @@ public class DeptFragment extends BaseFragment {
     private TableRow table_header;
     private Bundle bundle;
     long totalMoney = 0;
+    Timestamp startTime, endTime;
 
+    public DeptFragment() {
+    }
+
+    @SuppressLint("ValidFragment")
+    public DeptFragment(Date startTime, Date endTime) {
+        this.startTime = new Timestamp(startTime.getTime());
+        this.endTime = new Timestamp(endTime.getTime());
+    }
 
     @Override
     protected void OnBindView() {
@@ -120,7 +132,8 @@ public class DeptFragment extends BaseFragment {
 
                 if (type.equals(Constant.DATETIME)) {
                     query = firebaseFirestore.collection(Constant.COLLECTION_CUSTOMER)
-                            .whereGreaterThanOrEqualTo("ngayVay", object);
+                            .whereGreaterThanOrEqualTo("ngayVayDate", (startTime))
+                            .whereLessThanOrEqualTo("ngayVayDate", (endTime));
                 }
             } else {
                 query = firebaseFirestore.collection(Constant.COLLECTION_CUSTOMER);
@@ -145,9 +158,8 @@ public class DeptFragment extends BaseFragment {
                     //  Log.wtf(TAG, "======================> DATETIME: " + object);
                     query = firebaseFirestore.collection(Constant.COLLECTION_CUSTOMER)
                             .whereEqualTo("nhanvienthu", userName)
-                            //    .whereLessThanOrEqualTo("ngayVay", object)
-                            .whereEqualTo("ngayVay", object);
-                    // .whereGreaterThanOrEqualTo("ngayVay", object);
+                            .whereGreaterThanOrEqualTo("ngayVay", Utils.convertDateToTimeStame(startTime))
+                            .whereLessThanOrEqualTo("ngayVay", Utils.convertDateToTimeStame(endTime));
                 }
             } else {
                 query = firebaseFirestore.collection(Constant.COLLECTION_CUSTOMER)

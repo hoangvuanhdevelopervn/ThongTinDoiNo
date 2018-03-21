@@ -72,17 +72,6 @@
             android:background="@android:color/white" />
 
 
-        <ProgressBar
-            android:id="@+id/progressBar"
-            style="?android:attr/progressBarStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="8dip"
-            android:indeterminate="true"
-            android:indeterminateTint="@color/colorAccent"
-            tools:targetApi="lollipop" />
-
     </LinearLayout>
 
     <hvasoftware.com.thongtindoino.utils.SmartButton
@@ -99,6 +88,25 @@
         android:text="ĐĂNG NHẬP"
         android:textColor="@android:color/white"
         android:textSize="18sp" />
+<FrameLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_centerInParent="true"
+    android:id="@+id/wrap_progressbar"
+    android:visibility="gone"
+    >
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="8dip"
+        android:indeterminate="true"
+        android:indeterminateTint="@color/colorAccent"
+        tools:targetApi="lollipop" />
+</FrameLayout>
+
 
 
 </RelativeLayout>

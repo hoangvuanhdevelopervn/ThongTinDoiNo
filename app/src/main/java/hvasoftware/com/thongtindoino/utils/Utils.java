@@ -13,6 +13,7 @@ import android.widget.ProgressBar;
 
 import org.joda.time.Days;
 
+import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
@@ -89,8 +90,13 @@ public class Utils {
     public static int daysBetween(Date d1, Date d2) {
         return (int) ((d2.getTime() - d1.getTime()) / (1000 * 60 * 60 * 24));
     }
+
     public final static boolean isValidEmail(CharSequence target) {
         return (!TextUtils.isEmpty(target) && Patterns.EMAIL_ADDRESS.matcher(target).matches());
+    }
+
+    public final static Timestamp convertDateToTimeStame(Date date) {
+        return new Timestamp(date.getTime());
     }
     /**
      *

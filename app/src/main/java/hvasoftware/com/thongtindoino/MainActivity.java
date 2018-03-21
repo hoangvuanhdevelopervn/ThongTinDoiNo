@@ -38,6 +38,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import hvasoftware.com.thongtindoino.base.BaseActivity;
@@ -288,12 +289,12 @@ public class MainActivity extends BaseActivity {
                 // DATE TIME
                 DateSortDialog dateSortDialog = new DateSortDialog(MainActivity.this);
                 dateSortDialog.show(getFragmentManager(), "");
-                dateSortDialog.setiOnCompleteListener(new IOnCompleteListener() {
+                dateSortDialog.setiOnCompleteListener(new DateSortDialog.IOnCompleteListener() {
                     @Override
-                    public void onComplete(String staffName, String staffDocumentId) {
-                        DeptFragment deptFragment = new DeptFragment();
+                    public void onComplete(Date start, Date end) {
+                        DeptFragment deptFragment = new DeptFragment(start, end);
                         Bundle bundle = new Bundle();
-                        bundle.putString(Constant.KEY, staffName);
+                        bundle.putString(Constant.KEY, Constant.DATETIME);
                         bundle.putString(Constant.TYPE, Constant.DATETIME);
                         deptFragment.setArguments(bundle);
                         SwitchFragment(deptFragment, false);
