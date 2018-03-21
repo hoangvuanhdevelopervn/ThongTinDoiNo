@@ -113,6 +113,7 @@ public class LoginFragment extends BaseFragment {
                                                 Toast.makeText(getContext(), R.string.login_success, Toast.LENGTH_SHORT).show();
                                                 SwitchFragment(new DeptFragment(), false);
                                                 BaseActivity.role = user.getRole();
+                                                BaseActivity.firebasePw = user.getPassword();
                                                 databaseUser.insertUser(user);
                                             } else {
                                                 Toast.makeText(getContext(), R.string.wrong_account_pass_check_again, Toast.LENGTH_SHORT).show();

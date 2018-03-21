@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,10 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.WriteBatch;
@@ -26,6 +31,7 @@ import java.util.List;
 
 import hvasoftware.com.thongtindoino.MainActivity;
 import hvasoftware.com.thongtindoino.R;
+import hvasoftware.com.thongtindoino.base.BaseActivity;
 import hvasoftware.com.thongtindoino.model.User;
 import hvasoftware.com.thongtindoino.ui.fragment.LoginFragment;
 import hvasoftware.com.thongtindoino.utils.Constant;
@@ -51,6 +57,9 @@ public class ChangePassDialog extends DialogFragment {
     private FirebaseFirestore firebaseFirestore;
     private MainActivity mainActivity;
     private String userPass = null;
+    FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+    String newPass;
+    String newPass2;
 
     public ChangePassDialog(MainActivity mainActivity) {
         this.mainActivity = mainActivity;
@@ -85,8 +94,8 @@ public class ChangePassDialog extends DialogFragment {
             @Override
             public void onClick(View view) {
                 String oldPass = edt_pass.getText().toString().trim();
-                String newPass = edt_new_pass.getText().toString().trim();
-                String newPass2 = edt_new_pass2.getText().toString().trim();
+                newPass = edt_new_pass.getText().toString().trim();
+                newPass2 = edt_new_pass2.getText().toString().trim();
 
                 if (TextUtils.isEmpty(oldPass)) {
                     Toast.makeText(getActivity(), "Bạn chưa nhập mật khẩu cũ", Toast.LENGTH_SHORT).show();
@@ -122,26 +131,54 @@ public class ChangePassDialog extends DialogFragment {
                 progressBar.setVisibility(View.VISIBLE);
                 tvChangePass.setVisibility(View.GONE);
 
-                WriteBatch writeBatch = firebaseFirestore.batch();
-                DocumentReference updateQuoteShareAmount = firebaseFirestore.collection(Constant.COLLECTION_USER).document(documentId);
-                writeBatch.update(updateQuoteShareAmount, "password", newPass2);
-                writeBatch.update(updateQuoteShareAmount, "updateAt", DateTimeUtils.getDateTime());
-                writeBatch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        progressBar.setVisibility(View.GONE);
-                        Toast.makeText(getActivity(), "Đổi mật khẩu thành công", Toast.LENGTH_SHORT).show();
-                        mainActivity.SwitchFragment(new LoginFragment(), false);
-                        dismiss();
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(getActivity(), "Đổi mật khẩu thất bại", Toast.LENGTH_SHORT).show();
-                        progressBar.setVisibility(View.GONE);
-                        tvChangePass.setVisibility(View.VISIBLE);
-                    }
-                });
+
+// Get auth credentials from the user for re-authentication. The example below shows
+// email and password credentials but there are multiple possible providers,
+// such as GoogleAuthProvider or FacebookAuthProvider.
+                AuthCredential credential = EmailAuthProvider
+                        .getCredential(firebaseUser.getEmail(), oldPass);
+
+// Prompt the user to re-provide their sign-in credentials
+                firebaseUser.reauthenticate(credential)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    firebaseUser.updatePassword(newPass).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isSuccessful()) {
+                                                WriteBatch writeBatch = firebaseFirestore.batch();
+                                                DocumentReference updateQuoteShareAmount = firebaseFirestore.collection(Constant.COLLECTION_USER).document(documentId);
+                                                writeBatch.update(updateQuoteShareAmount, "password", newPass);
+                                                writeBatch.update(updateQuoteShareAmount, "updateAt", DateTimeUtils.getDateTime());
+                                                writeBatch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<Void> task) {
+                                                        progressBar.setVisibility(View.GONE);
+                                                        Toast.makeText(getActivity(), "Đổi mật khẩu thành công", Toast.LENGTH_SHORT).show();
+                                                        mainActivity.SwitchFragment(new LoginFragment(), false);
+                                                        dismiss();
+                                                    }
+                                                }).addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                        Toast.makeText(getActivity(), "Đổi mật khẩu thất bại", Toast.LENGTH_SHORT).show();
+                                                        progressBar.setVisibility(View.GONE);
+                                                        tvChangePass.setVisibility(View.VISIBLE);
+                                                    }
+                                                });
+                                                Log.d(TAG, "Password updated");
+                                            } else {
+                                                Log.d(TAG, "Error password not updated");
+                                            }
+                                        }
+                                    });
+                                } else {
+                                    Log.d(TAG, "Error auth failed");
+                                }
+                            }
+                        });
             }
         });
     }

@@ -17,6 +17,7 @@ import hvasoftware.com.thongtindoino.utils.FragmentHelper;
 public abstract class BaseActivity extends AppCompatActivity {
     private static final String TAG = "BaseActivity";
     public static String role;
+    public static String firebasePw;
     private boolean isVisible;
 
     protected String GetScreenTitle() {
