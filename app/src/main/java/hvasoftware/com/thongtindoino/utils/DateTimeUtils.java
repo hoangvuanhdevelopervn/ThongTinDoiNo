@@ -3,10 +3,13 @@ package hvasoftware.com.thongtindoino.utils;
 import android.annotation.SuppressLint;
 import android.content.Context;
 
+import java.sql.Timestamp;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+
 
 /**
  * Created by HoangVuAnh on 3/11/18.
@@ -56,5 +59,27 @@ public class DateTimeUtils {
     public static String getCurrentLocal(Context mContext) {
         Locale currentLocal = mContext.getResources().getConfiguration().locale;
         return currentLocal.getDisplayCountry() + " - " + currentLocal.getDisplayName();
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    public static Timestamp convertStringToTimestamp(String something) {
+        SimpleDateFormat dateFormat = null;
+        if (something.contains(".")) {
+            dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS");
+        }
+        if (something.contains(",")) {
+            dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss,SSS");
+        }
+        Timestamp timestamp = null;
+        Date parsedDate;
+        try {
+            assert dateFormat != null;
+            parsedDate = dateFormat.parse(something);
+            timestamp = new java.sql.Timestamp(parsedDate.getTime());
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return timestamp;
     }
 }

@@ -73,7 +73,9 @@ public class DetailCustomerFragment extends BaseFragment implements com.wdullaer
     private String customerDocumentID;
     private int status;
 
+
     public DetailCustomerFragment() {
+
     }
 
 
@@ -289,6 +291,7 @@ public class DetailCustomerFragment extends BaseFragment implements com.wdullaer
         writeBatch.update(updateCustomer, "ngayVay", ngayVay);
         writeBatch.update(updateCustomer, "ngayHetHan", ngayHetHan);
 
+
         writeBatch.update(updateCustomer, "sotien", customerSoTienVay);
         writeBatch.update(updateCustomer, "songayvay", soNgayVay);
         writeBatch.update(updateCustomer, "dayleft", Utils.daysBetween(DateTimeUtils.getDateTime(), Utils.parseStringToDate(ngayHetHan)));
@@ -305,14 +308,14 @@ public class DetailCustomerFragment extends BaseFragment implements com.wdullaer
             public void onComplete(@NonNull Task<Void> task) {
                 progressBar.setVisibility(View.GONE);
                 Toast.makeText(getContext(), getActivity().getString(R.string.updapte_success), Toast.LENGTH_SHORT).show();
-                getMainAcitivity().StartFragmentClearTop(new DeptFragment(),false);
+                getMainAcitivity().StartFragmentClearTop(new DeptFragment(), false);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
                 progressBar.setVisibility(View.GONE);
                 Toast.makeText(getContext(), getActivity().getString(R.string.updapte_failed), Toast.LENGTH_SHORT).show();
-                getMainAcitivity().StartFragmentClearTop(new DeptFragment(),false);
+                getMainAcitivity().StartFragmentClearTop(new DeptFragment(), false);
                 // Log.wtf(TAG, "==============================>" + e.getMessage());
             }
         });
@@ -328,8 +331,6 @@ public class DetailCustomerFragment extends BaseFragment implements com.wdullaer
             ngayVay = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year;
             tvNgayVay.setText(ngayVay);
         }
-
-        //soNgayVay = Utils.get_count_of_days(ngayVay, ngayHetHan);
         soNgayVay = Utils.daysBetween(Utils.parseStringToDate(ngayVay), Utils.parseStringToDate(ngayHetHan));
         tvSoNgayVay.setText("" + soNgayVay);
     }

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -73,7 +74,9 @@ public class AddCustomerFragment extends BaseFragment implements com.wdullaer.ma
 
     private int soNgayVay = 0;
     private Timestamp ngayVayDate;
-    Calendar cal = Calendar.getInstance();
+
+    private Calendar cal = Calendar.getInstance();
+
     @SuppressLint("ValidFragment")
     public AddCustomerFragment(ScreenType screenType) {
         this.screenType = screenType;
@@ -85,7 +88,7 @@ public class AddCustomerFragment extends BaseFragment implements com.wdullaer.ma
         cal.set(Calendar.HOUR, 0);
         cal.set(Calendar.MINUTE, 0);
         cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.MILLISECOND,0);
+        cal.set(Calendar.MILLISECOND, 0);
     }
 
     @Override
@@ -269,7 +272,7 @@ public class AddCustomerFragment extends BaseFragment implements com.wdullaer.ma
         objectMap.put("ngayVay", ngayVay);
         objectMap.put("ngayHetHan", ngayHetHan);
 
-        objectMap.put("ngayVayDate",ngayVayDate);
+        objectMap.put("ngayVayDate", ngayVayDate);
         objectMap.put("dayleft", soNgayVay);
         objectMap.put("songayvay", soNgayVay);
         objectMap.put("sotien", customerSoTienVay);
@@ -333,9 +336,12 @@ public class AddCustomerFragment extends BaseFragment implements com.wdullaer.ma
         } else {
             ngayVay = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year;
             tvNgayVay.setText(ngayVay);
+            cal.set(Calendar.YEAR, year);
+            cal.set(Calendar.MONTH, monthOfYear);
+            cal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            ngayVayDate = new Timestamp(cal.getTime().getTime());
         }
-
-        //soNgayVay = Utils.get_count_of_days(ngayVay, ngayHetHan);
+        Log.wtf(TAG, "============================>" + ngayVayDate);
         soNgayVay = Utils.daysBetween(Utils.parseStringToDate(ngayVay), Utils.parseStringToDate(ngayHetHan));
         tvSoNgayVay.setText("" + soNgayVay);
     }
