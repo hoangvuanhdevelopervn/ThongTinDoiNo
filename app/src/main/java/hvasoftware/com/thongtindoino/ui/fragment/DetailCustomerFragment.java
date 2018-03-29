@@ -2,7 +2,6 @@ package hvasoftware.com.thongtindoino.ui.fragment;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -65,7 +64,11 @@ public class DetailCustomerFragment extends BaseFragment implements com.wdullaer
     private FirebaseFirestore firebaseFirestore;
     private String ngayVay = null;
     private String ngayHetHan = null;
-    private DatePickerDialog datePickerDialog;
+
+
+    private DatePickerDialog ngayVayDatePickerDialog;
+    private DatePickerDialog ngayHetHanDatePickerDialog;
+
     private int soNgayVay = 0;
     private String customerDocumentID;
     private int status;
@@ -89,7 +92,8 @@ public class DetailCustomerFragment extends BaseFragment implements com.wdullaer
     @Override
     protected void OnBindView() {
         Calendar calendar = Calendar.getInstance();
-        datePickerDialog = DatePickerDialog.newInstance(this, calendar);
+        ngayVayDatePickerDialog = DatePickerDialog.newInstance(this, calendar);
+        ngayHetHanDatePickerDialog = DatePickerDialog.newInstance(this, calendar);
         firebaseFirestore = FirebaseFirestore.getInstance();
         edt_CustomerName = (EditText) findViewById(R.id.edt_obj_name);
         tvNgayVay = (TextView) findViewById(R.id.tvNgayVay);
@@ -122,9 +126,17 @@ public class DetailCustomerFragment extends BaseFragment implements com.wdullaer
         tvNgayHetHan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                datePickerDialog.show(getActivity().getFragmentManager(), TAG);
+                ngayHetHanDatePickerDialog.show(getActivity().getFragmentManager(), TAG);
             }
         });
+
+        tvNgayVay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ngayVayDatePickerDialog.show(getActivity().getFragmentManager(), TAG);
+            }
+        });
+
 
         bindData();
     }
@@ -308,8 +320,15 @@ public class DetailCustomerFragment extends BaseFragment implements com.wdullaer
 
     @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
-        ngayHetHan = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year;
-        tvNgayHetHan.setText(ngayHetHan);
+
+        if (view == ngayHetHanDatePickerDialog) {
+            ngayHetHan = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year;
+            tvNgayHetHan.setText(ngayHetHan);
+        } else {
+            ngayVay = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year;
+            tvNgayVay.setText(ngayVay);
+        }
+
         //soNgayVay = Utils.get_count_of_days(ngayVay, ngayHetHan);
         soNgayVay = Utils.daysBetween(Utils.parseStringToDate(ngayVay), Utils.parseStringToDate(ngayHetHan));
         tvSoNgayVay.setText("" + soNgayVay);

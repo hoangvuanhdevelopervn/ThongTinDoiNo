@@ -28,7 +28,6 @@ import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -68,7 +67,10 @@ public class AddCustomerFragment extends BaseFragment implements com.wdullaer.ma
     private FirebaseFirestore firebaseFirestore;
     private String ngayVay = null;
     private String ngayHetHan = null;
-    private DatePickerDialog datePickerDialog;
+
+    private DatePickerDialog ngayVayDatePickerDialog;
+    private DatePickerDialog ngayHetHanDatePickerDialog;
+
     private int soNgayVay = 0;
     private Timestamp ngayVayDate;
     Calendar cal = Calendar.getInstance();
@@ -94,7 +96,8 @@ public class AddCustomerFragment extends BaseFragment implements com.wdullaer.ma
     @Override
     protected void OnBindView() {
         Calendar calendar = Calendar.getInstance();
-        datePickerDialog = DatePickerDialog.newInstance(this, calendar);
+        ngayVayDatePickerDialog = DatePickerDialog.newInstance(this, calendar);
+        ngayHetHanDatePickerDialog = DatePickerDialog.newInstance(this, calendar);
         firebaseFirestore = FirebaseFirestore.getInstance();
         edt_CustomerName = (EditText) findViewById(R.id.edt_obj_name);
         tvNgayVay = (TextView) findViewById(R.id.tvNgayVay);
@@ -132,7 +135,14 @@ public class AddCustomerFragment extends BaseFragment implements com.wdullaer.ma
         tvNgayHetHan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                datePickerDialog.show(getActivity().getFragmentManager(), TAG);
+                ngayHetHanDatePickerDialog.show(getActivity().getFragmentManager(), TAG);
+            }
+        });
+
+        tvNgayVay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ngayVayDatePickerDialog.show(getActivity().getFragmentManager(), TAG);
             }
         });
 
@@ -317,8 +327,14 @@ public class AddCustomerFragment extends BaseFragment implements com.wdullaer.ma
 
     @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
-        ngayHetHan = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year;
-        tvNgayHetHan.setText(ngayHetHan);
+        if (view == ngayHetHanDatePickerDialog) {
+            ngayHetHan = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year;
+            tvNgayHetHan.setText(ngayHetHan);
+        } else {
+            ngayVay = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year;
+            tvNgayVay.setText(ngayVay);
+        }
+
         //soNgayVay = Utils.get_count_of_days(ngayVay, ngayHetHan);
         soNgayVay = Utils.daysBetween(Utils.parseStringToDate(ngayVay), Utils.parseStringToDate(ngayHetHan));
         tvSoNgayVay.setText("" + soNgayVay);
