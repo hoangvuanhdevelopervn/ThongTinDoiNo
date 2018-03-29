@@ -26,6 +26,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.WriteBatch;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -72,6 +73,9 @@ public class DetailCustomerFragment extends BaseFragment implements com.wdullaer
     private int soNgayVay = 0;
     private String customerDocumentID;
     private int status;
+    private Timestamp ngayVayDate;
+    private Calendar cal = Calendar.getInstance();
+    private boolean isUpdateNgayVay = false;
 
 
     public DetailCustomerFragment() {
@@ -84,6 +88,10 @@ public class DetailCustomerFragment extends BaseFragment implements com.wdullaer
         super.onCreate(savedInstanceState);
         savedInstanceState = this.getArguments();
         customerDocumentID = savedInstanceState.getString(Constant.KEY);
+        cal.set(Calendar.HOUR, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
     }
 
     @Override
@@ -180,7 +188,6 @@ public class DetailCustomerFragment extends BaseFragment implements com.wdullaer
                     }
                 });
     }
-
 
     private void setUpNhanVienThu() {
         final Dialog dialog = new Dialog(getActivity());
@@ -291,6 +298,9 @@ public class DetailCustomerFragment extends BaseFragment implements com.wdullaer
         writeBatch.update(updateCustomer, "ngayVay", ngayVay);
         writeBatch.update(updateCustomer, "ngayHetHan", ngayHetHan);
 
+        if (isUpdateNgayVay && ngayVayDate != null) {
+            writeBatch.update(updateCustomer, "ngayVayDate", ngayVayDate);
+        }
 
         writeBatch.update(updateCustomer, "sotien", customerSoTienVay);
         writeBatch.update(updateCustomer, "songayvay", soNgayVay);
@@ -316,20 +326,24 @@ public class DetailCustomerFragment extends BaseFragment implements com.wdullaer
                 progressBar.setVisibility(View.GONE);
                 Toast.makeText(getContext(), getActivity().getString(R.string.updapte_failed), Toast.LENGTH_SHORT).show();
                 getMainAcitivity().StartFragmentClearTop(new DeptFragment(), false);
-                // Log.wtf(TAG, "==============================>" + e.getMessage());
             }
         });
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
-
         if (view == ngayHetHanDatePickerDialog) {
             ngayHetHan = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year;
             tvNgayHetHan.setText(ngayHetHan);
         } else {
             ngayVay = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year;
             tvNgayVay.setText(ngayVay);
+            cal.set(Calendar.YEAR, year);
+            cal.set(Calendar.MONTH, monthOfYear);
+            cal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            ngayVayDate = new Timestamp(cal.getTime().getTime());
+            isUpdateNgayVay = true;
         }
         soNgayVay = Utils.daysBetween(Utils.parseStringToDate(ngayVay), Utils.parseStringToDate(ngayHetHan));
         tvSoNgayVay.setText("" + soNgayVay);

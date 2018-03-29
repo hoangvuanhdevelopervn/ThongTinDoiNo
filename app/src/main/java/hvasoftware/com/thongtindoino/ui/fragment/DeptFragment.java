@@ -64,8 +64,8 @@ public class DeptFragment extends BaseFragment {
     private HorizontalScrollView horizontalView;
     private TableRow table_header;
     private Bundle bundle;
-    long totalMoney = 0;
-    Timestamp startTime, endTime;
+    private long totalMoney = 0;
+    private Timestamp startTime, endTime;
 
     public DeptFragment() {
     }

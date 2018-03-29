@@ -19,7 +19,6 @@ import java.util.Date;
 import hvasoftware.com.thongtindoino.MainActivity;
 import hvasoftware.com.thongtindoino.R;
 import hvasoftware.com.thongtindoino.utils.DateTimeUtils;
-import hvasoftware.com.thongtindoino.utils.IOnCompleteListener;
 
 /**
  * Created by Thanh on 03/12/2018.
@@ -33,17 +32,17 @@ public class DateSortDialog extends DialogFragment implements com.wdullaer.mater
 
     private static final String TAG = "DateSortDialog";
     public static DateSortDialog dateSortDialog;
-    View wrapFrom, wrapTo;
-    DatePickerDialog fromDateDialog;
-    DatePickerDialog toDateDialog;
-    TextView tvFrom, tvTo;
+    private View wrapFrom, wrapTo;
+    private DatePickerDialog fromDateDialog;
+    private DatePickerDialog toDateDialog;
+    private TextView tvFrom, tvTo;
     private String startDate;
     private String endDate;
     private TextView tvLoc;
     private IOnCompleteListener iOnCompleteListener;
     private MainActivity mainActivity;
-    Timestamp dateStart, dateEnd;
-    Calendar cal = Calendar.getInstance();
+    private Timestamp dateStart, dateEnd;
+    private Calendar cal = Calendar.getInstance();
 
     public DateSortDialog(MainActivity mainActivity) {
         this.mainActivity = mainActivity;

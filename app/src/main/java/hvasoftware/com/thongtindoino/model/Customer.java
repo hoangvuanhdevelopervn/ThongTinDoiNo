@@ -28,9 +28,18 @@ public class Customer {
     private Date createAt;
     private Date updateAt;
     private int trangthai;
+    private Date ngayVayDate;
 
     public Customer() {
 
+    }
+
+    public Date getNgayVayDate() {
+        return ngayVayDate;
+    }
+
+    public void setNgayVayDate(Date ngayVayDate) {
+        this.ngayVayDate = ngayVayDate;
     }
 
     public String getObjectID() {

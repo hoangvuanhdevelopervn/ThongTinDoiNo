@@ -74,7 +74,6 @@ public class AddCustomerFragment extends BaseFragment implements com.wdullaer.ma
 
     private int soNgayVay = 0;
     private Timestamp ngayVayDate;
-
     private Calendar cal = Calendar.getInstance();
 
     @SuppressLint("ValidFragment")
